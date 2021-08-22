@@ -5,12 +5,7 @@
     "types": [
       "jasmine",
       "node"
-    ],
-    "paths": {
-      "path": [
-        "./node_modules/path-browserify"
-      ]
-    }
+    ]
   },
   "files": [
     "src/test.ts",

@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 
 export enum Style {
   light = 'vex-style-light',
@@ -9,6 +10,7 @@ export enum Style {
   dark = 'vex-style-dark'
 }
 
+const STORAGE_KEY = 'MasherMan-StyleConf';
 
 @UntilDestroy()
 @Injectable({
@@ -18,14 +20,17 @@ export class StyleService {
 
   defaultStyle = Style.default;
 
-  private _styleSubject = new BehaviorSubject<Style>(this.defaultStyle);
+  private _styleSubject = new BehaviorSubject<Style>(this.storage.get(STORAGE_KEY) || this.defaultStyle);
   style$ = this._styleSubject.asObservable();
 
-  constructor(@Inject(DOCUMENT) private document: Document) {
+  constructor(
+    @Inject(DOCUMENT) private document: Document,
+    @Inject(SESSION_STORAGE) private storage: StorageService) {
     this.style$.pipe(untilDestroyed(this)).subscribe(style => this._updateStyle(style));
   }
 
   setStyle(style: Style) {
+    this.storage.set(STORAGE_KEY, style);
     this._styleSubject.next(style);
   }
 

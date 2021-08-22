@@ -8,6 +8,14 @@ import { PublisherSwaggerComponent } from './publisher-swagger/publisher-swagger
 const routes: Routes = [
   {
     path: '',
+    component: PublisherListComponent,
+  },
+  {
+    path: 'swagger-client',
+    component: PublisherEditComponent,
+  },
+  {
+    path: 'import',
     component: PublisherEditComponent,
   }
 ];
@@ -16,7 +24,7 @@ const routes: Routes = [
   declarations: [
     PublisherEditComponent,
     PublisherListComponent,
-    PublisherSwaggerComponent
+    PublisherSwaggerComponent,
   ],
   imports: [
     RouterModule.forChild(routes),

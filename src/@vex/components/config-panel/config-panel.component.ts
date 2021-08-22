@@ -13,6 +13,9 @@ import { ConfigName } from '../../interfaces/config-name.model';
 import { ColorVariable, colorVariables } from './color-variables';
 import { DOCUMENT } from '@angular/common';
 import icClose from '@iconify/icons-ic/twotone-close';
+import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
+
+const STORAGE_KEY = 'MasherMan-ColorConf';
 
 @Component({
   selector: 'vex-config-panel',
@@ -43,13 +46,18 @@ export class ConfigPanelComponent implements OnInit {
   Style = Style;
   selectedColor = colorVariables.blue;
 
-  constructor(private configService: ConfigService,
-              private styleService: StyleService,
-              private layoutService: LayoutService,
-              @Inject(DOCUMENT) private document: Document,
-              private route: ActivatedRoute) { }
+  constructor(
+    private configService: ConfigService,
+    private styleService: StyleService,
+    private layoutService: LayoutService,
+    @Inject(DOCUMENT) private document: Document,
+    private route: ActivatedRoute,
+    @Inject(SESSION_STORAGE) private storage: StorageService) { }
 
   ngOnInit() {
+    if (this.storage.get(STORAGE_KEY)) {
+      this.selectColor(this.storage.get(STORAGE_KEY));
+    }
   }
 
   setConfig(layout: ConfigName, style: Style) {
@@ -63,10 +71,11 @@ export class ConfigPanelComponent implements OnInit {
       this.document.documentElement.style.setProperty('--color-primary', color.default.replace('rgb(', '').replace(')', ''));
       this.document.documentElement.style.setProperty('--color-primary-contrast', color.contrast.replace('rgb(', '').replace(')', ''));
     }
+    this.storage.set(STORAGE_KEY, color);
   }
 
   isSelectedColor(color: ColorVariable) {
-    return color === this.selectedColor;
+    return color.default === this.selectedColor.default;
   }
 
   enableDarkMode() {
