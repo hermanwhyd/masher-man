@@ -28,16 +28,13 @@
       "prefix": "vex",
       "architect": {
         "build": {
-          "builder": "@angular-builders/custom-webpack:browser",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/vex",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "customWebpackConfig": {
-              "path": "./webpack.config.js"
-            },
             "assets": [
               "src/favicon.ico",
               "src/assets",
