@@ -1,0 +1,19 @@
+<div fxLayout="row" fxLayoutAlign="start center" mat-dialog-title>
+  <h2 class="headline m-0" fxFlex="auto">Konfirmasi</h2>
+
+  <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
+    <mat-icon [icIcon]="icClose"></mat-icon>
+  </button>
+</div>
+<mat-divider class="-mx-6 text-border"></mat-divider>
+
+<mat-divider class="-mx-6 text-border"></mat-divider>
+
+<mat-dialog-content>
+  <p class="py-5" [innerHtml]="message"></p>
+</mat-dialog-content>
+
+<mat-dialog-actions class="m-0 p-2" fxLayout="row" fxLayoutAlign="end center">
+  <button mat-button class="mr-4" mat-dialog-close tabindex="-1">{{cancelButtonText | uppercase}}</button>
+  <button mat-button color="primary" (click)="onConfirmClick()" tabindex="1">{{confirmButtonText | uppercase}}</button>
+</mat-dialog-actions>

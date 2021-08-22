@@ -1,0 +1,11 @@
+<div class="footer" fxLayout="row" fxLayoutAlign="space-between center">
+  <div class="text-gray">
+    MasherMan - a productivity booster for publishing and subscribe wso2 service
+  </div>
+  <div @scaleIn class="text-gray" *ngIf="!isLoading">
+    Versi 1.0
+  </div>
+  <div *ngIf="isLoading">
+    <img src="/assets/img/illustrations/DualBall-1s-48px.svg" class="w-10 z-10">
+  </div>
+</div>

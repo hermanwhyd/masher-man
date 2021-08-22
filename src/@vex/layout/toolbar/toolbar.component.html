@@ -1,0 +1,38 @@
+<div class="toolbar w-full px-gutter" fxLayout="row" fxLayoutAlign="start center" vexContainer>
+  <button (click)="openSidenav()" [fxHide]="!mobileQuery" mat-icon-button type="button">
+    <mat-icon [icIcon]="icMenu"></mat-icon>
+  </button>
+
+  <a *ngIf="isVerticalLayout$ | async" [routerLink]="['/']" class="ltr:mr-4 rtl:ml-4 block" fxLayout="row"
+    fxLayoutAlign="start center">
+    <img class="w-8 select-none" src="assets/img/default/masherman-square.png">
+    <h1 [fxHide]="mobileQuery" class="title ltr:pl-4 rtl:pr-4 m-0 select-none">MasherMan</h1>
+  </a>
+
+  <button type="button" [fxHide]="mobileQuery" color="primary" mat-button>
+    API MANAGER
+  </button>
+
+  <div *ngIf="(isVerticalLayout$ | async) && isNavbarInToolbar$ | async" [fxHide]="mobileQuery" class="px-gutter"
+    fxFlex="none" fxLayout="row" fxLayoutAlign="start center">
+    <vex-navigation-item *ngFor="let item of navigationItems" [item]="item"></vex-navigation-item>
+  </div>
+
+  <span fxFlex></span>
+
+  <div class="-mx-1 flex items-center">
+    <div class="px-1">
+      <button (click)="reloadPage()" color="primary" mat-button type="button" matTooltip="Refresh Page">
+        <mat-icon [icIcon]="icRefresh" class="-ml-1 mr-2" size="24px"></mat-icon>
+        <span>REFRESH</span>
+      </button>
+    </div>
+
+    <div class="px-1">
+      <vex-toolbar-user></vex-toolbar-user>
+    </div>
+  </div>
+</div>
+
+<vex-navigation *ngIf="(isVerticalLayout$ | async) && isNavbarBelowToolbar$ | async" [fxHide]="mobileQuery">
+</vex-navigation>

@@ -1,0 +1,20 @@
+<ng-template #sidenavRef>
+  <vex-sidenav [collapsed]="sidenavCollapsed$ | async"></vex-sidenav>
+</ng-template>
+
+<ng-template #toolbarRef>
+  <vex-toolbar [hasShadow]="toolbarShadowEnabled$ | async" [mobileQuery]="!(isDesktop$ | async)" class="vex-toolbar">
+  </vex-toolbar>
+</ng-template>
+
+<ng-template #footerRef>
+  <vex-footer *ngIf="isFooterVisible$ | async" class="vex-footer" [isLoading]="loading"></vex-footer>
+</ng-template>
+
+<vex-layout [footerRef]="footerRef" [sidenavRef]="sidenavRef" [toolbarRef]="toolbarRef"></vex-layout>
+
+<!-- CONFIGPANEL -->
+<vex-sidebar #configpanel [invisibleBackdrop]="true" position="right">
+  <vex-config-panel></vex-config-panel>
+</vex-sidebar>
+<!-- END CONFIGPANEL -->

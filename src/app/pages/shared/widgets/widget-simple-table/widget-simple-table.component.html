@@ -1,0 +1,59 @@
+<div class="card overflow-auto w-full" fxLayout="column">
+  <div class="border-b py-4 px-6 sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+    <h2 class="m-0 title pr-4 mr-4 border-r" fxFlex="none">{{ title }}</h2>
+
+    <div class="bg-card rounded-full border px-4"
+             fxFlex="400px"
+             fxFlex.lt-md="auto"
+             fxLayout="row"
+             fxLayoutAlign="start center">
+          <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+          <input [formControl]="searchCtrl"
+                 class="px-4 py-3 border-0 outline-none w-full bg-transparent"
+                 placeholder="Cari..."
+                 type="search">
+        </div>
+
+  </div>
+
+  <table [dataSource]="dataSource" class="w-full overflow-auto" mat-table matSort>
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- Model Properties Column -->
+    <ng-container *ngFor="let column of columns">
+      <ng-container *ngIf="column.type === 'text'" [matColumnDef]="column.property">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header> {{ column.label }}</th>
+        <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ jmespath.search(row, column.property) }}</td>
+      </ng-container>
+
+      <!-- Number Columns -->
+      <ng-container *ngIf="column.type === 'number'" [matColumnDef]="column.property">
+        <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
+        <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ jmespath.search(row, column.property) | number }}ms</td>
+      </ng-container>
+
+      <!-- Date Columns -->
+      <ng-container *ngIf="column.type === 'date'" [matColumnDef]="column.property">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>
+          {{ column.label }}
+        </th>
+        <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
+          {{ jmespath.search(row, column.property) | date:'dd/MMM/yy HH:mm' }}
+        </td>
+      </ng-container>
+
+    </ng-container>
+
+    <tr *matHeaderRowDef="visibleColumns" mat-header-row></tr>
+    <tr *matRowDef="let row; columns: visibleColumns;" mat-row></tr>
+  </table>
+
+  <div *ngIf="isLoading" class="flex-auto flex flex-col justify-center items-center">
+    <mat-progress-spinner mode="indeterminate" class="m-20 text-left"></mat-progress-spinner>
+  </div>
+
+  <mat-paginator [pageSize]="pageSize" class="paginator sticky left-0"></mat-paginator>
+
+</div>

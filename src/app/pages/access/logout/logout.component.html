@@ -1,0 +1,20 @@
+<div class="w-full h-full bg-pattern" fxLayout="column" fxLayoutAlign="center center">
+  <div @fadeInUp class="card overflow-hidden w-full max-w-xs">
+    <div class="p-6 pb-0" fxLayout="column" fxLayoutAlign="center center">
+      <div class="fill-current text-center">
+        <img class="w-16" src="assets/img/default/MasherMan Logo.png">
+      </div>
+    </div>
+
+    <div class="text-center mt-4">
+      <h2 class="title m-0">Logout sukses</h2>
+      <h4 class="body-2 text-secondary m-0">Login kembali untuk masuk IPortal Diklat</h4>
+    </div>
+
+    <div class="p-6" fxLayout="column" fxLayoutGap="16px">
+      <button [routerLink]="['/login']" color="primary" mat-raised-button type="button">
+        Ke Halaman Login
+      </button>
+    </div>
+  </div>
+</div>
