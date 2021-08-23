@@ -1,0 +1,24 @@
+<div class="card overflow-hidden" fxLayout="column" fxLayoutAlign="start center">
+  <div class="p-4 text-center hover:bg-hover trans-ease-out cursor-pointer relative w-full" matRipple>
+
+    <h2 class="headline m-0">Good Job, David!</h2>
+
+    <div class="mt-4" fxLayout="row" fxLayoutAlign="start center">
+      <ic-icon [icon]="icCheck" class="mr-2 text-green" size="24px"></ic-icon>
+      <span class="body-2 cursor-pointer">View API</span>
+    </div>
+
+    <div class="mt-1" fxLayout="row" fxLayoutAlign="start center">
+      <ic-icon [icon]="icCheck" class="mr-2 text-green" size="24px"></ic-icon>
+      <span class="body-2 cursor-pointer">Publish API</span>
+    </div>
+
+    <div class="mt-1" fxLayout="row" fxLayoutAlign="start center">
+      <ic-icon [icon]="icUnCheck" class="mr-2 text-red" size="24px"></ic-icon>
+      <span class="body-2 cursor-pointer">Approve</span>
+    </div>
+  </div>
+  <div class="bg-app-bar p-2  w-full">
+    <button class="text-secondary w-full" mat-icon-button type="button">Remove</button>
+  </div>
+</div>

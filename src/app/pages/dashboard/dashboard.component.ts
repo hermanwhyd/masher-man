@@ -15,7 +15,7 @@ import icLandScap from '@iconify/icons-ic/round-landscape';
 import icNote2 from '@iconify/icons-ic/round-sticky-note-2';
 
 import * as _ from 'lodash';
-import { AuthService } from 'src/app/auth/auth.service';
+import { AuthService } from 'src/app/pages/access/auth-manager/services/auth.service';
 import { SharedPropertyService } from '../../services/shared-property.service';
 import { SharedProperty } from 'src/app/types/shared-property.interface';
 

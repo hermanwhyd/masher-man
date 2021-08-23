@@ -25,7 +25,7 @@ export class CustomLayoutComponent implements OnInit {
 
   toolbarShadowEnabled$ = this.router.events.pipe(
     filter(event => event instanceof NavigationEnd),
-    startWith(null),
+    startWith([]),
     map(() => checkRouterChildsData(this.router.routerState.root.snapshot, data => data.toolbarShadowEnabled))
   );
 

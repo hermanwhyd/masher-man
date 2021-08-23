@@ -1,0 +1,32 @@
+<div @stagger>
+  <div class="bg-card">
+    <div class="py-10 px-gutter">
+      <h1 @fadeInUp class="display-2 mt-0 mb-4 text-center">Auth Manager</h1>
+      <h2 @fadeInUp class="subheading-2 text-hint text-center max-w-lg mx-auto m-0">
+        User authorization for publisher, subscriber, and approver.
+      </h2>
+    </div>
+    <div class="px-gutter" fxLayout="row" fxLayoutAlign="start center">
+      <nav class="vex-tabs border-0" fxFlex="auto" mat-tab-nav-bar>
+        <a #rla="routerLinkActive" *ngFor="let link of links" [active]="rla.isActive" [disabled]="link.disabled"
+          [routerLink]="link.route" mat-tab-link routerLinkActive>
+          {{ link.label }}
+        </a>
+      </nav>
+      <button class="ml-4" color="primary" fxFlex="none" mat-raised-button type="button">
+        <ic-icon [icon]="icPersonAdd" class="mr-2 -ml-1" inline="true" size="20px"></ic-icon>
+        <span fxHide.xs>LINK USER</span>
+      </button>
+    </div>
+  </div>
+
+  <div @fadeInUp class="p-6" gdColumns="1fr 1fr 1fr 1fr" gdColumns.lt-md="1fr 1fr" gdColumns.lt-sm="1fr" gdGap="16px">
+    <vex-widget-user></vex-widget-user>
+    <vex-widget-user></vex-widget-user>
+    <vex-widget-user></vex-widget-user>
+    <vex-widget-user></vex-widget-user>
+    <vex-widget-user></vex-widget-user>
+    <vex-widget-user></vex-widget-user>
+    <vex-widget-user></vex-widget-user>
+  </div>
+</div>

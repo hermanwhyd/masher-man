@@ -7,20 +7,16 @@ import { NavigationService } from '../@vex/services/navigation.service';
 
 import icLayers from '@iconify/icons-ic/twotone-layers';
 import icSettings from '@iconify/icons-ic/twotone-settings';
-import icAccountCircle from '@iconify/icons-ic/baseline-people-outline';
 import icTraining from '@iconify/icons-ic/baseline-model-training';
-import icVoucher from '@iconify/icons-ic/twotone-card-giftcard';
 import icUser from '@iconify/icons-ic/baseline-supervised-user-circle';
 import icStyle from '@iconify/icons-ic/style';
-import icTag from '@iconify/icons-ic/baseline-tag';
-import icAds from '@iconify/icons-ic/baseline-music-video';
-import icProduct from '@iconify/icons-ic/outline-shopping-cart';
+import icAuth from '@iconify/icons-ic/outline-supervised-user-circle';
 
 import { LayoutService } from '../@vex/services/layout.service';
 import { ActivatedRoute } from '@angular/router';
 import { SplashScreenService } from '../@vex/services/splash-screen.service';
 import { StyleService } from '../@vex/services/style.service';
-import { AuthService } from './auth/auth.service';
+import { AuthService } from './pages/access/auth-manager/services/auth.service';
 
 @Component({
   selector: 'vex-root',
@@ -63,6 +59,28 @@ export class AppComponent {
         ]
       },
       {
+        type: 'dropdown',
+        label: 'Auth Manager',
+        icon: icAuth,
+        children: [
+          {
+            type: 'link',
+            label: 'Publisher',
+            route: '/auth-manager/publisher'
+          },
+          {
+            type: 'link',
+            label: 'Store',
+            route: '/auth-manager/store'
+          },
+          {
+            type: 'link',
+            label: 'Api Manager',
+            route: '/auth-manager/api-manager'
+          }
+        ]
+      },
+      {
         type: 'subheading',
         label: 'Workspace',
         children: [
@@ -74,7 +92,7 @@ export class AppComponent {
               {
                 type: 'link',
                 label: 'Listed API',
-                route: '/publisher/list'
+                route: '/publisher'
               },
               {
                 type: 'link',
@@ -108,6 +126,18 @@ export class AppComponent {
           }
         ]
       },
+      {
+        type: 'subheading',
+        label: 'Settings',
+        children: [
+          {
+            type: 'link',
+            label: 'Setups',
+            route: '/setup',
+            icon: icSettings,
+          }
+        ]
+      }, ,
       {
         type: 'subheading',
         label: 'Customize',

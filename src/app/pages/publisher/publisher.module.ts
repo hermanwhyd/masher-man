@@ -4,6 +4,24 @@ import { RouterModule, Routes } from '@angular/router';
 import { PublisherEditComponent } from './publisher-edit/publisher-edit.component';
 import { PublisherListComponent } from './publisher-list/publisher-list.component';
 import { PublisherSwaggerComponent } from './publisher-swagger/publisher-swagger.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { IconModule } from '@visurel/iconify-angular';
+import { BreadcrumbsModule } from 'src/@vex/components/breadcrumbs/breadcrumbs.module';
+import { PageLayoutModule } from 'src/@vex/components/page-layout/page-layout.module';
+import { ContainerModule } from 'src/@vex/directives/container/container.module';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 const routes: Routes = [
   {
@@ -28,7 +46,26 @@ const routes: Routes = [
   ],
   imports: [
     RouterModule.forChild(routes),
-    CommonModule
+    CommonModule,
+    PageLayoutModule,
+    FlexLayoutModule,
+    BreadcrumbsModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatSortModule,
+    MatCheckboxModule,
+    MatIconModule,
+    MatButtonModule,
+    MatMenuModule,
+    IconModule,
+    FormsModule,
+    MatTooltipModule,
+    ReactiveFormsModule,
+    ContainerModule,
+    MatSelectModule,
+    MatButtonToggleModule,
+    MatProgressSpinnerModule,
+    MatSnackBarModule
   ]
 })
 export class PublisherModule { }

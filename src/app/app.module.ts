@@ -7,9 +7,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { VexModule } from '../@vex/vex.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CustomLayoutModule } from './custom-layout/custom-layout.module';
-import { AuthModule } from './auth/auth.module';
 import { JsonDateInterceptor } from './config/json-date.interceptor';
-
+import { HttpErrorInterceptor } from './config/http-error.interceptor';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -17,7 +17,7 @@ import { JsonDateInterceptor } from './config/json-date.interceptor';
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    AuthModule,
+    MatSnackBarModule,
 
     // Vex
     VexModule,
@@ -27,6 +27,11 @@ import { JsonDateInterceptor } from './config/json-date.interceptor';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JsonDateInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
       multi: true
     }
   ],

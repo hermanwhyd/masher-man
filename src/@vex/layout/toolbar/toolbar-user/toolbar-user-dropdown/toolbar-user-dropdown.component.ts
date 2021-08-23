@@ -10,7 +10,7 @@ import icVerifiedUser from '@iconify/icons-ic/twotone-verified-user';
 import icLock from '@iconify/icons-ic/twotone-lock';
 import icNotificationsOff from '@iconify/icons-ic/twotone-notifications-off';
 import { PopoverRef } from '../../../../components/popover/popover-ref';
-import { AuthService } from 'src/app/auth/auth.service';
+import { AuthService } from 'src/app/pages/access/auth-manager/services/auth.service';
 
 
 @Component({
