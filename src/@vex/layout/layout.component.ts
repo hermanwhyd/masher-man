@@ -7,7 +7,7 @@ import { Event, NavigationEnd, Router, Scroll } from '@angular/router';
 import { filter, map, startWith, withLatestFrom } from 'rxjs/operators';
 import { checkRouterChildsData } from '../utils/check-router-childs-data';
 import { DOCUMENT } from '@angular/common';
-import { ConfigService } from '../services/config.service';
+import { ThemeConfigService } from '../services/theme-config.service';
 
 @UntilDestroy()
 @Component({
@@ -49,11 +49,11 @@ export class LayoutComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSidenavContainer, { static: true }) sidenavContainer: MatSidenavContainer;
 
   constructor(private cd: ChangeDetectorRef,
-              private breakpointObserver: BreakpointObserver,
-              private layoutService: LayoutService,
-              private configService: ConfigService,
-              private router: Router,
-              @Inject(DOCUMENT) private document: Document) { }
+    private breakpointObserver: BreakpointObserver,
+    private layoutService: LayoutService,
+    private configService: ThemeConfigService,
+    private router: Router,
+    @Inject(DOCUMENT) private document: Document) { }
 
   ngOnInit() {
     /**

@@ -1,27 +1,43 @@
-import { Inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
-import * as _ from 'lodash';
-import { LoginRq } from './oauth.interface';
+import { LoginRq, RegisterRq, RegisterRs } from './oauth.interface';
+import { DeepPartial } from 'src/@vex/interfaces/deep-partial.type';
+import { ApiConfigService } from 'src/app/services/api-config.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private readonly TOKEN_NAME = 'JWT_TOKEN';
+  constructor(
+    private apiConfigService: ApiConfigService,
+    private http: HttpClient) { }
 
-  private readonly URL_REGISTER = 'https://portal.egw.xl.co.id/client-registration/v0.13/register';
-  private readonly URL_LOGIN = 'https://gateway.egw.xl.co.id/token';
+  token(user: DeepPartial<LoginRq>, digest: string) {
+    const body = new HttpParams()
+      .set('grant_type', user.grant_type)
+      .set('username', user.username)
+      .set('password', user.password)
+      .set('scope', user.scope);
 
-  constructor(private http: HttpClient, @Inject(LOCAL_STORAGE) private storage: StorageService) { }
+    const headers = new HttpHeaders({ Authorization: `Basic ${digest}`, 'Content-Type': 'application/x-www-form-urlencoded' });
 
-  login(user: LoginRq) {
-    return this.http.post(this.URL_LOGIN, user)
-      .pipe(
-        tap(rs => console.log(rs)),
-      ) as Observable<LoginRq>;
+    return this.http.post([
+      this.apiConfigService.configApi.value,
+      this.apiConfigService.getActiveProfile()?.name,
+      'token'
+    ].join('/'), body.toString(), { headers }).pipe(tap(rs => console.log(rs))) as Observable<LoginRq>;
   }
+
+  register(user: DeepPartial<RegisterRq>, digest: string) {
+    const headers = new HttpHeaders({ Authorization: `Basic ${digest}` });
+    return this.http.post([
+      this.apiConfigService.configApi.value,
+      this.apiConfigService.getActiveProfile()?.name,
+      'register'
+    ].join('/'), user, { headers }).pipe(tap(rs => console.log(rs))) as Observable<RegisterRs>;
+  }
+
 }

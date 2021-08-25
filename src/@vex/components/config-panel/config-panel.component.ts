@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { ConfigService } from '../../services/config.service';
+import { ThemeConfigService } from '../../services/theme-config.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { first, map } from 'rxjs/operators';
 import icSettings from '@iconify/icons-ic/twotone-settings';
@@ -13,7 +13,7 @@ import { ConfigName } from '../../interfaces/config-name.model';
 import { ColorVariable, colorVariables } from './color-variables';
 import { DOCUMENT } from '@angular/common';
 import icClose from '@iconify/icons-ic/twotone-close';
-import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
+import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 
 const STORAGE_KEY = 'MasherMan-ColorConf';
 
@@ -47,12 +47,12 @@ export class ConfigPanelComponent implements OnInit {
   selectedColor = colorVariables.blue;
 
   constructor(
-    private configService: ConfigService,
+    private configService: ThemeConfigService,
     private styleService: StyleService,
     private layoutService: LayoutService,
     @Inject(DOCUMENT) private document: Document,
     private route: ActivatedRoute,
-    @Inject(SESSION_STORAGE) private storage: StorageService) { }
+    @Inject(LOCAL_STORAGE) private storage: StorageService) { }
 
   ngOnInit() {
     if (this.storage.get(STORAGE_KEY)) {

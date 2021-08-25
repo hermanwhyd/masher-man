@@ -1,5 +1,5 @@
 import { Component, Inject, LOCALE_ID, Renderer2 } from '@angular/core';
-import { ConfigService } from '../@vex/services/config.service';
+import { ThemeConfigService } from '../@vex/services/theme-config.service';
 import { Settings } from 'luxon';
 import { DOCUMENT } from '@angular/common';
 import { Platform } from '@angular/cdk/platform';
@@ -27,7 +27,7 @@ export class AppComponent {
   title = 'MasherMan';
 
   constructor(
-    private configService: ConfigService,
+    private configService: ThemeConfigService,
     private styleService: StyleService,
     private renderer: Renderer2,
     private platform: Platform,
@@ -110,24 +110,6 @@ export class AppComponent {
       },
       {
         type: 'subheading',
-        label: 'Social',
-        children: [
-          {
-            type: 'link',
-            label: 'Status',
-            icon: icTraining,
-            route: '/status'
-          },
-          {
-            type: 'link',
-            label: 'Pengguna',
-            icon: icUser,
-            route: '/pengguna'
-          }
-        ]
-      },
-      {
-        type: 'subheading',
         label: 'Settings',
         children: [
           {
@@ -137,7 +119,7 @@ export class AppComponent {
             icon: icSettings,
           }
         ]
-      }, ,
+      },
       {
         type: 'subheading',
         label: 'Customize',

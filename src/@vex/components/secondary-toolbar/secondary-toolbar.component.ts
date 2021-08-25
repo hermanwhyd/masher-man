@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ConfigService } from '../../services/config.service';
+import { ThemeConfigService } from '../../services/theme-config.service';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -16,7 +16,7 @@ export class SecondaryToolbarComponent implements OnInit {
     map(config => config.toolbar.fixed)
   );
 
-  constructor(private configService: ConfigService) { }
+  constructor(private configService: ThemeConfigService) { }
 
   ngOnInit() {
   }

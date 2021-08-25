@@ -1,0 +1,35 @@
+<span class="card" fxLayout="column" fxLayout.gt-sm="row">
+
+  <div class="p-6" fxFlex="60%">
+    <div class="mt-0 mb-4" fxLayout="row" fxLayoutAlign="start center">
+      <h2 class="title" fxFlex="auto">{{ TITLE }}</h2>
+      <button (click)="createOrUpdateModel()" matTooltip="Tambah" matTooltipPosition="above"
+        class="cursor-pointer text-primary" mat-icon-button type="button" [loading]="isLoading">
+        <mat-icon [icIcon]="icAdd"></mat-icon>
+      </button>
+    </div>
+    <div @stagger class="py-4" [ngClass]="{'border-b': !last}"
+      *ngFor="let item of users; let idx = index; let first = first ;let last = last;" fxLayout="row"
+      fxLayoutAlign="start center">
+      <div @fadeInRight fxFlex="auto">
+        <span class="body-2 m-0 leading-snug mr-4 pr-4 border-r">{{ item.code }}</span>
+        <span class="text-secondary m-0 caption leading-none">{{ item.label }}</span>
+      </div>
+      <div class="flex flex-row justify-center">
+        <button (click)="removeModel(item)" matTooltip="Delete" matTooltipPosition="above" [disabled]="!item.removable"
+          class="cursor-pointer text-primary" mat-icon-button type="button">
+          <mat-icon size="20px" [icIcon]="icTrash"></mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="border-l" fxFlex="40%">
+    <div class="p-6">
+      <h2 class="title mt-0 mb-4">DESCRIPTION</h2>
+      <p class="text-secondary">
+        {{ DESCRIPTION }}
+      </p>
+    </div>
+  </div>
+</span>

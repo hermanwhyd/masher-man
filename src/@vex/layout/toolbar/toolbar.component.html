@@ -21,6 +21,7 @@
   <span fxFlex></span>
 
   <div class="-mx-1 flex items-center">
+
     <div class="px-1">
       <button (click)="reloadPage()" color="primary" mat-button type="button" matTooltip="Refresh Page">
         <mat-icon [icIcon]="icRefresh" class="-ml-1 mr-2" size="24px"></mat-icon>
@@ -29,8 +30,26 @@
     </div>
 
     <div class="px-1">
+      <div [matMenuTriggerFor]="profileMenu"
+        class="flex items-center rounded cursor-pointer relative trans-ease-out select-none py-1 pr-1 pl-3 hover:bg-hover"
+        matRipple>
+        <div class="body-1 font-medium leading-snug mr-3"> {{ activeProfileName }}</div>
+        <div class="rounded-full h-9 w-9 flex items-center justify-center text-primary bg-primary-light">
+          <mat-icon [icIcon]="icApiGW"></mat-icon>
+        </div>
+      </div>
+    </div>
+
+    <div class="px-1">
       <vex-toolbar-user></vex-toolbar-user>
     </div>
+
+    <mat-menu #profileMenu="matMenu" overlapTrigger="false" xPosition="before" yPosition="below">
+      <button mat-menu-item *ngFor="let item of profiles | async" (click)="changeActiveProfile(item)">
+        <span>{{ item.name }}</span>
+      </button>
+    </mat-menu>
+
   </div>
 </div>
 

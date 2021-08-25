@@ -10,6 +10,8 @@ import { CustomLayoutModule } from './custom-layout/custom-layout.module';
 import { JsonDateInterceptor } from './config/json-date.interceptor';
 import { HttpErrorInterceptor } from './config/http-error.interceptor';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+// import { CommonHeadersInterceptor } from './config/common-headers.interceptor';
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -33,7 +35,12 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,
       multi: true
-    }
+    },
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: CommonHeadersInterceptor,
+    //   multi: true
+    // }
   ],
   bootstrap: [AppComponent]
 })

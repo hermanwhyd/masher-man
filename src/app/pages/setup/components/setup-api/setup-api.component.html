@@ -1,48 +1,42 @@
 <span class="card" fxLayout="column" fxLayout.gt-sm="row">
 
-  <div class="p-6" fxFlex="70%">
-    <form [formGroup]="form">
+  <div class="p-6" fxFlex="50%">
+    <form [formGroup]="form" autocomplete="off">
       <h2 class="title mt-0 mb-4">API CONFIG</h2>
 
       <div fxLayout="column" fxLayoutAlign="space-between center">
-        <mat-form-field class="w-full">
-          <mat-label>Base API URL</mat-label>
-          <input type="text" formControlName="baseApiUrl" matInput>
-        </mat-form-field>
-
-        <mat-form-field class="w-full">
-          <mat-label>Registration API URL</mat-label>
-          <textarea type="text" formControlName="registrationUrl" matInput></textarea>
-        </mat-form-field>
-
-
-        <mat-form-field class="w-full">
-          <mat-label>Token Generation API URL</mat-label>
-          <textarea type="text" formControlName="tokenGenerationUrl" matInput></textarea>
+        <mat-form-field class="w-full" appearance="outline">
+          <mat-label>API Config URL</mat-label>
+          <input type="text" formControlName="configApi" matInput placeholder="https://..." required>
+          <mat-error *ngIf="formControl.configApi.touched && formControl.configApi.errors?.required">
+            Config URL harus diisi
+          </mat-error>
+          <mat-hint>API for getting profiles</mat-hint>
         </mat-form-field>
 
       </div>
 
       <div fxLayoutAlign="end center" fxLayoutGap="10px">
-        <button mat-stroked-button type="button" (click)="reset()" [disabled]="!submitable">Reset</button>
+        <button mat-stroked-button type="button" (click)="reset()" [disabled]="resetable">Reset</button>
         <button mat-stroked-button color="primary" type="button" (click)="submit()"
-          [disabled]="!submitable">Update</button>
+          [disabled]="!submitable">Fetch</button>
       </div>
     </form>
   </div>
 
-  <div class="border-l" fxFlex="30%">
+  <div class="border-l" fxFlex="50%">
     <div class="p-6">
       <h2 class="title mt-0 mb-4">Description</h2>
       <p class="text-secondary">
         Information of URL Wso2 API.
-        For mor detail please access to : <a
-          href="https://docs.wso2.com/display/AM250/RESTful+APIs">https://docs.wso2.com/display/AM250/RESTful+APIs</a>
-        Example:
-        - Api Base Url: https://localhost:9443/api/am/store/v0.13
-        - Registration Url: https://localhost:9443/client-registration/v0.13/register
-        - Token Generation Url: https://localhost:8243/token
-
+        For mor detail please access to :
+        <a href="https://docs.wso2.com/display/AM250/RESTful+APIs" target="_blank">
+          <u class="text-cyan">WsO2 v2.50 Docs</u>
+        </a>
+        <br>
+        for other version: <a href="https://apim.docs.wso2.com/en/versions/" target="_blank">
+          <u class="text-cyan">WsO2 Docs</u>
+        </a>
       </p>
     </div>
   </div>

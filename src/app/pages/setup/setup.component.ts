@@ -6,7 +6,8 @@ import { fadeInRight400ms } from '../../../@vex/animations/fade-in-right.animati
 import { fadeInUp400ms } from '../../../@vex/animations/fade-in-up.animation';
 import { stagger80ms } from '../../../@vex/animations/stagger.animation';
 import { SidebarMenu } from './interfaces/sidebar-menu.interface';
-import { SetupEnumComponent } from './components/setup-enum/setup-enum.component';
+import { SetupApiComponent } from './components/setup-api/setup-api.component';
+import { SetupUserComponent } from './components/setup-user/setup-user.component';
 
 @Component({
   selector: 'vex-setup',
@@ -23,18 +24,21 @@ export class SetupComponent implements OnInit {
 
   sidebarMenu: SidebarMenu[] = [
     { type: 'subheader', title: 'BASE CONFIG', element: '', active: false },
-    { type: 'link', element: 'setupApi', title: 'API Configuration', active: false },
+    { type: 'link', element: 'setupApi', title: 'API Config', active: true },
+    { type: 'subheader', title: 'USER CONFIG', element: '', active: false },
+    { type: 'link', element: 'setupUser', title: 'Publisher', active: false },
+    { type: 'link', element: 'setupUser', title: 'Store', active: false },
+    { type: 'link', element: 'setupUser', title: 'API Manager', active: false },
   ];
 
-  @ViewChild(SetupEnumComponent, { read: ElementRef, static: true }) private setupApi: ElementRef;
+  @ViewChild(SetupUserComponent, { read: ElementRef, static: true }) private setupUser: ElementRef;
+  @ViewChild(SetupApiComponent, { read: ElementRef, static: true }) private setupApi: ElementRef;
   constructor(
     private layoutService: LayoutService,
     private scrollDispatcher: ScrollDispatcher,
     private elem: ElementRef) { }
 
-  ngOnInit(): void {
-    this.sidebarMenu[1].active = true;
-  }
+  ngOnInit(): void { }
 
   scrollTo(element: SidebarMenu) {
     this.scrollDispatcher.getAncestorScrollContainers(this.elem)[0].scrollTo({

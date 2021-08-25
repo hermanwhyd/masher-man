@@ -7,14 +7,14 @@ import { LayoutService } from './layout.service';
 import { configs } from './configs';
 import { ConfigName } from '../interfaces/config-name.model';
 import { Config } from '../interfaces/config.model';
-import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
+import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 
 const STORAGE_KEY = 'MasherMan-LayoutConf';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ConfigService {
+export class ThemeConfigService {
   defaultConfig = ConfigName.apollo;
 
   configs: Config[] = configs;
@@ -24,7 +24,7 @@ export class ConfigService {
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
-    @Inject(SESSION_STORAGE) private storage: StorageService,
+    @Inject(LOCAL_STORAGE) private storage: StorageService,
     private layoutService: LayoutService,
   ) {
     this.config$.subscribe(config => this._updateConfig(config));

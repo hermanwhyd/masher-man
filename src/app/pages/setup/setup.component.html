@@ -2,20 +2,23 @@
   <vex-page-layout-content fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="24px" vexContainer>
     <div @stagger [fxFlex]="menuWidth" class="sticky top-6" fxHide fxLayout="column" fxShow.gt-sm>
       <mat-list class="navigation" fxFlex="grow">
-        <div *ngFor="let item of sidebarMenu">
-          <h5 *ngIf="item.type === 'subheader'" @fadeInRight matSubheader>
+        <div *ngFor="let item of sidebarMenu; let idx = index;">
+          <h5 *ngIf="item.type === 'subheader'" [class.pt-10]="idx > 0" @fadeInRight matSubheader>
             {{ item.title }}
           </h5>
-          <a *ngIf="item.type === 'link'" (click)="scrollTo(item)" @fadeInRight [class.bg-hover]="item.active"
-            [class.text-primary]="item.active" class="list-item mb-2 no-underline flex items-center" matRipple>
-            <span>{{ item.title }}</span>
-          </a>
+          <mat-list-item *ngIf="item.type === 'link'" (click)="scrollTo(item)" @fadeInRight
+            [class.bg-hover]="item.active" class="cursor-pointer" matRipple>
+            <h4 matLine [class.text-primary]="item.active">{{ item.title }}</h4>
+          </mat-list-item>
         </div>
       </mat-list>
     </div>
 
     <div @stagger class="max-w-6xl w-full" fxLayout="column" fxLayoutGap="24px">
       <vex-setup-api @fadeInUp></vex-setup-api>
+      <vex-setup-user TITLE="PUBLISHER" DESCRIPTION="Brief Description" TYPE="publisher"></vex-setup-user>
+      <vex-setup-user TITLE="STORE" DESCRIPTION="Brief Description" TYPE="store"></vex-setup-user>
+      <vex-setup-user TITLE="API MANAGER" DESCRIPTION="Brief Description" TYPE="apimanager"></vex-setup-user>
     </div>
   </vex-page-layout-content>
 </vex-page-layout>

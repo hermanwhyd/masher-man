@@ -4,7 +4,7 @@ import { delay, filter, map, startWith } from 'rxjs/operators';
 import { NavigationEnd, Router } from '@angular/router';
 import { checkRouterChildsData } from '../../@vex/utils/check-router-childs-data';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { ConfigService } from '../../@vex/services/config.service';
+import { ThemeConfigService } from '../../@vex/services/theme-config.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { SidebarComponent } from '../../@vex/components/sidebar/sidebar.component';
 import { LoadingService } from '../services/loading-service.service';
@@ -33,7 +33,7 @@ export class CustomLayoutComponent implements OnInit {
 
   constructor(
     private layoutService: LayoutService,
-    private configService: ConfigService,
+    private configService: ThemeConfigService,
     private breakpointObserver: BreakpointObserver,
     private router: Router,
     private loadingSvc: LoadingService) { }

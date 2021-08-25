@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
+import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 
 export enum Style {
   light = 'vex-style-light',
@@ -25,7 +25,7 @@ export class StyleService {
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
-    @Inject(SESSION_STORAGE) private storage: StorageService) {
+    @Inject(LOCAL_STORAGE) private storage: StorageService) {
     this.style$.pipe(untilDestroyed(this)).subscribe(style => this._updateStyle(style));
   }
 

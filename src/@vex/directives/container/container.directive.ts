@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Directive, HostBinding } from '@angular/core';
-import { ConfigService } from '../../services/config.service';
+import { ThemeConfigService } from '../../services/theme-config.service';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
@@ -12,8 +12,8 @@ export class ContainerDirective {
 
   @HostBinding('class.container') enabled: boolean;
 
-  constructor(private configService: ConfigService,
-              private cd: ChangeDetectorRef) {
+  constructor(private configService: ThemeConfigService,
+    private cd: ChangeDetectorRef) {
     this.configService.config$.pipe(
       map(config => config.boxed),
       distinctUntilChanged(),

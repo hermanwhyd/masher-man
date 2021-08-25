@@ -12,12 +12,10 @@ import { ApiConfigService } from 'src/app/services/api-config.service';
 })
 export class SetupApiComponent implements OnInit {
 
-  apiConfig = this.apiConfigService.config;
+  configApi = this.apiConfigService.configApi;
 
   form = this.fb.group({
-    baseApiUrl: ['', Validators.required],
-    tokenUrl: ['', Validators.required],
-    registrationUrl: ['', Validators.required]
+    configApi: ['', Validators.required],
   });
 
   constructor(
@@ -30,7 +28,11 @@ export class SetupApiComponent implements OnInit {
   }
 
   get submitable(): boolean {
-    return !this.form.pristine && this.form.valid;
+    return this.form.valid;
+  }
+
+  get resetable(): boolean {
+    return !(!this.form.pristine && this.form.valid);
   }
 
   get formControl() {
@@ -38,11 +40,18 @@ export class SetupApiComponent implements OnInit {
   }
 
   submit() {
-    this.apiConfig.next(this.form.getRawValue());
-    this.snackBar.openFromComponent(SnackbarNotifComponent, { data: { message: 'Data berhasil disimpan!', type: 'success' } });
+    const url = this.formControl.configApi.value;
+    this.apiConfigService.getProfile(url).subscribe((rs) => {
+      rs[0].active = true;
+      this.apiConfigService.configApi.next(url);
+      this.apiConfigService.profiles.next(rs);
+      this.snackBar.openFromComponent(SnackbarNotifComponent, { data: { message: 'Data berhasil disimpan!', type: 'success' } });
+      this.reset();
+    });
   }
 
   reset() {
-    this.form.patchValue(this.apiConfig);
+    this.form.patchValue({ configApi: this.configApi.value });
+    this.form.markAsPristine();
   }
 }

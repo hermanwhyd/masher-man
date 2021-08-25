@@ -1,0 +1,52 @@
+<form (ngSubmit)="submit()" [formGroup]="form" autocomplete="off">
+  <div fxLayout="row" fxLayoutAlign="start center" mat-dialog-title>
+    <h2 class="headline m-0" fxFlex="auto">Client Registration
+      <span class="bg-teal-light p-1 rounded-lg text-primary">{{ activeProfile.name}}</span>
+    </h2>
+    <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
+      <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+  </div>
+
+  <mat-divider class="-mx-6 text-border"></mat-divider>
+
+  <mat-dialog-content fxLayout="column">
+
+    <mat-form-field appearance="outline">
+      <mat-label>Username</mat-label>
+      <input formControlName="username" matInput required>
+      <mat-hint>Username untuk login ke portal</mat-hint>
+      <mat-error *ngIf="(formControl.username.touched) && formControl.username.errors?.required">
+        Username harus diisi
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Password</mat-label>
+      <input formControlName="password" matInput required>
+      <mat-hint>Password untuk login ke portal</mat-hint>
+      <mat-error *ngIf="(formControl.password.touched) && formControl.password.errors?.required">
+        Password harus diisi
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" *ngIf="isFetched">
+      <mat-label>Client Id</mat-label>
+      <input formControlName="client_id" matInput>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" *ngIf="isFetched">
+      <mat-label>Client Secret</mat-label>
+      <input formControlName="client_secret" matInput>
+    </mat-form-field>
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close type="button">CANCEL</button>
+    <button color="primary" mat-button type="button" [disabled]="!submitable" [loading]="isLoading" (click)="fetch()">
+      GET CLIENT ID
+    </button>
+    <button color="primary" mat-button type="submit" *ngIf="isFetched">SAVE</button>
+  </mat-dialog-actions>
+</form>

@@ -28,11 +28,11 @@ const routes: VexRoutes = [
         loadChildren: () => import('./pages/publisher/publisher.module').then(m => m.PublisherModule),
         data: { roles: [] }
       },
-      // {
-      //   path: 'setup',
-      //   loadChildren: () => import('./pages/setup/setup.module').then(m => m.SetupModule),
-      //   data: { roles: [] }
-      // },
+      {
+        path: 'setup',
+        loadChildren: () => import('./pages/setup/setup.module').then(m => m.SetupModule),
+        data: { roles: [] }
+      },
       {
         path: 'no-access',
         loadChildren: () => import('./pages/access/error-403/error-403.module').then(m => m.Error403Module)

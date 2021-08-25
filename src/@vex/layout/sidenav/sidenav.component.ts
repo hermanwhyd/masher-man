@@ -4,7 +4,7 @@ import { NavigationService } from '../../services/navigation.service';
 import icRadioButtonChecked from '@iconify/icons-ic/twotone-radio-button-checked';
 import icRadioButtonUnchecked from '@iconify/icons-ic/twotone-radio-button-unchecked';
 import { LayoutService } from '../../services/layout.service';
-import { ConfigService } from '../../services/config.service';
+import { ThemeConfigService } from '../../services/theme-config.service';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -26,8 +26,8 @@ export class SidenavComponent implements OnInit {
   icRadioButtonUnchecked = icRadioButtonUnchecked;
 
   constructor(private navigationService: NavigationService,
-              private layoutService: LayoutService,
-              private configService: ConfigService) { }
+    private layoutService: LayoutService,
+    private configService: ThemeConfigService) { }
 
   ngOnInit() {
   }

@@ -1,4 +1,4 @@
-export interface LoginRq {
+export interface RegisterRq {
   callbackUrl: string;
   clientName: string;
   owner: string;
@@ -6,7 +6,7 @@ export interface LoginRq {
   saasApp: boolean;
 }
 
-export interface LoginRs {
+export interface RegisterRs {
   clientId: string;
   clientName: string;
   callBackURL?: any;
@@ -16,14 +16,14 @@ export interface LoginRs {
   tokenType?: any;
 }
 
-export interface RegisterRq {
+export interface LoginRq {
   grant_type: string;
   username: string;
   password: string;
   scope: string;
 }
 
-export interface RegisterRs {
+export interface LoginRs {
   access_token: string;
   refresh_token: string;
   scope: string;

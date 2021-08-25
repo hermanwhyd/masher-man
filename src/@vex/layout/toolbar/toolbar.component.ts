@@ -2,12 +2,17 @@ import { Component, ElementRef, HostBinding, Input, OnInit } from '@angular/core
 import { LayoutService } from '../../services/layout.service';
 import icMenu from '@iconify/icons-ic/twotone-menu';
 import icRefresh from '@iconify/icons-ic/baseline-refresh';
-import { ConfigService } from '../../services/config.service';
+import { ThemeConfigService } from '../../services/theme-config.service';
 import { map } from 'rxjs/operators';
 import { NavigationService } from '../../services/navigation.service';
 import icArrowDropDown from '@iconify/icons-ic/twotone-arrow-drop-down';
 import { PopoverService } from '../../components/popover/popover.service';
 import { Router } from '@angular/router';
+
+import icApiGW from '@iconify/icons-logos/aws-api-gateway';
+
+import { ApiConfigService } from 'src/app/services/api-config.service';
+import { Profile } from 'src/app/types/api-config.interface';
 
 @Component({
   selector: 'vex-toolbar',
@@ -15,6 +20,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./toolbar.component.scss']
 })
 export class ToolbarComponent implements OnInit {
+
+  icApiGW = icApiGW;
+
+  profiles = this.apiConfigService.profiles;
+  activeProfileName: string;
 
   @Input() mobileQuery: boolean;
 
@@ -35,12 +45,16 @@ export class ToolbarComponent implements OnInit {
 
   constructor(
     private layoutService: LayoutService,
-    private configService: ConfigService,
+    private configService: ThemeConfigService,
     private navigationService: NavigationService,
     private popoverService: PopoverService,
-    private router: Router,) { }
+    private router: Router,
+    private apiConfigService: ApiConfigService) { }
 
   ngOnInit() {
+    this.apiConfigService.profiles$.subscribe(() => {
+      this.activeProfileName = this.apiConfigService.getActiveProfile()?.name;
+    });
   }
 
   openQuickpanel() {
@@ -56,5 +70,10 @@ export class ToolbarComponent implements OnInit {
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
       this.router.navigate([currentUrl]);
     });
+  }
+
+  changeActiveProfile(profile: Profile) {
+    this.profiles.value.forEach(p => p.active = (p.name === profile.name) ? true : false);
+    this.profiles.next(this.profiles.value);
   }
 }
