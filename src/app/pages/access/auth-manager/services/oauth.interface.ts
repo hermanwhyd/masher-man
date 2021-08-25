@@ -11,7 +11,8 @@ export interface RegisterRs {
   clientName: string;
   callBackURL?: any;
   clientSecret: string;
-  isSaasApplication: boolean;
+  jsonString: string;
+  isSaasApplication?: boolean;
   appOwner: string;
   tokenType?: any;
 }

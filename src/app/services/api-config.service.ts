@@ -31,7 +31,7 @@ export class ApiConfigService {
       // set configs active
       const name = this.getActiveProfile()?.name;
       const configs = this.configs.value;
-      configs.forEach(p => p.active = (p.alias === name) ? true : false);
+      configs.forEach(p => p.active = (p.profile === name) ? true : false);
       this.configs.next(configs);
     });
   }

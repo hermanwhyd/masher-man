@@ -46,14 +46,24 @@ export class SetupUserComponent implements OnInit {
 
   ngOnInit(): void {
     this.apiConfigService.configs$.subscribe((configs: ApiConfig[]) => {
+
       this.configs = configs;
       this.config = this.configs.find(c => c.active === true);
+      if (!this.config) {
+        this.config = {
+          profile: this.apiConfigService.getActiveProfile().name, active: true
+          , userPublishers: [], userStores: [], userApiManagers: []
+        } as ApiConfig;
+        this.configs.push(this.config);
+      }
+
+      console.log(this.config);
       if (this.TYPE === 'publisher') {
-        this.users = this.config?.userPublishers || [];
+        this.users = this.config.userPublishers;
       } else if (this.TYPE === 'store') {
-        this.users = this.config?.userStores || [];
+        this.users = this.config.userStores;
       } else if (this.TYPE === 'apimanager') {
-        this.users = this.config?.userApiManagers || [];
+        this.users = this.config.userApiManagers;
       } else {
         this.users = [];
       }
@@ -70,11 +80,13 @@ export class SetupUserComponent implements OnInit {
 
         this.users.push(newModel);
         this.snackBar.openFromComponent(SnackbarNotifComponent, { data: { message: 'Data berhasil disimpan!', type: 'success' } });
+        this.apiConfigService.configs.next(this.configs);
       });
   }
 
   removeModel(model: User) {
-    this.users.unshift(model);
+    const idx = this.users.indexOf(model);
+    this.users.splice(idx, 1);
     this.apiConfigService.configs.next(this.configs);
   }
 }

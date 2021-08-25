@@ -31,6 +31,11 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" *ngIf="isFetched">
+      <mat-label>Grant Types</mat-label>
+      <input formControlName="grant_types" matInput>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" *ngIf="isFetched">
       <mat-label>Client Id</mat-label>
       <input formControlName="client_id" matInput>
     </mat-form-field>
@@ -44,7 +49,8 @@
 
   <mat-dialog-actions align="end">
     <button mat-button mat-dialog-close type="button">CANCEL</button>
-    <button color="primary" mat-button type="button" [disabled]="!submitable" [loading]="isLoading" (click)="fetch()">
+    <button color="primary" mat-button type="button" [disabled]="!submitable" [loading]="isLoading" (click)="fetch()"
+      *ngIf="!isFetched">
       GET CLIENT ID
     </button>
     <button color="primary" mat-button type="submit" *ngIf="isFetched">SAVE</button>

@@ -1,6 +1,6 @@
 export interface ApiConfig {
   active: boolean;
-  alias: string;
+  profile: string;
   userPublishers?: User[];
   userStores?: User[];
   userApiManagers?: User[];
@@ -9,6 +9,7 @@ export interface ApiConfig {
 export interface User {
   username: string;
   password: string;
+  grantTypes: string;
   clientDigest: string;
 }
 

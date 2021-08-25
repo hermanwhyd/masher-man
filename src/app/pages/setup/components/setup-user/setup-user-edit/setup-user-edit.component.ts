@@ -28,6 +28,7 @@ export class SetupUserEditComponent implements OnInit {
   form = this.fb.group({
     username: ['', Validators.required],
     password: ['', Validators.required],
+    grant_types: [{ value: '', disabled: true }],
     client_id: [{ value: '', disabled: true }],
     client_secret: [{ value: '', disabled: true }],
   });
@@ -76,6 +77,8 @@ export class SetupUserEditComponent implements OnInit {
 
         model.client_id = rs.clientId;
         model.client_secret = rs.clientSecret;
+        const json = JSON.parse(rs.jsonString);
+        model.grant_types = json?.grant_types;
 
         this.form.patchValue(model);
       });
@@ -85,7 +88,7 @@ export class SetupUserEditComponent implements OnInit {
     const model = this.form.getRawValue();
     const clientDigest = encodeDigest(model.client_id, model.client_secret);
     const password = encode(model.password);
-    const user = { username: model.username, password, clientDigest } as User;
+    const user = { username: model.username, grantTypes: model.grant_types, password, clientDigest } as User;
     this.dialogRef.close(user);
   }
 }
