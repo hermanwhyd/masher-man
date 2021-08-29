@@ -41,7 +41,6 @@ export class ThemeConfigService {
   updateConfig(config: DeepPartial<Config>) {
     const newConfig = mergeDeep({ ...this._configSubject.getValue() }, config);
 
-    console.log(newConfig);
     this.storage.set(STORAGE_KEY, newConfig);
     this._configSubject.next(newConfig);
   }

@@ -1,0 +1,74 @@
+.profile-panel {
+  padding: var(--padding-16) var(--padding);
+}
+
+.heading {
+  margin-bottom: var(--padding);
+}
+
+.section {
+  border-bottom: 1px solid var(--foreground-divider);
+  margin-bottom: var(--padding-16);
+  padding-bottom: var(--padding-16);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.section-content {
+  margin-inline-start: var(--padding-12);
+
+  .subheading {
+    margin-top: var(--padding);
+  }
+}
+
+.subheading {
+  @apply my-4 uppercase text-xs text-secondary font-medium;
+}
+
+.layout + .layout {
+  margin-top: var(--padding);
+}
+
+.layout-image {
+
+  &:hover {
+    .layout-image-overlay {
+      background: rgba(0, 0, 0, 0.7);
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  .layout-image-overlay {
+    border-radius: var(--border-radius);
+    bottom: 0;
+    height: 100%;
+    left: 0;
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: var(--trans-ease-out);
+    visibility: hidden;
+    width: 100%;
+
+    button {
+      padding: 0 8px;
+    }
+  }
+}
+
+mat-slide-toggle + mat-slide-toggle,
+mat-slide-toggle + mat-checkbox,
+mat-checkbox + mat-slide-toggle,
+mat-checkbox + mat-checkbox {
+  display: block;
+  margin-top: var(--padding-12);
+}
+
+.style-name {
+  font: var(--font-body-2);
+}

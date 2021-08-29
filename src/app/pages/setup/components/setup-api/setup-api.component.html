@@ -7,8 +7,8 @@
       <div fxLayout="column" fxLayoutAlign="space-between center">
         <mat-form-field class="w-full" appearance="outline">
           <mat-label>API Config URL</mat-label>
-          <input type="text" formControlName="configApi" matInput placeholder="https://..." required>
-          <mat-error *ngIf="formControl.configApi.touched && formControl.configApi.errors?.required">
+          <input type="text" formControlName="proxyApi" matInput placeholder="https://..." required>
+          <mat-error *ngIf="formControl.proxyApi.touched && formControl.proxyApi.errors?.required">
             Config URL harus diisi
           </mat-error>
           <mat-hint>API for getting profiles</mat-hint>

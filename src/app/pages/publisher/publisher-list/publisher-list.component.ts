@@ -10,6 +10,8 @@ import icClear from '@iconify/icons-ic/round-clear';
 import icProduk from '@iconify/icons-ic/outline-shopping-cart';
 import icClose from '@iconify/icons-ic/twotone-close';
 import icRestore from '@iconify/icons-ic/baseline-restore-from-trash';
+import icInfo from '@iconify/icons-ic/sharp-help-outline';
+import icGlobe from '@iconify/icons-fa-solid/globe';
 
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
@@ -17,16 +19,20 @@ import { MatTableDataSource } from '@angular/material/table';
 import { FormControl } from '@angular/forms';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { debounceTime, filter, finalize } from 'rxjs/operators';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { filter, finalize, map } from 'rxjs/operators';
 import { fadeInRight400ms } from 'src/@vex/animations/fade-in-right.animation';
 import { scaleIn400ms } from 'src/@vex/animations/scale-in.animation';
 import { scaleFadeIn400ms } from 'src/@vex/animations/scale-fade-in.animation';
 import _ from 'lodash';
 import { Api } from 'src/app/types/api.interface';
 import { PublisherService } from '../services/publisher.service';
-import { SnackbarNotifComponent } from 'src/app/utilities/snackbar-notif/snackbar-notif.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Paginate } from 'src/app/types/paginate.interface';
+import { PageEvent } from '@angular/material/paginator';
+import { ApiConfigService } from 'src/app/services/api-config.service';
+import { untilDestroyed, UntilDestroy } from '@ngneat/until-destroy';
+import { SnackbarNotifComponent } from 'src/app/utilities/snackbar-notif/snackbar-notif.component';
+import { ActivatedRoute } from '@angular/router';
 
 @UntilDestroy()
 @Component({
@@ -53,55 +59,68 @@ export class PublisherListComponent implements OnInit {
   icProduk = icProduk;
   icClose = icClose;
   icRestore = icRestore;
+  icInfo = icInfo;
+  icGlobe = icGlobe;
 
   @Input()
   columns: TableColumn<Api>[] = [
     { label: 'Thumbnail', property: 'thumbnailUri', type: 'image', visible: true },
     { label: 'Name', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
-    { label: 'Description', property: 'description', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Portal', property: 'portal', type: 'button', visible: true },
+    { label: 'Description', property: 'description', type: 'text', visible: false, cssClasses: ['font-medium'] },
     { label: 'Context', property: 'context', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Version', property: 'version', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Provider', property: 'provider', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Status', property: 'status', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Actions', property: 'actions', type: 'button', visible: true }
+    { label: 'Status', property: 'status', type: 'status', visible: true, cssClasses: ['text-secondary', 'font-medium'] }
   ];
 
-
-  pageSize = 10;
   pageSizeOptions: number[] = [5, 10, 25, 100];
+  pagination: Paginate<Api>;
+  pageEventSubject: BehaviorSubject<PageEvent> = new BehaviorSubject(null);
   dataSource: MatTableDataSource<Api> | null;
   searchCtrl = new FormControl();
-  searchStr$ = this.searchCtrl.valueChanges.pipe(
-    debounceTime(10)
-  );
 
   isLoading = false;
   apisSubject: BehaviorSubject<Api[]> = new BehaviorSubject([]);
   data$: Observable<Api[]> = this.apisSubject.asObservable();
-  apis: Api[];
+  profiles$ = this.apiConfigService.profiles$;
+  isLoadApiDetail = new BehaviorSubject<boolean>(false);
 
   constructor(
+    private route: ActivatedRoute,
     private snackBar: MatSnackBar,
+    private apiConfigService: ApiConfigService,
     private publisherService: PublisherService,
   ) { }
 
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource();
     this.registerSub();
-    this.fetchData();
   }
 
   registerSub() {
     this.data$.pipe(
       filter<Api[]>(Boolean)
     ).subscribe(models => {
-      this.apis = models;
       this.dataSource.data = models;
     });
 
-    this.searchCtrl.valueChanges.pipe(
-      untilDestroyed(this)
-    ).subscribe(value => this.onFilterChange(value));
+    this.pageEventSubject
+      .asObservable()
+      .pipe(filter<PageEvent>(Boolean))
+      .subscribe(event => {
+        this.publisherService.paginate((event.pageIndex * event.pageSize), event.pageSize, this.searchCtrl.value)
+          .subscribe((rs) => {
+            this.pagination = rs;
+            this.apisSubject.next(rs.list);
+          });
+      });
+
+    this.profiles$.pipe(untilDestroyed(this)).subscribe(() => this.fetchData());
+
+    this.route.queryParamMap.pipe(
+      map((params: any) => params.has('apiId')),
+    ).subscribe((has) => this.isLoadApiDetail.next(has));
   }
 
   get visibleColumns() {
@@ -112,27 +131,54 @@ export class PublisherListComponent implements OnInit {
     return column.property;
   }
 
-  fetchData() {
-    this.isLoading = true;
-    this.publisherService.paginate(0, 25)
-      .pipe(finalize(() => this.isLoading = false))
-      .subscribe(rs => this.apisSubject.next(rs.list));
+  refreshDataPaging(event: PageEvent): void {
+    this.pageEventSubject.next(event);
   }
 
-  toggleColumnVisibility(column, event) {
+  fetchData() {
+    this.isLoading = true;
+    this.publisherService.paginate(0, 10)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe(rs => {
+        this.pagination = rs;
+        this.apisSubject.next(rs.list);
+      }, (error) => {
+        this.pagination = null;
+        this.apisSubject.next([] as Api[]);
+        this.snackBar.openFromComponent(SnackbarNotifComponent, { data: { message: `${error}. F12 for more detail`, type: 'danger' } });
+      });
+  }
+
+  toggleColumnVisibility(column: any, event: any) {
     event.stopPropagation();
     event.stopImmediatePropagation();
     column.visible = !column.visible;
   }
 
-  onFilterChange(value: string) {
-    if (!this.dataSource) {
-      return;
+  onSearch() {
+    const pageEvent = this.pageEventSubject.value
+      || ({ pageIndex: 1, pageSize: 10, length: this.pagination?.pagination.total || 10 } as PageEvent);
+    pageEvent.pageIndex = 0;
+    this.pageEventSubject.next(pageEvent);
+  }
+
+  getStatusClass(status: string) {
+    if (status === 'PUBLISHED') {
+      return 'text-cyan bg-cyan-light';
     }
-    if (value) {
-      value = value.trim();
-      value = value.toLowerCase();
+
+    if (status === 'CREATED') {
+      return 'text-green bg-green-light';
     }
-    this.dataSource.filter = value;
+
+    if (status === 'DEPRECATED' || status === 'BLOCKED') {
+      return 'text-red bg-red-light';
+    }
+
+    return 'text-gray bg-gray-light';
+  }
+
+  getPortalLink(api: Api) {
+    return `${this.apiConfigService.getActiveProfile()?.portalUrl}/publisher/info?name=${api.name}&version=${api.version}&provider=${api.provider}`;
   }
 }

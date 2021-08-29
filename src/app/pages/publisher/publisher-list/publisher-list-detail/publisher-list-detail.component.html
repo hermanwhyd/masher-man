@@ -1,0 +1,21 @@
+<div class="card overflow-auto -mt-16">
+
+  <div class="bg-app-bar px-6 h-16 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+    <div class="flex items-center">
+      <button [routerLink]="['.']" class="mr-2" mat-icon-button [loading]="isLoading">
+        <mat-icon [icIcon]="icArrowBack" size="24px"></mat-icon>
+      </button>
+      <p *ngIf="!isLoading" class="text-lg leading-normal">
+        <span>{{ model?.name }}</span>
+        <span class="ml-2 text-sm text-white bg-primary px-2 py-1 rounded-full">{{ model?.version }}</span>
+      </p>
+    </div>
+
+    <span fxFlex></span>
+
+    <button class="ml-4" color="primary" fxFlex="none" mat-mini-fab matTooltip="Edit" type="button">
+      <mat-icon [icIcon]="icPencil" size="20px"></mat-icon>
+    </button>
+  </div>
+
+</div>

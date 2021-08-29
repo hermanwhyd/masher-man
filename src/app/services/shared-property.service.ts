@@ -5,7 +5,7 @@ import { EMPTY, Observable, of } from 'rxjs';
 import { map, publishReplay, refCount, catchError, isEmpty, filter } from 'rxjs/operators';
 import { GenericRs } from 'src/app/types/generic-rs.interface';
 import { SharedProperty } from 'src/app/types/shared-property.interface';
-import { ApiConfig } from '../common/api.config';
+import { Account } from '../common/api.config';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class SharedPropertyService {
   private STORAGE_KEY = 'dashboard-greeting';
   private TIME_TO_KEEP = 10000; // in milis
 
-  private readonly URL = ApiConfig.url + '/v1/shared-props';
+  private readonly URL = Account.url + '/v1/shared-props';
   sharedPropGroupCache = {};
   sharedPropOptionCache = {};
 

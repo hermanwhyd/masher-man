@@ -1,5 +1,5 @@
 import { environment } from '../../environments/environment';
 
-export const ApiConfig = {
+export const Account = {
   url: environment.apiUrl,
 };

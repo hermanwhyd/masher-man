@@ -23,7 +23,6 @@ export class ToolbarComponent implements OnInit {
 
   icApiGW = icApiGW;
 
-  profiles = this.apiConfigService.profiles;
   activeProfileName: string;
 
   @Input() mobileQuery: boolean;
@@ -72,8 +71,7 @@ export class ToolbarComponent implements OnInit {
     });
   }
 
-  changeActiveProfile(profile: Profile) {
-    this.profiles.value.forEach(p => p.active = (p.name === profile.name) ? true : false);
-    this.profiles.next(this.profiles.value);
+  openPanelProfile() {
+    this.layoutService.openProfilepanel();
   }
 }

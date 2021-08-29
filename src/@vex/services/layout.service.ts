@@ -24,6 +24,9 @@ export class LayoutService {
   private _configpanelOpenSubject = new BehaviorSubject<boolean>(false);
   configpanelOpen$ = this._configpanelOpenSubject.asObservable();
 
+  private _profilepanelOpenSubject = new BehaviorSubject<boolean>(false);
+  profilepanelOpen$ = this._profilepanelOpenSubject.asObservable();
+
   private _searchOpen = new BehaviorSubject<boolean>(false);
   searchOpen$ = this._searchOpen.asObservable();
 
@@ -51,7 +54,7 @@ export class LayoutService {
   isMobile = () => this.breakpointObserver.isMatched(`(max-width: 599px)`);
 
   constructor(private router: Router,
-              private breakpointObserver: BreakpointObserver) { }
+    private breakpointObserver: BreakpointObserver) { }
 
   openQuickpanel() {
     this._quickpanelOpenSubject.next(true);
@@ -91,6 +94,14 @@ export class LayoutService {
 
   closeConfigpanel() {
     this._configpanelOpenSubject.next(false);
+  }
+
+  openProfilepanel() {
+    this._profilepanelOpenSubject.next(true);
+  }
+
+  closeProfilepanel() {
+    this._profilepanelOpenSubject.next(false);
   }
 
   openSearch() {

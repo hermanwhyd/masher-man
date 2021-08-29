@@ -11,7 +11,7 @@
     <div @stagger class="py-4" [ngClass]="{'border-b': !last}"
       *ngFor="let item of users; let idx = index; let first = first ;let last = last;" fxLayout="row"
       fxLayoutAlign="start center">
-      <div @fadeInRight fxFlex="auto">
+      <div @fadeInRight fxFlex="auto" class="mt-3">
         <span class="body-2 m-0 leading-snug mr-4 pr-4 border-r">{{ item.username }}</span>
         <span class="text-secondary m-0 caption leading-none">{{ item.grantTypes }}</span>
       </div>

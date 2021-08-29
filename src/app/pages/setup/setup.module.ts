@@ -42,7 +42,6 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatButtonLoadingModule,
     MatSnackBarModule,
     MatDialogModule,
-    MatButtonLoadingModule
   ]
 })
 export class SetupModule { }

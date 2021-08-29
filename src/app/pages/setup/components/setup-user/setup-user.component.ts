@@ -8,7 +8,7 @@ import { fadeInRight400ms } from 'src/@vex/animations/fade-in-right.animation';
 import { scaleIn400ms } from 'src/@vex/animations/scale-in.animation';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
 import { ApiConfigService } from 'src/app/services/api-config.service';
-import { ApiConfig, User } from 'src/app/types/api-config.interface';
+import { Account, User } from 'src/app/types/api-config.interface';
 import { SetupUserEditComponent } from './setup-user-edit/setup-user-edit.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -35,8 +35,8 @@ export class SetupUserComponent implements OnInit {
 
   isLoading = false;
 
-  configs: ApiConfig[];
-  config: ApiConfig;
+  accounts: Account[];
+  config: Account;
   users: User[];
 
   constructor(
@@ -45,19 +45,18 @@ export class SetupUserComponent implements OnInit {
     private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
-    this.apiConfigService.configs$.subscribe((configs: ApiConfig[]) => {
+    this.apiConfigService.accounts$.subscribe((accounts: Account[]) => {
 
-      this.configs = configs;
-      this.config = this.configs.find(c => c.active === true);
+      this.accounts = accounts;
+      this.config = this.accounts.find(c => c.active === true);
       if (!this.config) {
         this.config = {
           profile: this.apiConfigService.getActiveProfile().name, active: true
           , userPublishers: [], userStores: [], userApiManagers: []
-        } as ApiConfig;
-        this.configs.push(this.config);
+        } as Account;
+        this.accounts.push(this.config);
       }
 
-      console.log(this.config);
       if (this.TYPE === 'publisher') {
         this.users = this.config.userPublishers;
       } else if (this.TYPE === 'store') {
@@ -80,13 +79,13 @@ export class SetupUserComponent implements OnInit {
 
         this.users.push(newModel);
         this.snackBar.openFromComponent(SnackbarNotifComponent, { data: { message: 'Data berhasil disimpan!', type: 'success' } });
-        this.apiConfigService.configs.next(this.configs);
+        this.apiConfigService.accounts.next(this.accounts);
       });
   }
 
   removeModel(model: User) {
     const idx = this.users.indexOf(model);
     this.users.splice(idx, 1);
-    this.apiConfigService.configs.next(this.configs);
+    this.apiConfigService.accounts.next(this.accounts);
   }
 }

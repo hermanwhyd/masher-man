@@ -9,6 +9,7 @@ import { ConfigPanelModule } from '../../@vex/components/config-panel/config-pan
 import { SidebarModule } from '../../@vex/components/sidebar/sidebar.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoadingInterceptor } from '../config/loading.interceptor';
+import { ProfilepanelModule } from './profile-panel/profile-panel.module';
 
 @NgModule({
   declarations: [CustomLayoutComponent],
@@ -19,6 +20,7 @@ import { LoadingInterceptor } from '../config/loading.interceptor';
     ToolbarModule,
     FooterModule,
     ConfigPanelModule,
+    ProfilepanelModule,
     SidebarModule
   ],
   providers: [

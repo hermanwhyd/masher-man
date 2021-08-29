@@ -22,18 +22,21 @@ import { ContainerModule } from 'src/@vex/directives/container/container.module'
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { PublisherListDetailComponent } from './publisher-list/publisher-list-detail/publisher-list-detail.component';
+import { QuicklinkModule } from 'ngx-quicklink';
+import { MatButtonLoadingModule } from 'src/app/utilities/mat-button-loading/mat-button-loading.module';
 
 const routes: Routes = [
   {
     path: '',
-    component: PublisherListComponent,
+    component: PublisherListComponent
   },
   {
-    path: 'swagger-client',
+    path: 'edit',
     component: PublisherEditComponent,
   },
   {
-    path: 'import',
+    path: 'import-swagger',
     component: PublisherEditComponent,
   }
 ];
@@ -43,6 +46,7 @@ const routes: Routes = [
     PublisherEditComponent,
     PublisherListComponent,
     PublisherSwaggerComponent,
+    PublisherListDetailComponent,
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -65,7 +69,12 @@ const routes: Routes = [
     MatSelectModule,
     MatButtonToggleModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatButtonLoadingModule
+  ],
+  exports: [
+    RouterModule,
+    QuicklinkModule
   ]
 })
 export class PublisherModule { }

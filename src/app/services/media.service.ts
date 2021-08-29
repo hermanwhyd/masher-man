@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiConfig } from '../common/api.config';
+import { Account } from '../common/api.config';
 import { GenericRs } from '../types/generic-rs.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MediaService {
-  private readonly URL = [ApiConfig.url, 'media'].join('/');
+  private readonly URL = [Account.url, 'media'].join('/');
 
   constructor(private httpClient: HttpClient) { }
 

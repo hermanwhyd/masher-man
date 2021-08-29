@@ -23,7 +23,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 
           const reason = error?.error?.description
             ? [error.error.code, error.error.message, error.error.description].filter((f) => f !== '').join(' | ')
-            : 'Unexpected Error. F12 for more detail.';
+            : 'Unexpected Error. F12 for more detail!';
           this.snackBar.openFromComponent(SnackbarNotifComponent, { data: { message: reason, type: 'danger' } });
 
           return throwError(genericRs);

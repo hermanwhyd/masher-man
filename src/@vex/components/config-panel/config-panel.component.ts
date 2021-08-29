@@ -24,7 +24,7 @@ const STORAGE_KEY = 'MasherMan-ColorConf';
 })
 export class ConfigPanelComponent implements OnInit {
 
-  configs = this.configService.configs;
+  accounts = this.configService.configs;
   colorVariables = colorVariables;
 
   config$ = this.configService.config$;

@@ -1,7 +1,7 @@
 <form (ngSubmit)="submit()" [formGroup]="form" autocomplete="off">
   <div fxLayout="row" fxLayoutAlign="start center" mat-dialog-title>
     <h2 class="headline m-0" fxFlex="auto">Client Registration
-      <span class="bg-teal-light p-1 rounded-lg text-primary">{{ activeProfile.name}}</span>
+      <span class="bg-teal-light text-teal p-1 rounded-full text-sm">{{ activeProfile.name}}</span>
     </h2>
     <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
       <mat-icon [icIcon]="icClose"></mat-icon>

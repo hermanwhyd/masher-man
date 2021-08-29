@@ -97,7 +97,7 @@ export class AppComponent {
               {
                 type: 'link',
                 label: 'New API',
-                route: '/publisher/new'
+                route: '/publisher/edit'
               },
               {
                 type: 'link',

@@ -12,10 +12,10 @@ import { ApiConfigService } from 'src/app/services/api-config.service';
 })
 export class SetupApiComponent implements OnInit {
 
-  configApi = this.apiConfigService.configApi;
+  proxyApi = this.apiConfigService.proxyApi;
 
   form = this.fb.group({
-    configApi: ['', Validators.required],
+    proxyApi: ['', Validators.required],
   });
 
   constructor(
@@ -40,10 +40,10 @@ export class SetupApiComponent implements OnInit {
   }
 
   submit() {
-    const url = this.formControl.configApi.value;
+    const url = this.formControl.proxyApi.value;
     this.apiConfigService.getProfile(url).subscribe((rs) => {
       rs[0].active = true;
-      this.apiConfigService.configApi.next(url);
+      this.apiConfigService.proxyApi.next(url);
       this.apiConfigService.profiles.next(rs);
       this.snackBar.openFromComponent(SnackbarNotifComponent, { data: { message: 'Data berhasil disimpan!', type: 'success' } });
       this.reset();
@@ -51,7 +51,7 @@ export class SetupApiComponent implements OnInit {
   }
 
   reset() {
-    this.form.patchValue({ configApi: this.configApi.value });
+    this.form.patchValue({ proxyApi: this.proxyApi.value });
     this.form.markAsPristine();
   }
 }

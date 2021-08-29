@@ -7,14 +7,14 @@
         <span @fadeInRight class="ml-4 block">Publisher</span>
       </h2>
 
-      <mat-button-toggle-group class="mt-4 sm:mt-0">
+      <!-- <mat-button-toggle-group class="mt-4 sm:mt-0">
         <mat-button-toggle>AKTIF</mat-button-toggle>
         <mat-button-toggle>ARSIP</mat-button-toggle>
-      </mat-button-toggle-group>
+      </mat-button-toggle-group> -->
     </div>
   </vex-page-layout-header>
 
-  <vex-page-layout-content class="container -mt-6">
+  <vex-page-layout-content class="-mt-6" *ngIf="!(isLoadApiDetail | async)">
 
     <div class="card overflow-auto -mt-16">
       <div class="bg-app-bar px-6 h-16 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
@@ -26,9 +26,13 @@
           fxLayoutAlign="start center">
           <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
           <input [formControl]="searchCtrl" class="px-4 py-3 border-0 outline-none w-full bg-transparent"
-            placeholder="Cari..." type="search">
-          <ic-icon [icon]="icClear" *ngIf="searchCtrl.value" (click)="searchCtrl.reset()"
-            class="text-secondary flex-none mr-4 cursor-pointer" size="20px"></ic-icon>
+            placeholder="Type and enter to search" type="search" (keydown.enter)="onSearch()">
+          <ic-icon [icon]="icClear" *ngIf="searchCtrl.value" (click)="searchCtrl.reset();onSearch()"
+            class="text-secondary flex-none mr-2 cursor-pointer" size="20px"></ic-icon>
+          <ic-icon [icon]="icInfo" class="text-secondary flex-none cursor-pointer" size="20px"
+            matTooltip="Advance search with suffix `context:`, `provider:`, `tags:`. Default search by Name"
+            matTooltipPosition="above">
+          </ic-icon>
         </div>
 
         <span fxFlex></span>
@@ -42,7 +46,7 @@
           <mat-icon [icIcon]="icFilterList"></mat-icon>
         </button>
 
-        <button class="ml-4" color="primary" fxFlex="none" mat-mini-fab matTooltip="Tambah Produk" type="button">
+        <button class="ml-4" color="primary" fxFlex="none" mat-mini-fab matTooltip="Publish New API" type="button">
           <mat-icon [icIcon]="icAdd"></mat-icon>
         </button>
       </div>
@@ -61,28 +65,40 @@
         <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
           <!-- Text Columns -->
           <ng-container *ngIf="column.type === 'text'" [matColumnDef]="column.property">
-            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header> {{ column.label }}</th>
+            <th *matHeaderCellDef class="uppercase" mat-header-cell> {{ column.label }}</th>
             <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>{{ row[column.property] }}</td>
           </ng-container>
 
         </ng-container>
 
-        <!-- Action Column -->
-        <ng-container matColumnDef="actions">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header></th>
-          <td *matCellDef="let row" class="w-10 text-secondary" mat-cell>
-            <button (click)="$event.stopPropagation()" [matMenuTriggerData]="{ produk: row }"
-              [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button">
-              <mat-icon [icIcon]="icMoreHoriz"></mat-icon>
-            </button>
+        <!-- Portal Column -->
+        <ng-container matColumnDef="portal">
+          <th *matHeaderCellDef mat-header-cell></th>
+          <td *matCellDef="let row" mat-cell>
+            <a (click)="$event.stopPropagation()" mat-icon-button matTooltip="Go to Portal" matTooltipPosition="above"
+              [href]="getPortalLink(row)" target="_blank"
+              class="w-8 h-8 leading-none flex items-center justify-center hover:bg-hover text-orange bg-orange-light">
+              <mat-icon [icIcon]="icGlobe" size="18px"></mat-icon>
+            </a>
+          </td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th *matHeaderCellDef class="uppercase" mat-header-cell>Status</th>
+          <td *matCellDef="let row" mat-cell>
+            <div (click)="$event.stopPropagation()" fxLayoutAlign="start center" fxLayoutGap="4px">
+              <div class="rounded px-2 py-1 font-medium text-xs" fxFlex="none" [ngClass]="getStatusClass(row.status)">
+                {{ row.status }}
+              </div>
+            </div>
           </td>
         </ng-container>
 
         <tr *matHeaderRowDef="visibleColumns" mat-header-row></tr>
-        <tr *matRowDef="let row; columns: visibleColumns;" @fadeInUp
-          class="hover:bg-hover trans-ease-out cursor-pointer" mat-row>
+        <tr *matRowDef="let row; columns: visibleColumns;" @fadeInUp [routerLink]="['.']"
+          [queryParams]="{apiId: row.id}" class="hover:bg-hover trans-ease-out cursor-pointer" mat-row>
         </tr>
-        s
       </table>
 
       <div *ngIf="isLoading" @scaleFadeIn class="flex-auto flex flex-col justify-center items-center p-20">
@@ -97,9 +113,16 @@
         </h2>
       </div>
 
-      <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" class="sticky left-0"></mat-paginator>
+      <mat-paginator [length]="pagination?.pagination?.total" showFirstLastButtons="'true'"
+        [pageSizeOptions]="pageSizeOptions" (page)="refreshDataPaging($event)" class="sticky left-0"
+        [pageSize]="this.pageEventSubject.value?.pageSize || 10" [pageIndex]="this.pageEventSubject.value?.pageIndex">
+      </mat-paginator>
     </div>
 
+  </vex-page-layout-content>
+
+  <vex-page-layout-content class="-mt-6" *ngIf="isLoadApiDetail | async">
+    <vex-publisher-list-detail></vex-publisher-list-detail>
   </vex-page-layout-content>
 
 </vex-page-layout>
@@ -111,13 +134,4 @@
       {{ column.label }}
     </mat-checkbox>
   </button>
-</mat-menu>
-
-<mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
-  <ng-template let-produk="produk" matMenuContent>
-    <button *ngIf="!produk.deleted_at" mat-menu-item>
-      <mat-icon [icIcon]="icEdit"></mat-icon>
-      <span>Modify</span>
-    </button>
-  </ng-template>
 </mat-menu>

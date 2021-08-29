@@ -41,7 +41,7 @@ export interface ApiDetail extends Api {
   visibility?: string;
   visibleRoles?: any[];
   visibleTenants?: any[];
-  endpointConfig?: string;
+  endpointConfig?: string | EndPointConfig;
   endpointImplementationType?: string;
   endpointSecurity?: any;
   gatewayEnvironments?: string;
@@ -54,4 +54,22 @@ export interface ApiDetail extends Api {
   accessControlRoles?: any[];
   businessInformation?: BusinessInformation;
   corsConfiguration?: CorsConfiguration;
+}
+
+export interface ProductionEndpoints {
+  url: string;
+  config?: any;
+  template_not_supported: boolean;
+}
+
+export interface SandboxEndpoints {
+  url: string;
+  config?: any;
+  template_not_supported: boolean;
+}
+
+export interface EndPointConfig {
+  production_endpoints: ProductionEndpoints;
+  sandbox_endpoints: SandboxEndpoints;
+  endpoint_type: string;
 }

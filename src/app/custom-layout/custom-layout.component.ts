@@ -30,6 +30,7 @@ export class CustomLayoutComponent implements OnInit {
   );
 
   @ViewChild('configpanel', { static: true }) configpanel: SidebarComponent;
+  @ViewChild('profilepanel', { static: true }) profilepanel: SidebarComponent;
 
   constructor(
     private layoutService: LayoutService,
@@ -44,6 +45,10 @@ export class CustomLayoutComponent implements OnInit {
     this.layoutService.configpanelOpen$.pipe(
       untilDestroyed(this)
     ).subscribe(open => open ? this.configpanel.open() : this.configpanel.close());
+
+    this.layoutService.profilepanelOpen$.pipe(
+      untilDestroyed(this)
+    ).subscribe(open => open ? this.profilepanel.open() : this.profilepanel.close());
   }
 
   /**
