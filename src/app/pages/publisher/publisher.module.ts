@@ -25,6 +25,11 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { PublisherListDetailComponent } from './publisher-list/publisher-list-detail/publisher-list-detail.component';
 import { QuicklinkModule } from 'ngx-quicklink';
 import { MatButtonLoadingModule } from 'src/app/utilities/mat-button-loading/mat-button-loading.module';
+import { MatTabsModule } from '@angular/material/tabs';
+import { NgxShimmerLoadingModule } from 'ngx-shimmer-loading';
+import { JsonFormsModule } from '@jsonforms/angular';
+import { JsonFormsAngularMaterialModule } from '@jsonforms/angular-material';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
 
 const routes: Routes = [
   {
@@ -70,7 +75,12 @@ const routes: Routes = [
     MatButtonToggleModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
-    MatButtonLoadingModule
+    MatButtonLoadingModule,
+    MatTabsModule,
+    NgxShimmerLoadingModule,
+    JsonFormsModule,
+    JsonFormsAngularMaterialModule,
+    NgxJsonViewerModule
   ],
   exports: [
     RouterModule,

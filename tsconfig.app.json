@@ -5,7 +5,8 @@
     "types": []
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "src/assets/static-data/**/*.json"
   ],
   "exclude": [
     "src/**/*.spec.ts"

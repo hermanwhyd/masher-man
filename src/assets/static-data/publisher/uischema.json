@@ -1,0 +1,43 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "HorizontalLayout",
+      "elements": [
+        {
+          "type": "Control",
+          "label": "Name",
+          "scope": "#/properties/name"
+        },
+        {
+          "type": "Control",
+          "label": "Version",
+          "scope": "#/properties/version"
+        },
+        {
+          "type": "Control",
+          "label": "Context",
+          "scope": "#/properties/context"
+        }
+      ]
+    },
+    {
+      "type": "Control",
+      "label": "Description",
+      "scope": "#/properties/description",
+      "options": {
+        "multi": true
+      }
+    },
+    {
+      "type": "Control",
+      "label": "Production Endpoint URL",
+      "scope": "#/properties/endpointConfig/properties/production_endpoints/properties/url"
+    },
+    {
+      "type": "Control",
+      "label": "Sandbox Endpoint URL",
+      "scope": "#/properties/endpointConfig/properties/sandbox_endpoints/properties/url"
+    }
+  ]
+}

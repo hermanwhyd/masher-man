@@ -1,0 +1,294 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "context": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "provider": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "thumbnailUri": {
+      "type": "null"
+    },
+    "apiDefinition": {
+      "type": "string"
+    },
+    "wsdlUri": {
+      "type": "null"
+    },
+    "responseCaching": {
+      "type": "string"
+    },
+    "cacheTimeout": {
+      "type": "integer"
+    },
+    "destinationStatsEnabled": {
+      "type": "null"
+    },
+    "isDefaultVersion": {
+      "type": "boolean"
+    },
+    "type": {
+      "type": "string"
+    },
+    "transport": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "tiers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "apiLevelPolicy": {
+      "type": "null"
+    },
+    "authorizationHeader": {
+      "type": "null"
+    },
+    "maxTps": {
+      "type": "null"
+    },
+    "visibility": {
+      "type": "string"
+    },
+    "visibleRoles": {
+      "type": "array",
+      "items": {}
+    },
+    "visibleTenants": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "endpointConfig": {
+      "type": "object",
+      "properties": {
+        "production_endpoints": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string"
+            },
+            "config": {
+              "type": "null"
+            },
+            "template_not_supported": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "url",
+            "config",
+            "template_not_supported"
+          ]
+        },
+        "sandbox_endpoints": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string"
+            },
+            "config": {
+              "type": "null"
+            },
+            "template_not_supported": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "url",
+            "config",
+            "template_not_supported"
+          ]
+        },
+        "endpoint_type": {
+          "type": "string"
+        }
+      }
+    },
+    "endpointImplementationType": {
+      "type": "string"
+    },
+    "endpointSecurity": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "username": {
+          "type": "null"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "username",
+        "password"
+      ]
+    },
+    "gatewayEnvironments": {
+      "type": "string"
+    },
+    "labels": {
+      "type": "array",
+      "items": {}
+    },
+    "sequences": {
+      "type": "array",
+      "items": {}
+    },
+    "subscriptionAvailability": {
+      "type": "null"
+    },
+    "subscriptionAvailableTenants": {
+      "type": "array",
+      "items": {}
+    },
+    "additionalProperties": {
+      "type": "object"
+    },
+    "accessControl": {
+      "type": "string"
+    },
+    "accessControlRoles": {
+      "type": "array",
+      "items": {}
+    },
+    "businessInformation": {
+      "type": "object",
+      "properties": {
+        "businessOwner": {
+          "type": "string"
+        },
+        "businessOwnerEmail": {
+          "type": "string"
+        },
+        "technicalOwner": {
+          "type": "null"
+        },
+        "technicalOwnerEmail": {
+          "type": "null"
+        }
+      },
+      "required": [
+        "businessOwner",
+        "businessOwnerEmail",
+        "technicalOwner",
+        "technicalOwnerEmail"
+      ]
+    },
+    "corsConfiguration": {
+      "type": "object",
+      "properties": {
+        "corsConfigurationEnabled": {
+          "type": "boolean"
+        },
+        "accessControlAllowOrigins": {
+          "type": "array",
+          "items": [
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "accessControlAllowCredentials": {
+          "type": "boolean"
+        },
+        "accessControlAllowHeaders": {
+          "type": "array",
+          "items": [
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "accessControlAllowMethods": {
+          "type": "array",
+          "items": [
+            {
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "required": [
+        "corsConfigurationEnabled",
+        "accessControlAllowOrigins",
+        "accessControlAllowCredentials",
+        "accessControlAllowHeaders",
+        "accessControlAllowMethods"
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "description",
+    "context",
+    "version",
+    "provider",
+    "status",
+    "thumbnailUri",
+    "apiDefinition",
+    "wsdlUri",
+    "responseCaching",
+    "cacheTimeout",
+    "destinationStatsEnabled",
+    "isDefaultVersion",
+    "type",
+    "transport",
+    "tags",
+    "tiers",
+    "apiLevelPolicy",
+    "authorizationHeader",
+    "maxTps",
+    "visibility",
+    "visibleRoles",
+    "visibleTenants",
+    "endpointConfig",
+    "endpointImplementationType",
+    "endpointSecurity",
+    "gatewayEnvironments",
+    "labels",
+    "sequences",
+    "subscriptionAvailability",
+    "subscriptionAvailableTenants",
+    "additionalProperties",
+    "accessControl",
+    "accessControlRoles",
+    "businessInformation",
+    "corsConfiguration",
+    "production_endpoints",
+    "sandbox_endpoints",
+    "endpoint_type"
+  ]
+}

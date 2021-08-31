@@ -88,7 +88,7 @@
           <th *matHeaderCellDef class="uppercase" mat-header-cell>Status</th>
           <td *matCellDef="let row" mat-cell>
             <div (click)="$event.stopPropagation()" fxLayoutAlign="start center" fxLayoutGap="4px">
-              <div class="rounded px-2 py-1 font-medium text-xs" fxFlex="none" [ngClass]="getStatusClass(row.status)">
+              <div class="rounded px-2 py-1 font-medium text-xs" fxFlex="none" [ngClass]="statusClass(row.status)">
                 {{ row.status }}
               </div>
             </div>

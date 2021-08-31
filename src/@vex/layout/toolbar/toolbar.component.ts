@@ -67,7 +67,7 @@ export class ToolbarComponent implements OnInit {
   reloadPage() {
     const currentUrl = this.router.url;
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-      this.router.navigate([currentUrl]);
+      this.router.navigateByUrl(currentUrl);
     });
   }
 

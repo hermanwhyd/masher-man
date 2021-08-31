@@ -10,19 +10,20 @@ import icClear from '@iconify/icons-ic/round-clear';
 import icProduk from '@iconify/icons-ic/outline-shopping-cart';
 import icClose from '@iconify/icons-ic/twotone-close';
 import icRestore from '@iconify/icons-ic/baseline-restore-from-trash';
-import icInfo from '@iconify/icons-ic/sharp-help-outline';
+import icInfo from '@iconify/icons-ic/outline-info';
 import icGlobe from '@iconify/icons-fa-solid/globe';
 
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
+import { fadeInRight400ms } from 'src/@vex/animations/fade-in-right.animation';
+import { scaleIn400ms } from 'src/@vex/animations/scale-in.animation';
+import { scaleFadeIn400ms } from 'src/@vex/animations/scale-fade-in.animation';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
+
+import { filter, finalize, map } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormControl } from '@angular/forms';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { filter, finalize, map } from 'rxjs/operators';
-import { fadeInRight400ms } from 'src/@vex/animations/fade-in-right.animation';
-import { scaleIn400ms } from 'src/@vex/animations/scale-in.animation';
-import { scaleFadeIn400ms } from 'src/@vex/animations/scale-fade-in.animation';
 import _ from 'lodash';
 import { Api } from 'src/app/types/api.interface';
 import { PublisherService } from '../services/publisher.service';
@@ -33,6 +34,7 @@ import { ApiConfigService } from 'src/app/services/api-config.service';
 import { untilDestroyed, UntilDestroy } from '@ngneat/until-destroy';
 import { SnackbarNotifComponent } from 'src/app/utilities/snackbar-notif/snackbar-notif.component';
 import { ActivatedRoute } from '@angular/router';
+import { statusClass } from 'src/app/utilities/function/api-status'
 
 @UntilDestroy()
 @Component({
@@ -79,6 +81,8 @@ export class PublisherListComponent implements OnInit {
   pageEventSubject: BehaviorSubject<PageEvent> = new BehaviorSubject(null);
   dataSource: MatTableDataSource<Api> | null;
   searchCtrl = new FormControl();
+
+  statusClass = statusClass;
 
   isLoading = false;
   apisSubject: BehaviorSubject<Api[]> = new BehaviorSubject([]);
@@ -160,22 +164,6 @@ export class PublisherListComponent implements OnInit {
       || ({ pageIndex: 1, pageSize: 10, length: this.pagination?.pagination.total || 10 } as PageEvent);
     pageEvent.pageIndex = 0;
     this.pageEventSubject.next(pageEvent);
-  }
-
-  getStatusClass(status: string) {
-    if (status === 'PUBLISHED') {
-      return 'text-cyan bg-cyan-light';
-    }
-
-    if (status === 'CREATED') {
-      return 'text-green bg-green-light';
-    }
-
-    if (status === 'DEPRECATED' || status === 'BLOCKED') {
-      return 'text-red bg-red-light';
-    }
-
-    return 'text-gray bg-gray-light';
   }
 
   getPortalLink(api: Api) {
