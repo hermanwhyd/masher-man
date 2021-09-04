@@ -9,9 +9,6 @@ import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
 import { PublisherService } from '../services/publisher.service';
 
-import { Utils } from 'tslint';
-import SwaggerParser from '@apidevtools/swagger-parser';
-
 @Component({
   selector: 'vex-publisher-new',
   templateUrl: './publisher-new.component.html',
@@ -26,7 +23,6 @@ export class PublisherNewComponent implements OnInit {
   icCreate = icCreate;
 
   isLoading = false;
-  parser = new SwaggerParser();
 
   swaggerCtrl = new FormControl();
 
@@ -48,10 +44,6 @@ export class PublisherNewComponent implements OnInit {
     this.publisherService.getSwaggerJson(this.swaggerCtrl.value)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe((data) => {
-        // this.parser.dereference(data).then(api => {
-        //   console.log(api.paths);
-        // });
-        // this.router.navigate(['../', 'edit'], { relativeTo: this.route });
       });
   }
 
