@@ -46,7 +46,8 @@
           <mat-icon [icIcon]="icFilterList"></mat-icon>
         </button>
 
-        <button class="ml-4" color="primary" fxFlex="none" mat-mini-fab matTooltip="Publish New API" type="button">
+        <button class="ml-4" color="primary" fxFlex="none" mat-mini-fab matTooltip="Publish New API"
+          [routerLink]="['../', 'add']" type="button">
           <mat-icon [icIcon]="icAdd"></mat-icon>
         </button>
       </div>

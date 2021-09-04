@@ -92,17 +92,12 @@ export class AppComponent {
               {
                 type: 'link',
                 label: 'Listed API',
-                route: '/publisher'
+                route: '/publisher/list'
               },
               {
                 type: 'link',
                 label: 'New API',
-                route: '/publisher/edit'
-              },
-              {
-                type: 'link',
-                label: 'Import Swagger',
-                route: '/publisher/import-swagger'
+                route: '/publisher/add'
               }
             ]
           }

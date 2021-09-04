@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
 import { ApiConfigService } from 'src/app/services/api-config.service';
 import { Api, ApiDetail } from 'src/app/types/api.interface';
 import { Paginate } from 'src/app/types/paginate.interface';
@@ -14,7 +14,11 @@ import { LoginRq } from '../../access/auth-manager/services/oauth.interface';
 })
 export class PublisherService {
 
+  public swagger = new BehaviorSubject<string>(null);
+  public swagger$ = this.swagger.asObservable();
+
   private readonly URL = 'apis';
+  private readonly URL_PROXY = 'proxy';
 
   constructor(
     private httpClient: HttpClient,
@@ -22,7 +26,10 @@ export class PublisherService {
     private apiConfigService: ApiConfigService) { }
 
   public getSwaggerJson(url: string) {
-    return this.httpClient.get(url) as Observable<any>;
+    const headers = new HttpHeaders({ 'target-url': url });
+    return this.httpClient
+      .get([this.apiConfigService.getApiUrl(), this.URL_PROXY].join('/'), { headers })
+      .pipe(tap((rs: string) => this.swagger.next(rs))) as Observable<any>;
   }
 
   public paginate(offset: number, limit: number, query?: string) {

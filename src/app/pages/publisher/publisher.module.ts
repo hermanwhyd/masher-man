@@ -30,11 +30,22 @@ import { NgxShimmerLoadingModule } from 'ngx-shimmer-loading';
 import { JsonFormsModule } from '@jsonforms/angular';
 import { JsonFormsAngularMaterialModule } from '@jsonforms/angular-material';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import { PublisherNewComponent } from './publisher-new/publisher-new.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatInputModule } from '@angular/material/input';
 
 const routes: Routes = [
   {
     path: '',
+    redirectTo: 'list'
+  },
+  {
+    path: 'list',
     component: PublisherListComponent
+  },
+  {
+    path: 'add',
+    component: PublisherNewComponent,
   },
   {
     path: 'edit',
@@ -42,7 +53,7 @@ const routes: Routes = [
   },
   {
     path: 'import-swagger',
-    component: PublisherEditComponent,
+    component: PublisherSwaggerComponent,
   }
 ];
 
@@ -52,6 +63,7 @@ const routes: Routes = [
     PublisherListComponent,
     PublisherSwaggerComponent,
     PublisherListDetailComponent,
+    PublisherNewComponent,
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -70,6 +82,7 @@ const routes: Routes = [
     FormsModule,
     MatTooltipModule,
     ReactiveFormsModule,
+    MatInputModule,
     ContainerModule,
     MatSelectModule,
     MatButtonToggleModule,
@@ -80,7 +93,8 @@ const routes: Routes = [
     NgxShimmerLoadingModule,
     JsonFormsModule,
     JsonFormsAngularMaterialModule,
-    NgxJsonViewerModule
+    NgxJsonViewerModule,
+    MatExpansionModule,
   ],
   exports: [
     RouterModule,

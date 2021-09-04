@@ -1,0 +1,44 @@
+<div class="text-center py-14 header">
+  <div class="container">
+    <h2 @fadeInUp class="display-2 mt-16 mb-8">Let's get started!</h2>
+  </div>
+</div>
+
+<div class="container max-w-3xl w-full" @stagger>
+  <mat-accordion>
+    <mat-expansion-panel expanded="'true'">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          I Have an Existing API
+        </mat-panel-title>
+        <mat-panel-description>
+          Import from Open API or API Swagger definition to create an API.
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="p-2">
+        <div class="bg-card border">
+          <input [formControl]="swaggerCtrl" class="px-4 py-3 border-0 outline-none w-full bg-transparent"
+            placeholder="http://localhost:8080/v3/api-docs" autocomplete="off">
+
+        </div>
+        <button mat-raised-button color="primary" class="mt-2" (click)="importFromSwagger()"
+          [disabled]="!isSubmitableImport()" [loading]="isLoading">Start Creating</button>
+      </div>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Design a New REST API
+        </mat-panel-title>
+        <mat-panel-description>
+          Design and prototype a new REST API.
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="p-2">
+        <button mat-raised-button color="primary" (click)="createNew()">Start Creating</button>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+</div>
