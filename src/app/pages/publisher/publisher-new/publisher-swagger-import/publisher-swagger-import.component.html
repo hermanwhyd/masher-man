@@ -1,0 +1,96 @@
+<div fxLayout="row" fxLayoutAlign="start center" mat-dialog-title>
+  <h2 class="headline m-0" fxFlex="auto">Import From Swagger</h2>
+
+  <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
+    <mat-icon [icIcon]="icClose"></mat-icon>
+  </button>
+</div>
+
+<mat-divider class="-mx-6 mb-4 text-border"></mat-divider>
+
+<div class="-m-6">
+  <mat-horizontal-stepper #stepper [linear]="true">
+    <ng-template matStepperIcon="edit">
+      <mat-icon [icIcon]="icDoneAll"></mat-icon>
+    </ng-template>
+
+    <ng-template matStepperIcon="done">
+      <mat-icon [icIcon]="icDoneAll"></mat-icon>
+    </ng-template>
+
+    <mat-step [stepControl]="form">
+      <form (ngSubmit)="submit()" [formGroup]="form" autocomplete="off" fxLayout="column">
+        <ng-template matStepLabel>Set Base</ng-template>
+        <p class="mt-0 mb-4 text-secondary">
+          Base config for all imported operation from swagger. You can custome individually later on API Designer!
+        </p>
+        <mat-form-field appearance="outline">
+          <mat-label>Base Name</mat-label>
+          <input cdkFocusInitial formControlName="name" matInput required placeholder="E.g., ServiceName-v1">
+          <mat-hint>Display name, a pascal case of service name with hardcoded version</mat-hint>
+          <mat-error *ngIf="(formControl.name.touched) && formControl.name.errors?.required">
+            Name is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Base Context</mat-label>
+          <input formControlName="context" matInput required placeholder="E.g., service-name/{version}">
+          <mat-hint>URI context path of the API, a kebab case name of service followed by &#123;version&#125;
+          </mat-hint>
+          <mat-error *ngIf="(formControl.context.touched) && formControl.context.errors?.required">
+            Context is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Version</mat-label>
+          <input formControlName="version" matInput required placeholder="E.g. v1, v2, etc">
+          <mat-hint>Must is lower case with single number version</mat-hint>
+          <mat-error *ngIf="(formControl.version.touched) && formControl.version.errors?.required">
+            Version is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Tags</mat-label>
+          <mat-chip-list #chipList formControlName="tags">
+            <mat-chip *ngFor="let tag of tags.value" (removed)="removeTag(tag)">
+              {{ tag }}
+              <mat-icon matChipRemove [icIcon]="icDelete"></mat-icon>
+            </mat-chip>
+            <input type="text" placeholder="touchpoint name, api-economy, etc" [matChipInputFor]="chipList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="addTag($event)">
+          </mat-chip-list>
+          <mat-hint>Use keywords and common search terms as tags to group APIs</mat-hint>
+        </mat-form-field>
+      </form>
+      <div fxLayout="row" fxLayoutAlign="end center">
+        <button mat-button matStepperNext [disabled]="!nextable">NEXT</button>
+      </div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Chose Operations</ng-template>
+      <mat-dialog-content>
+        <div *ngFor="let path of swagger.paths | keyvalue" class="swagger-ui">
+          <div class="operation-tag-content" *ngFor="let method of path.value | keyvalue">
+            <mat-checkbox [(ngModel)]="method.value.selected"
+              class="opblock opblock-{{ method.key | lowercase }} pl-3 w-full">
+              <div class="opblock-summary opblock-summary-{{ method.key | lowercase }}">
+                <span class="opblock-summary-method">{{ method.key | uppercase }}</span>
+                <span class="opblock-summary-path">{{ path.key }}</span>
+                <div class="opblock-summary-description truncate">
+                  {{ method.value.summary || method.value.description || method.value.operationId }}
+                </div>
+              </div>
+            </mat-checkbox>
+          </div>
+        </div>
+      </mat-dialog-content>
+      <div fxLayout="row" fxLayoutAlign="end center">
+        <button mat-button matStepperPrevious>PREV</button>
+        <button mat-button (click)="submit()" color="primary">START DESIGN</button>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+</div>

@@ -21,6 +21,7 @@ import { MatButtonLoadingModule } from 'src/app/utilities/mat-button-loading/mat
 import { SetupUserEditComponent } from './components/setup-user/setup-user-edit/setup-user-edit.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [SetupComponent, SetupApiComponent, SetupUserComponent, SetupUserEditComponent],
@@ -42,6 +43,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatButtonLoadingModule,
     MatSnackBarModule,
     MatDialogModule,
+    MatSlideToggleModule
   ]
 })
 export class SetupModule { }

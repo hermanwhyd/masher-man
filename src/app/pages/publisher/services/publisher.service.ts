@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { ApiConfigService } from 'src/app/services/api-config.service';
 import { Api, ApiDetail } from 'src/app/types/api.interface';
 import { Paginate } from 'src/app/types/paginate.interface';
@@ -14,8 +14,8 @@ import { LoginRq } from '../../access/auth-manager/services/oauth.interface';
 })
 export class PublisherService {
 
-  public swagger = new BehaviorSubject<string>(null);
-  public swagger$ = this.swagger.asObservable();
+  public draftAPIs = new BehaviorSubject<ApiDetail[]>([]);
+  public draftAPIs$ = this.draftAPIs.asObservable();
 
   private readonly URL = 'apis';
   private readonly URL_PROXY = 'proxy';
@@ -28,8 +28,7 @@ export class PublisherService {
   public getSwaggerJson(url: string) {
     const headers = new HttpHeaders({ 'target-url': url });
     return this.httpClient
-      .get([this.apiConfigService.getApiUrl(), this.URL_PROXY].join('/'), { headers })
-      .pipe(tap((rs: string) => this.swagger.next(rs))) as Observable<any>;
+      .get([this.apiConfigService.getApiUrl(), this.URL_PROXY].join('/'), { headers }) as Observable<any>;
   }
 
   public paginate(offset: number, limit: number, query?: string) {
@@ -73,4 +72,26 @@ export class PublisherService {
       })) as Observable<ApiDetail>;
   }
 
+  public createOrUpdateApi(api: ApiDetail) {
+    const scope = 'apim:api_create';
+
+    const publisher = this.apiConfigService.getActivePublisher();
+    if (!publisher) {
+      return throwError('Invalid Profile');
+    }
+
+    const loginRq: LoginRq = { username: publisher.username, password: decode(publisher.password), grant_type: 'password', scope };
+
+    return this.authService.token(loginRq, publisher.clientDigest)
+      .pipe(switchMap(token => {
+        const headers = new HttpHeaders({ Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' });
+        if (api.id) {
+          return this.httpClient.post(
+            [this.apiConfigService.getApiUrl(), this.URL, api.id].join('/'), api, { headers }
+          ) as Observable<ApiDetail>;
+        } else {
+          return this.httpClient.post([this.apiConfigService.getApiUrl(), this.URL].join('/'), api, { headers }) as Observable<ApiDetail>;
+        }
+      })) as Observable<ApiDetail>;
+  }
 }

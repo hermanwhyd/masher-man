@@ -1,3 +1,6 @@
-{{
-swagger | json
-}}
+<div class="card">
+  <button mat-raised-button (click)="add()">Action</button>
+  <jsonforms [data]="model" [schema]="schema" [uischema]="uischema" [renderers]="renderers"
+    (dataChange)="onChange($event)">
+  </jsonforms>
+</div>

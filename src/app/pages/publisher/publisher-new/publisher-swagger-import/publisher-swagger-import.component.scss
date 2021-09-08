@@ -1,0 +1,9 @@
+::ng-deep .mat-checkbox .mat-checkbox-layout {
+  width: 100%;
+  margin: 0;
+}
+
+::ng-deep .mat-checkbox .mat-checkbox-layout .mat-checkbox-label {
+  width: 100%;
+  padding-right: 1.25rem;
+}

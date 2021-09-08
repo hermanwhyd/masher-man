@@ -31,6 +31,7 @@ export class SetupUserEditComponent implements OnInit {
     grant_types: [{ value: '', disabled: true }],
     client_id: [{ value: '', disabled: true }],
     client_secret: [{ value: '', disabled: true }],
+    active: [true]
   });
 
   constructor(
@@ -88,7 +89,7 @@ export class SetupUserEditComponent implements OnInit {
     const model = this.form.getRawValue();
     const clientDigest = encodeDigest(model.client_id, model.client_secret);
     const password = encode(model.password);
-    const user = { username: model.username, grantTypes: model.grant_types, password, clientDigest } as User;
+    const user = { username: model.username, grantTypes: model.grant_types, password, clientDigest, active: model.active } as User;
     this.dialogRef.close(user);
   }
 }

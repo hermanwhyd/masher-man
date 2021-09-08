@@ -1,0 +1,71 @@
+{
+  "type": "Categorization",
+  "elements": [
+    {
+      "type": "Category",
+      "label": "Draft APIs",
+      "elements": [
+        {
+          "type": "ListWithDetail",
+          "scope": "#/properties/apis",
+          "options": {
+            "labelRef": "#/items/properties/name",
+            "detail": {
+              "type": "VerticalLayout",
+              "elements": [
+                {
+                  "type": "HorizontalLayout",
+                  "elements": [
+                    {
+                      "type": "Control",
+                      "label": "Name",
+                      "scope": "#/properties/name"
+                    },
+                    {
+                      "type": "Control",
+                      "label": "Version",
+                      "scope": "#/properties/version"
+                    }
+                  ]
+                },
+                {
+                  "type": "Control",
+                  "label": "Context",
+                  "scope": "#/properties/context"
+                },
+                {
+                  "type": "Control",
+                  "label": "Description",
+                  "scope": "#/properties/description",
+                  "options": {
+                    "multi": true
+                  }
+                },
+                {
+                  "type": "Control",
+                  "label": "Production Endpoint URL",
+                  "scope": "#/properties/endpointConfig/properties/production_endpoints/properties/url"
+                },
+                {
+                  "type": "Control",
+                  "label": "Sandbox Endpoint URL",
+                  "scope": "#/properties/endpointConfig/properties/sandbox_endpoints/properties/url"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "Category",
+      "label": "Raw Json",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/___data"
+        }
+      ]
+    }
+  ]
+}

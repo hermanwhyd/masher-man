@@ -77,6 +77,10 @@ export class SetupUserComponent implements OnInit {
       .afterClosed().subscribe((newModel: User) => {
         if (!newModel) { return; }
 
+        if (this.users.length > 0 && newModel.active === true) {
+          this.users.forEach(u => u.active = false);
+        }
+
         this.users.push(newModel);
         this.snackBar.openFromComponent(SnackbarNotifComponent, { data: { message: 'Data berhasil disimpan!', type: 'success' } });
         this.apiConfigService.accounts.next(this.accounts);

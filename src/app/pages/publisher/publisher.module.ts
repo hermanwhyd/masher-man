@@ -33,6 +33,11 @@ import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { PublisherNewComponent } from './publisher-new/publisher-new.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatInputModule } from '@angular/material/input';
+import { PublisherSwaggerImportComponent } from './publisher-new/publisher-swagger-import/publisher-swagger-import.component';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatStepperModule } from '@angular/material/stepper';
+import { PublisherDataDisplayComponent } from './publisher-edit/publisher-data-display.component';
 
 const routes: Routes = [
   {
@@ -64,6 +69,8 @@ const routes: Routes = [
     PublisherSwaggerComponent,
     PublisherListDetailComponent,
     PublisherNewComponent,
+    PublisherSwaggerImportComponent,
+    PublisherDataDisplayComponent
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -95,6 +102,9 @@ const routes: Routes = [
     JsonFormsAngularMaterialModule,
     NgxJsonViewerModule,
     MatExpansionModule,
+    MatChipsModule,
+    MatDialogModule,
+    MatStepperModule,
   ],
   exports: [
     RouterModule,

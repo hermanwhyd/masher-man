@@ -4,7 +4,7 @@
   </div>
 </div>
 
-<div class="container max-w-3xl w-full" @stagger>
+<div class="container lg:max-w-3xl w-full" @stagger>
   <mat-accordion>
     <mat-expansion-panel expanded="'true'">
       <mat-expansion-panel-header>
@@ -18,7 +18,7 @@
       <div class="p-2">
         <div class="bg-card border">
           <input [formControl]="swaggerCtrl" class="px-4 py-3 border-0 outline-none w-full bg-transparent"
-            placeholder="http://localhost:8080/v3/api-docs" autocomplete="off">
+            placeholder="http://localhost:8080/v3/api-docs" name="swaggerUrl" (keyup.enter)="importFromSwagger()">
 
         </div>
         <button mat-raised-button color="primary" class="mt-2" (click)="importFromSwagger()"

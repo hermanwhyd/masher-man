@@ -1,6 +1,7 @@
 <form (ngSubmit)="submit()" [formGroup]="form" autocomplete="off">
   <div fxLayout="row" fxLayoutAlign="start center" mat-dialog-title>
-    <h2 class="headline m-0" fxFlex="auto">Client Registration
+    <h2 class="headline m-0" fxFlex="auto">
+      Client Registration
       <span class="bg-teal-light text-teal p-1 rounded-full text-sm">{{ activeProfile.name}}</span>
     </h2>
     <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
@@ -14,7 +15,7 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Username</mat-label>
-      <input formControlName="username" matInput required>
+      <input cdkFocusInitial formControlName="username" matInput required>
       <mat-hint>Username untuk login ke portal</mat-hint>
       <mat-error *ngIf="(formControl.username.touched) && formControl.username.errors?.required">
         Username harus diisi
@@ -44,6 +45,9 @@
       <mat-label>Client Secret</mat-label>
       <input formControlName="client_secret" matInput>
     </mat-form-field>
+
+    <mat-slide-toggle *ngIf="isFetched" formControlName="active" color="warn" labelPosition="before">Set as default
+    </mat-slide-toggle>
 
   </mat-dialog-content>
 
