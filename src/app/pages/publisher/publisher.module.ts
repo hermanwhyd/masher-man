@@ -27,8 +27,6 @@ import { QuicklinkModule } from 'ngx-quicklink';
 import { MatButtonLoadingModule } from 'src/app/utilities/mat-button-loading/mat-button-loading.module';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NgxShimmerLoadingModule } from 'ngx-shimmer-loading';
-import { JsonFormsModule } from '@jsonforms/angular';
-import { JsonFormsAngularMaterialModule } from '@jsonforms/angular-material';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { PublisherNewComponent } from './publisher-new/publisher-new.component';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -37,7 +35,16 @@ import { PublisherSwaggerImportComponent } from './publisher-new/publisher-swagg
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatStepperModule } from '@angular/material/stepper';
-import { PublisherDataDisplayComponent } from './publisher-edit/publisher-data-display.component';
+import { PublisherDataDisplayComponent } from './publisher-edit/controls/publisher-data-display.component';
+import { SecondaryToolbarModule } from 'src/@vex/components/secondary-toolbar/secondary-toolbar.module';
+import { PublisherArrayControlComponent } from './publisher-edit/controls/publisher-array-control.component';
+import { AceEditorModule } from 'ng2-ace-editor';
+import { MatBadgeModule } from '@angular/material/badge';
+
+import { JsonFormsModule } from '@jsonforms/angular';
+import { JsonFormsAngularMaterialModule } from '@jsonforms/angular-material';
+import { MasterListComponent } from './publisher-edit/controls/master-detail/master-list.component';
+import { JsonFormsDetailComponent } from './publisher-edit/controls/master-detail/jsonforms-detail.component';
 
 const routes: Routes = [
   {
@@ -70,7 +77,10 @@ const routes: Routes = [
     PublisherListDetailComponent,
     PublisherNewComponent,
     PublisherSwaggerImportComponent,
-    PublisherDataDisplayComponent
+    PublisherDataDisplayComponent,
+    PublisherArrayControlComponent,
+    MasterListComponent,
+    JsonFormsDetailComponent
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -105,6 +115,9 @@ const routes: Routes = [
     MatChipsModule,
     MatDialogModule,
     MatStepperModule,
+    SecondaryToolbarModule,
+    AceEditorModule,
+    MatBadgeModule,
   ],
   exports: [
     RouterModule,

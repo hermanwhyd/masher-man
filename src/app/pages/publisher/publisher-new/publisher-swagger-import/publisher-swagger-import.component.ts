@@ -103,22 +103,18 @@ export class PublisherSwaggerImportComponent implements OnInit {
         spec['x-throttling-tier'] = 'Unlimited';
 
         const apiName = `${form.name}-${upperFirst(method)}${pascalCase(path.split('/').pop())}`;
-        const apiContext = `${form.context}/${lowerCase(method)}${paramCase(path.split('/').pop())}`;
+        const apiContext = `${form.context}/${lowerCase(method)}-${paramCase(path.split('/').pop())}`;
 
         const apiDefinitionSwagger = {
           ...this.swagger, ... { info: { title: apiName }, paths: { ['/*']: { [`${method}`]: spec } } }
         };
 
-        const api: ApiDetail = {
+        const api: Partial<ApiDetail> = {
           name: apiName,
           context: apiContext,
           version: form.version,
-          provider: 'developer',
-          tiers: ['Default', 'Unlimited'],
-          isDefaultVersion: false,
-          thumbnailUri: '',
-          wsdlUri: '',
-          transport: ['http', 'https'],
+          description: form.description,
+          tags: form.tags,
           endpointConfig: {
             production_endpoints: {
               url: (this.swagger.servers[0]?.url || this.swagger.host) + path,
@@ -126,41 +122,13 @@ export class PublisherSwaggerImportComponent implements OnInit {
               template_not_supported: false
             },
             sandbox_endpoints: {
-              url: null,
+              url: '',
               config: null,
               template_not_supported: false
             },
             endpoint_type: 'http'
           },
-          visibility: 'PUBLIC',
-          type: 'HTTP',
-          apiLevelPolicy: null,
-          authorizationHeader: null,
-          maxTps: null,
-          visibleRoles: [],
-          visibleTenants: [],
-          description: form.description,
           apiDefinition: apiDefinitionSwagger,
-          status: 'CREATED',
-          responseCaching: 'Disabled',
-          cacheTimeout: 300,
-          destinationStatsEnabled: 'ENDPOINT',
-          endpointSecurity: null,
-          tags: form.tags,
-          gatewayEnvironments: 'Production and Sandbox',
-          labels: [],
-          sequences: [],
-          subscriptionAvailability: null,
-          subscriptionAvailableTenants: [],
-          additionalProperties: {},
-          accessControl: 'NONE',
-          accessControlRoles: [],
-          businessInformation: {
-            businessOwner: null,
-            businessOwnerEmail: null,
-            technicalOwner: null,
-            technicalOwnerEmail: null
-          },
           corsConfiguration: {
             corsConfigurationEnabled: true,
             accessControlAllowOrigins: [
@@ -177,7 +145,7 @@ export class PublisherSwaggerImportComponent implements OnInit {
           }
         };
 
-        draftAPIs.push(api);
+        draftAPIs.push({ ...ApiDetailTemplate, ...api });
       });
     });
 

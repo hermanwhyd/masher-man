@@ -1,6 +1,10 @@
-<div class="card">
-  <button mat-raised-button (click)="add()">Action</button>
-  <jsonforms [data]="model" [schema]="schema" [uischema]="uischema" [renderers]="renderers"
-    (dataChange)="onChange($event)">
-  </jsonforms>
-</div>
+<vex-page-layout>
+  <vex-secondary-toolbar current="API Designer">
+    <button mat-raised-button color="primary">Validate & Publish</button>
+  </vex-secondary-toolbar>
+  <div class="bg-card">
+    <jsonforms [data]="model" [schema]="schema" [uischema]="uischema" [renderers]="renderers"
+      (dataChange)="onChange($event)" (errors)="onError($event)">
+    </jsonforms>
+  </div>
+</vex-page-layout>

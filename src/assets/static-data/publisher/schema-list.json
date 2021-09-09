@@ -7,16 +7,21 @@
           "type": "string"
         },
         "name": {
-          "type": "string"
+          "type": "string",
+          "minLength": 10
         },
         "description": {
-          "type": "string"
+          "type": "string",
+          "minLength": 10
         },
         "context": {
-          "type": "string"
+          "type": "string",
+          "minLength": 10
         },
         "version": {
-          "type": "string"
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 3
         },
         "provider": {
           "type": "string"
@@ -95,7 +100,8 @@
               "type": "object",
               "properties": {
                 "url": {
-                  "type": "string"
+                  "type": "string",
+                  "minLength": 10
                 },
                 "config": {
                   "type": "null"
@@ -105,9 +111,7 @@
                 }
               },
               "required": [
-                "url",
-                "config",
-                "template_not_supported"
+                "url"
               ]
             },
             "sandbox_endpoints": {
@@ -122,17 +126,15 @@
                 "template_not_supported": {
                   "type": "boolean"
                 }
-              },
-              "required": [
-                "url",
-                "config",
-                "template_not_supported"
-              ]
+              }
             },
             "endpoint_type": {
               "type": "string"
             }
-          }
+          },
+          "required": [
+            "production_endpoints"
+          ]
         },
         "endpointImplementationType": {
           "type": "string"
@@ -149,12 +151,7 @@
             "password": {
               "type": "string"
             }
-          },
-          "required": [
-            "type",
-            "username",
-            "password"
-          ]
+          }
         },
         "gatewayEnvironments": {
           "type": "string"
@@ -194,15 +191,15 @@
               "type": "string"
             },
             "technicalOwner": {
-              "type": "null"
+              "type": "string",
+              "minLength": 5
             },
             "technicalOwnerEmail": {
-              "type": "null"
+              "type": "string",
+              "minLength": 10
             }
           },
           "required": [
-            "businessOwner",
-            "businessOwnerEmail",
             "technicalOwner",
             "technicalOwnerEmail"
           ]
@@ -215,41 +212,37 @@
             },
             "accessControlAllowOrigins": {
               "type": "array",
-              "items": [
-                {
-                  "type": "string"
-                }
-              ]
+              "items": {
+                "type": "string"
+              }
             },
             "accessControlAllowCredentials": {
               "type": "boolean"
             },
             "accessControlAllowHeaders": {
               "type": "array",
-              "items": [
-                {
-                  "type": "string"
-                }
-              ]
+              "items": {
+                "type": "string",
+                "minLength": 2
+              }
             },
             "accessControlAllowMethods": {
               "type": "array",
-              "items": [
-                {
-                  "type": "string"
-                }
-              ]
+              "items": {
+                "type": "string"
+              }
             }
-          },
-          "required": [
-            "corsConfigurationEnabled",
-            "accessControlAllowOrigins",
-            "accessControlAllowCredentials",
-            "accessControlAllowHeaders",
-            "accessControlAllowMethods"
-          ]
+          }
         }
-      }
+      },
+      "required": [
+        "name",
+        "description",
+        "context",
+        "version",
+        "endpointConfig",
+        "businessInformation"
+      ]
     }
   },
   "type": "object",
@@ -260,47 +253,5 @@
         "$ref": "#/definitions/api"
       }
     }
-  },
-  "required": [
-    "id",
-    "name",
-    "description",
-    "context",
-    "version",
-    "provider",
-    "status",
-    "thumbnailUri",
-    "apiDefinition",
-    "wsdlUri",
-    "responseCaching",
-    "cacheTimeout",
-    "destinationStatsEnabled",
-    "isDefaultVersion",
-    "type",
-    "transport",
-    "tags",
-    "tiers",
-    "apiLevelPolicy",
-    "authorizationHeader",
-    "maxTps",
-    "visibility",
-    "visibleRoles",
-    "visibleTenants",
-    "endpointConfig",
-    "endpointImplementationType",
-    "endpointSecurity",
-    "gatewayEnvironments",
-    "labels",
-    "sequences",
-    "subscriptionAvailability",
-    "subscriptionAvailableTenants",
-    "additionalProperties",
-    "accessControl",
-    "accessControlRoles",
-    "businessInformation",
-    "corsConfiguration",
-    "production_endpoints",
-    "sandbox_endpoints",
-    "endpoint_type"
-  ]
+  }
 }

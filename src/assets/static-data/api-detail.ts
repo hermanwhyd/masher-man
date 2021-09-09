@@ -15,7 +15,7 @@ export const ApiDetailTemplate = {
       template_not_supported: false
     },
     sandbox_endpoints: {
-      url: null,
+      url: '',
       config: null,
       template_not_supported: false
     },
@@ -45,10 +45,10 @@ export const ApiDetailTemplate = {
   accessControl: 'NONE',
   accessControlRoles: [],
   businessInformation: {
-    businessOwner: null,
-    businessOwnerEmail: null,
-    technicalOwner: null,
-    technicalOwnerEmail: null
+    businessOwner: '',
+    businessOwnerEmail: '',
+    technicalOwner: '',
+    technicalOwnerEmail: ''
   },
   corsConfiguration: {
     corsConfigurationEnabled: true,
