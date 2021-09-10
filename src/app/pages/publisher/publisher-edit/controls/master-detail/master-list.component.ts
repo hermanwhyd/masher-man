@@ -18,7 +18,7 @@ import {
   StatePropsOfArrayControl,
   uiTypeIs
 } from '@jsonforms/core';
-import { ApiDetailTemplate } from 'src/assets/static-data/api-detail';
+import { ApiDetailTemplate } from 'src/assets/static-data/template/api-detail';
 import { ConfirmationDialogComponent } from 'src/app/utilities/confirmation-dialog/confirmation-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 

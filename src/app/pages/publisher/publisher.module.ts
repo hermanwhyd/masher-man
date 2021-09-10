@@ -38,7 +38,6 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { PublisherDataDisplayComponent } from './publisher-edit/controls/publisher-data-display.component';
 import { SecondaryToolbarModule } from 'src/@vex/components/secondary-toolbar/secondary-toolbar.module';
 import { PublisherArrayControlComponent } from './publisher-edit/controls/publisher-array-control.component';
-import { AceEditorModule } from 'ng2-ace-editor';
 import { MatBadgeModule } from '@angular/material/badge';
 
 import { JsonFormsModule } from '@jsonforms/angular';
@@ -120,7 +119,6 @@ const routes: Routes = [
     MatDialogModule,
     MatStepperModule,
     SecondaryToolbarModule,
-    AceEditorModule,
     MatBadgeModule,
   ],
   exports: [

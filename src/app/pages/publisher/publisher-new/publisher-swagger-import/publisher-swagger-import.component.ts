@@ -12,7 +12,7 @@ import { COMMA, ENTER, SPACE, FF_SEMICOLON } from '@angular/cdk/keycodes';
 import { paramCase, pascalCase } from 'change-case';
 import _, { lowerCase, upperCase, upperFirst } from 'lodash';
 
-import { ApiDetailTemplate } from 'src/assets/static-data/api-detail';
+import { ApiDetailTemplate } from 'src/assets/static-data/template/api-detail';
 
 @Component({
   selector: 'vex-publisher-swagger-import',
