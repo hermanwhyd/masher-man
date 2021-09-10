@@ -16,9 +16,9 @@ import { PublisherArrayControlComponent } from './controls/publisher-array-contr
 import { BehaviorSubject } from 'rxjs';
 import { MatFormFieldDefaultOptions, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { masterDetailTester, MasterListComponent } from './controls/master-detail/master-list.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { InformationDialogComponent } from 'src/app/utilities/information-dialog/information-dialog.component';
+import { ApiDefinitionControlComponent, apiDefinitionTester } from './controls/api-definition-control.component';
 
 const arrayPrimitiveTester: Tester = or(
   and(
@@ -65,6 +65,10 @@ export class PublisherEditComponent implements OnInit {
   renderers = [
     ...angularMaterialRenderers,
     {
+      renderer: ApiDefinitionControlComponent,
+      tester: apiDefinitionTester
+    },
+    {
       renderer: MasterListComponent,
       tester: masterDetailTester
     },
@@ -80,8 +84,7 @@ export class PublisherEditComponent implements OnInit {
 
   constructor(
     private publiserService: PublisherService,
-    private dialog: MatDialog,
-    private snackBar: MatSnackBar) { }
+    private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.publiserService.draftAPIs$.subscribe(data => {

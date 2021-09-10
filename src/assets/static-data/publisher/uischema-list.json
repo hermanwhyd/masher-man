@@ -106,12 +106,12 @@
                 },
                 {
                   "type": "Group",
-                  "label": "API Definitions",
+                  "label": "API Specifications",
                   "elements": [
                     {
                       "type": "Control",
                       "label": "Allow Methods",
-                      "scope": "#/properties/corsConfiguration/properties/accessControlAllowMethods"
+                      "scope": "#/properties/apiDefinition"
                     }
                   ]
                 },
@@ -139,7 +139,7 @@
     },
     {
       "type": "Category",
-      "label": "Json View",
+      "label": "JSON View",
       "elements": [
         {
           "type": "Control",

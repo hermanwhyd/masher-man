@@ -46,6 +46,7 @@ import { JsonFormsAngularMaterialModule } from '@jsonforms/angular-material';
 import { MasterListComponent } from './publisher-edit/controls/master-detail/master-list.component';
 import { JsonFormsDetailComponent } from './publisher-edit/controls/master-detail/jsonforms-detail.component';
 import { JsonformEmptyComponent } from './publisher-edit/controls/master-detail/jsonform-empty.component';
+import { ApiDefinitionControlComponent } from './publisher-edit/controls/api-definition-control.component';
 
 const routes: Routes = [
   {
@@ -82,7 +83,8 @@ const routes: Routes = [
     PublisherArrayControlComponent,
     MasterListComponent,
     JsonFormsDetailComponent,
-    JsonformEmptyComponent
+    JsonformEmptyComponent,
+    ApiDefinitionControlComponent
   ],
   imports: [
     RouterModule.forChild(routes),

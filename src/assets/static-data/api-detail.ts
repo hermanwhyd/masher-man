@@ -29,7 +29,28 @@ export const ApiDetailTemplate = {
   visibleRoles: [],
   visibleTenants: [],
   description: '',
-  apiDefinition: '',
+  apiDefinition: JSON.stringify(
+    {
+      openapi: '3.0.0',
+      paths: {
+        '/*': {
+          get: {
+            responses: {
+              200: {
+                description: 'Success response'
+              }
+            },
+            'x-auth-type': 'Application & Application User',
+            'x-throttling-tier': 'Unlimited'
+          }
+        }
+      },
+      info: {
+        title: 'Api Definition',
+        version: 'v1'
+      }
+    }
+  ),
   status: 'CREATED',
   responseCaching: 'Disabled',
   cacheTimeout: 300,

@@ -25,7 +25,7 @@ export interface Api {
 }
 
 export interface ApiDetail extends Api {
-  apiDefinition?: string;
+  apiDefinition?: any;
   wsdlUri?: any;
   responseCaching?: string;
   cacheTimeout?: number;
