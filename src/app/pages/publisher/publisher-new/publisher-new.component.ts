@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import icCreate from '@iconify/icons-ic/outline-build-circle';
+import { finalize } from 'rxjs/operators';
 
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
@@ -45,18 +46,21 @@ export class PublisherNewComponent implements OnInit {
   importFromSwagger() {
     this.isLoading = true;
     this.publisherService.getSwaggerJson(this.swaggerCtrl.value)
+      .pipe(finalize(() => this.isLoading = false))
       .subscribe((data) => {
         this.dialog.open(PublisherSwaggerImportComponent, {
           data,
-          width: '750px',
+          width: '900px',
           disableClose: true
         })
           .afterClosed().subscribe((drafts: ApiDetail[]) => {
-            this.publisherService.draftAPIs.next(drafts);
-            this.createNew();
+            if (drafts) {
+              this.publisherService.draftAPIs.next(drafts);
+              this.createNew();
+            }
           });
       },
-        (error) => {
+        () => {
           this.isLoading = false;
         }
       );

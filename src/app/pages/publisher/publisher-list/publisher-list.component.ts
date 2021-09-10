@@ -149,7 +149,7 @@ export class PublisherListComponent implements OnInit {
       }, (error) => {
         this.pagination = null;
         this.apisSubject.next([] as Api[]);
-        this.snackBar.openFromComponent(SnackbarNotifComponent, { data: { message: `${error}. F12 for more detail`, type: 'danger' } });
+        this.snackBar.openFromComponent(SnackbarNotifComponent, { data: { message: `${error}. F12 for more detail!`, type: 'danger' } });
       });
   }
 

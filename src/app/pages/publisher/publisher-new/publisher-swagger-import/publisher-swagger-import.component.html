@@ -13,14 +13,13 @@
     <ng-template matStepperIcon="edit">
       <mat-icon [icIcon]="icDoneAll"></mat-icon>
     </ng-template>
-
     <ng-template matStepperIcon="done">
       <mat-icon [icIcon]="icDoneAll"></mat-icon>
     </ng-template>
 
     <mat-step [stepControl]="form">
       <form (ngSubmit)="submit()" [formGroup]="form" autocomplete="off" fxLayout="column">
-        <ng-template matStepLabel>Set Base</ng-template>
+        <ng-template matStepLabel>General Detail</ng-template>
         <p class="mt-0 mb-4 text-secondary">
           Base config for all imported operation from swagger. You can custome individually later on API Designer!
         </p>
@@ -55,7 +54,7 @@
         <mat-form-field appearance="outline">
           <mat-label>Base Description</mat-label>
           <textarea cdkTextareaAutosize formControlName="description" matInput></textarea>
-          <mat-hint>Brief description of API</mat-hint>
+          <mat-hint>Brief description of API functionality</mat-hint>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
@@ -75,8 +74,53 @@
         <button mat-button matStepperNext [disabled]="!nextable">NEXT</button>
       </div>
     </mat-step>
+    <mat-step [stepControl]="form2nd">
+      <form (ngSubmit)="submit()" [formGroup]="form2nd" fxLayout="column">
+        <ng-template matStepLabel>Business Information</ng-template>
+        <p class="mt-0 mb-4 text-secondary">
+          This information will be displayed in the store API owner.
+        </p>
+        <mat-form-field appearance="outline">
+          <mat-label>Business Owner</mat-label>
+          <input cdkFocusInitial type="text" formControlName="businessOwner" name="businessOwner" matInput
+            placeholder="E.g., XL Business Solution, Service Delivery Platform, Axis Business, etc">
+          <mat-hint>Fill Business Owner with a name of department or product owner (institution and not personal name)
+          </mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Business Owner Email</mat-label>
+          <input formControlName="businessOwnerEmail" name="businessOwnerEmail" type="email" matInput
+            placeholder="E.g., someone@xl.co.id">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Technical Owner</mat-label>
+          <input type="text" formControlName="technicalOwner" name="technicalOwner" matInput required
+            placeholder="E.g. John Spacy, Liggard Space">
+          <mat-hint>Name of developer or PIC who may have responsibility for this API</mat-hint>
+          <mat-error *ngIf="(formControl2nd.technicalOwner.touched) && formControl2nd.technicalOwner.errors?.required">
+            Technical Owner is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Technical Owner Email</mat-label>
+          <input formControlName="technicalOwnerEmail" name="technicalOwnerEmail" type="email" matInput required
+            placeholder="E.g., someyou@xl.co.id" autocomplete="email">
+          <mat-error
+            *ngIf="(formControl2nd.technicalOwnerEmail.touched) && formControl2nd.technicalOwnerEmail.errors?.required">
+            Technical Owner is required
+          </mat-error>
+        </mat-form-field>
+      </form>
+      <div fxLayout="row" fxLayoutAlign="end center">
+        <button mat-button matStepperPrevious>PREV</button>
+        <button mat-button matStepperNext [disabled]="!nextable2nd">NEXT</button>
+      </div>
+    </mat-step>
     <mat-step>
-      <ng-template matStepLabel>Chose Operations</ng-template>
+      <ng-template matStepLabel>Choose Operations</ng-template>
       <mat-dialog-content>
         <div *ngFor="let path of swagger.paths | keyvalue" class="swagger-ui">
           <div class="operation-tag-content" *ngFor="let method of path.value | keyvalue">
@@ -84,8 +128,8 @@
               class="opblock opblock-{{ method.key | lowercase }} pl-3 w-full">
               <div class="opblock-summary opblock-summary-{{ method.key | lowercase }}">
                 <span class="opblock-summary-method">{{ method.key | uppercase }}</span>
-                <span class="opblock-summary-path">{{ path.key }}</span>
-                <div class="opblock-summary-description truncate">
+                <span class="opblock-summary-path truncate">{{ path.key }}</span>
+                <div class="opblock-summary-description truncate text-right">
                   {{ method.value.summary || method.value.description || method.value.operationId }}
                 </div>
               </div>

@@ -6,10 +6,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { IconModule } from '@visurel/iconify-angular';
-import { ConfirmationDialogComponent } from './confirmation-dialog.component';
+import { InformationDialogComponent } from './information-dialog.component';
 
 @NgModule({
-  declarations: [ConfirmationDialogComponent],
+  declarations: [InformationDialogComponent],
   imports: [
     CommonModule,
     MatDialogModule,
@@ -19,6 +19,6 @@ import { ConfirmationDialogComponent } from './confirmation-dialog.component';
     MatButtonModule,
     FlexLayoutModule,
   ],
-  exports: [ConfirmationDialogComponent]
+  exports: [InformationDialogComponent]
 })
-export class ConfirmationDialogModule { }
+export class InformationDialogModule { }

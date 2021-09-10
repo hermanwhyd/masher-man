@@ -30,13 +30,22 @@
           "type": "string"
         },
         "thumbnailUri": {
-          "type": "null"
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "apiDefinition": {
-          "type": "string"
+          "type": [
+            "string",
+            "object"
+          ]
         },
         "wsdlUri": {
-          "type": "null"
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "responseCaching": {
           "type": "string"
@@ -45,7 +54,10 @@
           "type": "integer"
         },
         "destinationStatsEnabled": {
-          "type": "null"
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "isDefaultVersion": {
           "type": "boolean"
@@ -72,13 +84,22 @@
           }
         },
         "apiLevelPolicy": {
-          "type": "null"
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "authorizationHeader": {
-          "type": "null"
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "maxTps": {
-          "type": "null"
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "visibility": {
           "type": "string"
@@ -104,7 +125,10 @@
                   "minLength": 10
                 },
                 "config": {
-                  "type": "null"
+                  "type": [
+                    "string",
+                    "null"
+                  ]
                 },
                 "template_not_supported": {
                   "type": "boolean"
@@ -121,7 +145,10 @@
                   "type": "string"
                 },
                 "config": {
-                  "type": "null"
+                  "type": [
+                    "string",
+                    "null"
+                  ]
                 },
                 "template_not_supported": {
                   "type": "boolean"
@@ -140,13 +167,19 @@
           "type": "string"
         },
         "endpointSecurity": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "type": {
               "type": "string"
             },
             "username": {
-              "type": "null"
+              "type": [
+                "string",
+                "null"
+              ]
             },
             "password": {
               "type": "string"
@@ -165,7 +198,10 @@
           "items": {}
         },
         "subscriptionAvailability": {
-          "type": "null"
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "subscriptionAvailableTenants": {
           "type": "array",
@@ -185,10 +221,16 @@
           "type": "object",
           "properties": {
             "businessOwner": {
-              "type": "string"
+              "type": [
+                "string",
+                "null"
+              ]
             },
             "businessOwnerEmail": {
-              "type": "string"
+              "type": [
+                "string",
+                "null"
+              ]
             },
             "technicalOwner": {
               "type": "string",

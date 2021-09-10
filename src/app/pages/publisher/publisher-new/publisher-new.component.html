@@ -19,7 +19,6 @@
         <div class="bg-card border">
           <input [formControl]="swaggerCtrl" class="px-4 py-3 border-0 outline-none w-full bg-transparent"
             placeholder="http://localhost:8080/v3/api-docs" name="swaggerUrl" (keyup.enter)="importFromSwagger()">
-
         </div>
         <button mat-raised-button color="primary" class="mt-2" (click)="importFromSwagger()"
           [disabled]="!isSubmitableImport()" [loading]="isLoading">Start Creating</button>

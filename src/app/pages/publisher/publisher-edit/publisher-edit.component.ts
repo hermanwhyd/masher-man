@@ -5,7 +5,7 @@ import jmespath from 'jmespath';
 import { ApiDetail } from 'src/app/types/api.interface';
 
 import { angularMaterialRenderers } from '@jsonforms/angular-material';
-import { and, isControl, or, rankWith, schemaTypeIs, scopeEndsWith, Tester, uiTypeIs } from '@jsonforms/core';
+import { and, isControl, or, rankWith, schemaTypeIs, scopeEndsWith, Tester } from '@jsonforms/core';
 import { ErrorObject } from 'ajv';
 
 import { PublisherDataDisplayComponent } from './controls/publisher-data-display.component';
@@ -16,6 +16,9 @@ import { PublisherArrayControlComponent } from './controls/publisher-array-contr
 import { BehaviorSubject } from 'rxjs';
 import { MatFormFieldDefaultOptions, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { masterDetailTester, MasterListComponent } from './controls/master-detail/master-list.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { InformationDialogComponent } from 'src/app/utilities/information-dialog/information-dialog.component';
 
 const arrayPrimitiveTester: Tester = or(
   and(
@@ -50,7 +53,7 @@ const appearance: MatFormFieldDefaultOptions = {
 export class PublisherEditComponent implements OnInit {
   jmespath = jmespath;
 
-  errors: ErrorObject[];
+  errors = [] as ErrorObject[];
   draftAPIs = [] as ApiDetail[];
   model = { apis: [] as ApiDetail[] };
 
@@ -75,7 +78,10 @@ export class PublisherEditComponent implements OnInit {
     }
   ];
 
-  constructor(private publiserService: PublisherService) { }
+  constructor(
+    private publiserService: PublisherService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.publiserService.draftAPIs$.subscribe(data => {
@@ -89,5 +95,20 @@ export class PublisherEditComponent implements OnInit {
 
   onError(event: ErrorObject[]) {
     this.errors = event;
+  }
+
+  validate() {
+    this.dialog.open(InformationDialogComponent, {
+      data: {
+        message: `<pre>${JSON.stringify(this.errors, null, 2)}</pre>`,
+        buttonText: {
+          cancel: 'Close'
+        }
+      }
+    });
+  }
+
+  publish() {
+
   }
 }

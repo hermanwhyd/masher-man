@@ -1,10 +1,15 @@
-<vex-page-layout>
-  <vex-secondary-toolbar current="API Designer">
-    <button mat-raised-button color="primary">Validate & Publish</button>
-  </vex-secondary-toolbar>
-  <div class="bg-card">
-    <jsonforms [data]="model" [schema]="schema" [uischema]="uischema" [renderers]="renderers"
-      (dataChange)="onChange($event)" (errors)="onError($event)">
-    </jsonforms>
-  </div>
-</vex-page-layout>
+<vex-secondary-toolbar current="API Designer">
+  <button *ngIf="errors.length > 0" mat-stroked-button color="warn" (click)="validate()" [matBadge]="errors.length"
+    matBadgeColor="accent">
+    Validate
+  </button>
+  <button *ngIf="errors.length == 0" mat-raised-button (click)="publish()" [disabled]="draftAPIs.length == 0"
+    color="primary">
+    Publish
+  </button>
+</vex-secondary-toolbar>
+<div class="bg-card" vexContainer>
+  <jsonforms [data]="model" [schema]="schema" [uischema]="uischema" [renderers]="renderers"
+    (dataChange)="onChange($event)" (errors)="onError($event)">
+  </jsonforms>
+</div>

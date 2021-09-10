@@ -34,18 +34,12 @@ export const removeSchemaKeywords = (path: string) => {
 @Component({
   selector: 'vex-publisher-list-control-controller',
   template: `
-    <mat-sidenav-container class="container" [fxHide]="hidden">
-      <mat-sidenav mode="side" opened>
+    <mat-sidenav-container [fxHide]="hidden">
+      <mat-sidenav mode="side" class="p-2" opened>
         <mat-nav-list>
-          <mat-list-item *ngIf="masterItems.length === 0"
-            >No items</mat-list-item
-          >
+          <mat-list-item *ngIf="masterItems.length === 0">No items</mat-list-item>
           <mat-list-item
-            *ngFor="
-              let item of masterItems;
-              let i = index;
-              trackBy: trackElement
-            "
+            *ngFor="let item of masterItems;let i = index;trackBy: trackElement"
             [class.selected]="item === selectedItem"
             (click)="onSelect(item, i)"
             (mouseover)="onListItemHover(i)"
@@ -74,10 +68,8 @@ export const removeSchemaKeywords = (path: string) => {
         </button>
       </mat-sidenav>
       <mat-sidenav-content class="content">
-        <vex-jsonforms-detail
-          *ngIf="selectedItem"
-          [item]="selectedItem"
-        ></vex-jsonforms-detail>
+        <vex-jsonforms-detail *ngIf="selectedItem" [item]="selectedItem" ></vex-jsonforms-detail>
+        <vex-jsonform-empty *ngIf="!selectedItem"></vex-jsonform-empty>
       </mat-sidenav-content>
     </mat-sidenav-container>
   `,

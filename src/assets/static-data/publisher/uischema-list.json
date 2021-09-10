@@ -73,24 +73,45 @@
                   "label": "Business Information",
                   "elements": [
                     {
-                      "type": "Control",
-                      "label": "Business Owner",
-                      "scope": "#/properties/businessInformation/properties/businessOwner"
+                      "type": "HorizontalLayout",
+                      "elements": [
+                        {
+                          "type": "Control",
+                          "label": "Business Owner",
+                          "scope": "#/properties/businessInformation/properties/businessOwner"
+                        },
+                        {
+                          "type": "Control",
+                          "label": "Business Owner Email",
+                          "scope": "#/properties/businessInformation/properties/businessOwnerEmail"
+                        }
+                      ]
                     },
                     {
-                      "type": "Control",
-                      "label": "Business Owner Email",
-                      "scope": "#/properties/businessInformation/properties/businessOwnerEmail"
-                    },
+                      "type": "HorizontalLayout",
+                      "elements": [
+                        {
+                          "type": "Control",
+                          "label": "Technical Owner",
+                          "scope": "#/properties/businessInformation/properties/technicalOwner"
+                        },
+                        {
+                          "type": "Control",
+                          "label": "Technical Owner Email",
+                          "scope": "#/properties/businessInformation/properties/technicalOwnerEmail"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "Group",
+                  "label": "API Definitions",
+                  "elements": [
                     {
                       "type": "Control",
-                      "label": "Technical Owner",
-                      "scope": "#/properties/businessInformation/properties/technicalOwner"
-                    },
-                    {
-                      "type": "Control",
-                      "label": "Technical Owner Email",
-                      "scope": "#/properties/businessInformation/properties/technicalOwnerEmail"
+                      "label": "Allow Methods",
+                      "scope": "#/properties/corsConfiguration/properties/accessControlAllowMethods"
                     }
                   ]
                 },

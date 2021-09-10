@@ -1,5 +1,5 @@
 <div fxLayout="row" fxLayoutAlign="start center" mat-dialog-title>
-  <h2 class="headline m-0" fxFlex="auto">Confirm Deletion</h2>
+  <h2 class="headline m-0" fxFlex="auto">Information</h2>
 
   <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
     <mat-icon [icIcon]="icClose"></mat-icon>
@@ -12,6 +12,5 @@
 </mat-dialog-content>
 
 <mat-dialog-actions class="m-0 p-2" fxLayout="row" fxLayoutAlign="end center">
-  <button mat-button class="mr-4" mat-dialog-close tabindex="-1">{{cancelButtonText | uppercase}}</button>
-  <button mat-button color="primary" (click)="onConfirmClick()" tabindex="1">{{confirmButtonText | uppercase}}</button>
+  <button mat-button mat-dialog-close>{{cancelButtonText | uppercase}}</button>
 </mat-dialog-actions>

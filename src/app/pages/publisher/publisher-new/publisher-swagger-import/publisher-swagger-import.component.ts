@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Api, ApiDetail } from 'src/app/types/api.interface';
+import { ApiDetail } from 'src/app/types/api.interface';
 
 import icDoneAll from '@iconify/icons-ic/twotone-done-all';
 import icClose from '@iconify/icons-ic/twotone-close';
@@ -38,6 +38,13 @@ export class PublisherSwaggerImportComponent implements OnInit {
     tags: [[]],
   });
 
+  form2nd = this.fb.group({
+    businessOwner: [''],
+    businessOwnerEmail: [''],
+    technicalOwner: ['', Validators.required],
+    technicalOwnerEmail: [''],
+  });
+
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: any,
     private dialogRef: MatDialogRef<PublisherSwaggerImportComponent>,
@@ -63,12 +70,20 @@ export class PublisherSwaggerImportComponent implements OnInit {
     return this.form.controls;
   }
 
+  get formControl2nd() {
+    return this.form2nd.controls;
+  }
+
   get tags() {
     return this.form.get('tags');
   }
 
   get nextable(): boolean {
     return this.form.valid;
+  }
+
+  get nextable2nd(): boolean {
+    return this.form2nd.valid;
   }
 
   removeTag(tag: string): void {
@@ -94,6 +109,7 @@ export class PublisherSwaggerImportComponent implements OnInit {
 
   submit() {
     const form = this.form.getRawValue();
+    const form2nd = this.form2nd.getRawValue();
 
     const draftAPIs = [] as ApiDetail[];
 
@@ -102,6 +118,8 @@ export class PublisherSwaggerImportComponent implements OnInit {
         spec['x-auth-type'] = 'Application & Application User';
         spec['x-throttling-tier'] = 'Unlimited';
 
+        delete (spec.selected);
+
         const apiName = `${form.name}-${upperFirst(method)}${pascalCase(path.split('/').pop())}`;
         const apiContext = `${form.context}/${lowerCase(method)}-${paramCase(path.split('/').pop())}`;
 
@@ -109,11 +127,16 @@ export class PublisherSwaggerImportComponent implements OnInit {
           ...this.swagger, ... { info: { title: apiName }, paths: { ['/*']: { [`${method}`]: spec } } }
         };
 
+        let allowedHeaders = [];
+        if (spec.parameters) {
+          allowedHeaders = spec.parameters.filter(p => p.in === 'header').map(p => p.name);
+        }
+
         const api: Partial<ApiDetail> = {
           name: apiName,
           context: apiContext,
           version: form.version,
-          description: form.description,
+          description: [form.description, spec.description].join(' ').trim(),
           tags: form.tags,
           endpointConfig: {
             production_endpoints: {
@@ -129,6 +152,7 @@ export class PublisherSwaggerImportComponent implements OnInit {
             endpoint_type: 'http'
           },
           apiDefinition: apiDefinitionSwagger,
+          businessInformation: form2nd,
           corsConfiguration: {
             corsConfigurationEnabled: true,
             accessControlAllowOrigins: [
@@ -139,7 +163,7 @@ export class PublisherSwaggerImportComponent implements OnInit {
               'authorization',
               'Access-Control-Allow-Origin',
               'Content-Type',
-              ...spec.parameters.filter(p => p.in === 'header').map(p => p.name)
+              ...allowedHeaders
             ],
             accessControlAllowMethods: ['OPTIONS', upperCase(method)]
           }

@@ -4,23 +4,21 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import icClose from '@iconify/icons-ic/twotone-close';
 
 @Component({
-  selector: 'vex-confirmation-dialog',
-  templateUrl: 'confirmation-dialog.component.html',
+  selector: 'vex-information-dialog',
+  templateUrl: 'information-dialog.component.html',
 })
-export class ConfirmationDialogComponent {
+export class InformationDialogComponent {
   icClose = icClose;
 
   message = 'Are you sure?';
-  confirmButtonText = 'Yes';
   cancelButtonText = 'Cancel';
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: any,
-    private dialogRef: MatDialogRef<ConfirmationDialogComponent>) {
+    private dialogRef: MatDialogRef<InformationDialogComponent>) {
     if (this.data) {
       this.message = this.data.message || this.message;
-      if (this.data.buttonText) {
-        this.confirmButtonText = this.data.buttonText.ok || this.confirmButtonText;
+      if (data.buttonText) {
         this.cancelButtonText = this.data.buttonText.cancel || this.cancelButtonText;
       }
     }

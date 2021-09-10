@@ -45,8 +45,8 @@ export const ApiDetailTemplate = {
   accessControl: 'NONE',
   accessControlRoles: [],
   businessInformation: {
-    businessOwner: '',
-    businessOwnerEmail: '',
+    businessOwner: null,
+    businessOwnerEmail: null,
     technicalOwner: '',
     technicalOwnerEmail: ''
   },
