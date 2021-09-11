@@ -46,8 +46,8 @@ export const ApiDetailTemplate = {
         }
       },
       info: {
-        title: 'Api Definition',
-        version: 'v1'
+        title: '',
+        version: ''
       }
     }
   ),

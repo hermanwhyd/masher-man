@@ -2,9 +2,11 @@ export const ApiResourceTemplate = {
   get: {
     responses: {
       200: {
-        description: 'Successful operation'
+        description: 'Success response'
       }
-    }
+    },
+    'x-auth-type': 'Application & Application User',
+    'x-throttling-tier': 'Unlimited'
   },
   post: {
     requestBody: {
@@ -25,9 +27,11 @@ export const ApiResourceTemplate = {
     },
     responses: {
       200: {
-        description: 'Successful operation'
+        description: 'Success response'
       }
-    }
+    },
+    'x-auth-type': 'Application & Application User',
+    'x-throttling-tier': 'Unlimited'
   },
   put: {
     requestBody: {
@@ -48,16 +52,20 @@ export const ApiResourceTemplate = {
     },
     responses: {
       200: {
-        description: 'Successful operation'
+        description: 'Success response'
       }
-    }
+    },
+    'x-auth-type': 'Application & Application User',
+    'x-throttling-tier': 'Unlimited'
   },
   delete: {
     responses: {
       200: {
-        description: 'Successful operation'
+        description: 'Success response'
       }
-    }
+    },
+    'x-auth-type': 'Application & Application User',
+    'x-throttling-tier': 'Unlimited'
   },
   patch: {
     requestBody: {
@@ -78,15 +86,19 @@ export const ApiResourceTemplate = {
     },
     responses: {
       200: {
-        description: 'Successful operation'
+        description: 'Success response'
       }
-    }
+    },
+    'x-auth-type': 'Application & Application User',
+    'x-throttling-tier': 'Unlimited'
   },
   options: {
     responses: {
       200: {
-        description: 'Successful operation'
+        description: 'Success response'
       }
-    }
+    },
+    'x-auth-type': 'Application & Application User',
+    'x-throttling-tier': 'Unlimited'
   }
-}
+};
