@@ -26,8 +26,7 @@ import jmespath from 'jmespath';
             {{ tag }}
             <mat-icon matChipRemove [icIcon]="icDelete"></mat-icon>
           </mat-chip>
-          <input type="text" [matChipInputFor]="chipList"
-            [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="addTag($event)">
+          <input type="text" [matChipInputFor]="chipList" matChipInputAddOnBlur="'true'" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="addTag($event)">
         </mat-chip-list>
       </mat-form-field>
     </form>

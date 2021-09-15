@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ApiDetail } from 'src/app/types/api.interface';
@@ -13,6 +13,7 @@ import { paramCase, pascalCase } from 'change-case';
 import _, { lowerCase, upperCase, upperFirst } from 'lodash';
 
 import { ApiDetailTemplate } from 'src/assets/static-data/template/api-detail';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'vex-publisher-swagger-import',
@@ -27,6 +28,7 @@ export class PublisherSwaggerImportComponent implements OnInit {
   icClear = icClear;
 
   swagger: any;
+  isOpenApi: boolean;
 
   readonly separatorKeysCodes = [ENTER, COMMA, SPACE, FF_SEMICOLON] as const;
 
@@ -35,6 +37,7 @@ export class PublisherSwaggerImportComponent implements OnInit {
     context: ['', Validators.required],
     version: ['', Validators.required],
     description: [''],
+    server: [''],
     tags: [[]],
   });
 
@@ -45,6 +48,7 @@ export class PublisherSwaggerImportComponent implements OnInit {
     technicalOwnerEmail: [''],
   });
 
+  @ViewChild('stepper') private myStepper: MatStepper;
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: any,
     private dialogRef: MatDialogRef<PublisherSwaggerImportComponent>,
@@ -53,13 +57,16 @@ export class PublisherSwaggerImportComponent implements OnInit {
   ngOnInit(): void {
     this.swagger = this.data;
 
-    Object.values(this.swagger.paths).forEach(paths => {
-      Object.values(paths).forEach((method: any) => method.selected = true);
-    });
+    this.isOpenApi = this.data.swagger === undefined;
 
-    this.formControl.name.setValue(pascalCase(this.swagger.info?.title) + '-v1');
-    this.formControl.context.setValue(paramCase(this.swagger.info?.title) + '/{version}');
+    const host = this.isOpenApi ? this.swagger.servers[0].url : 'http://' + this.swagger.host;
+    const title = this.isOpenApi ? this.swagger.info.title : this.swagger.host.split('.')[0];
+
+    this.formControl.name.setValue(pascalCase(title) + '-v1');
+    this.formControl.context.setValue(paramCase(title) + '/{version}');
     this.formControl.version.setValue('v1');
+
+    this.formControl.server.setValue(host);
   }
 
   get submitable(): boolean {
@@ -107,6 +114,10 @@ export class PublisherSwaggerImportComponent implements OnInit {
     event.chipInput.clear();
   }
 
+  goForward() {
+    this.myStepper.next();
+  }
+
   submit() {
     const form = this.form.getRawValue();
     const form2nd = this.form2nd.getRawValue();
@@ -132,6 +143,8 @@ export class PublisherSwaggerImportComponent implements OnInit {
           allowedHeaders = spec.parameters.filter(p => p.in === 'header').map(p => p.name);
         }
 
+        const server = form.server;
+
         const api: Partial<ApiDetail> = {
           name: apiName,
           context: apiContext,
@@ -140,7 +153,7 @@ export class PublisherSwaggerImportComponent implements OnInit {
           tags: form.tags,
           endpointConfig: {
             production_endpoints: {
-              url: (this.swagger.servers[0]?.url || this.swagger.host) + path,
+              url: [server, path].join(''),
               config: null,
               template_not_supported: false
             },

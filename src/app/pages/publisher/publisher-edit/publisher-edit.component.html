@@ -1,10 +1,10 @@
 <vex-secondary-toolbar current="API Designer">
-  <button *ngIf="errors.length > 0" mat-stroked-button color="warn" (click)="validate()" [matBadge]="errors.length"
-    matBadgeColor="accent">
+  <button *ngIf="(errorsSubject | async).length > 0" mat-stroked-button color="warn" (click)="validate()"
+    [matBadge]="(errorsSubject | async).length" matBadgeColor="accent">
     Validate
   </button>
-  <button *ngIf="errors.length == 0" mat-raised-button (click)="publish()" [disabled]="draftAPIs.length == 0"
-    color="primary">
+  <button *ngIf="(errorsSubject | async).length == 0" mat-raised-button (click)="publish()"
+    [disabled]="(draftCountSubject | async) == 0" [loading]="isPublishing" color="primary">
     Publish
   </button>
 </vex-secondary-toolbar>

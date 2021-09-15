@@ -21,6 +21,13 @@ import {
 import { ApiDetailTemplate } from 'src/assets/static-data/template/api-detail';
 import { ConfirmationDialogComponent } from 'src/app/utilities/confirmation-dialog/confirmation-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { PublisherService } from '../../../services/publisher.service';
+import { filter, finalize } from 'rxjs/operators';
+import { ApiDetail } from 'src/app/types/api.interface';
+
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { SnackbarNotifComponent } from 'src/app/utilities/snackbar-notif/snackbar-notif.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 const keywords = ['#', 'properties', 'items'];
 
@@ -31,30 +38,27 @@ export const removeSchemaKeywords = (path: string) => {
     .join('.');
 };
 
+@UntilDestroy()
 @Component({
   selector: 'vex-publisher-list-control-controller',
   template: `
     <mat-sidenav-container [fxHide]="hidden">
-      <mat-sidenav mode="side" class="p-2" opened>
+      <mat-sidenav mode="side" class="pr-2" opened>
         <mat-nav-list>
           <mat-list-item *ngIf="masterItems.length === 0">No items</mat-list-item>
           <mat-list-item
             *ngFor="let item of masterItems;let i = index;trackBy: trackElement"
             [class.selected]="item === selectedItem"
+            [ngClass]="item.data?.id ? 'callout callout-info' : 'callout callout-default'"
             (click)="onSelect(item, i)"
             (mouseover)="onListItemHover(i)"
             (mouseout)="onListItemHover(undefined)"
           >
-            <a matLine [matTooltip]="item.label" matTooltipPosition="above">{{ item.label || 'No label set' }}</a>
-            <button
-              mat-icon-button
-              class="button hide"
-              (click)="onDeleteClick(i)"
-              [ngClass]="{ show: highlightedIdx == i }"
-              *ngIf="isEnabled()"
-            >
+            <a matLine [matTooltip]="item.label" matTooltipPosition="above">{{ item.label || 'No api name set' }}</a>
+            <button mat-icon-button class="button hide" (click)="onDeleteClick(i)" [ngClass]="{ show: highlightedIdx == i }" *ngIf="isEnabled()">
               <mat-icon mat-list-icon>delete</mat-icon>
             </button>
+            <button mat-icon-button [loading]="!isEnabled()" *ngIf="!isEnabled()"><mat-icon mat-list-icon>delete</mat-icon></button>
           </mat-list-item>
         </mat-nav-list>
         <button
@@ -101,8 +105,11 @@ export const removeSchemaKeywords = (path: string) => {
         display: inline-block;
       }
       mat-sidenav {
-        width: 20%;
+        width: 30%;
       }
+      /* ::ng-deep .mat-list-text {
+        padding: 0 !important;
+      } */
     `
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -117,10 +124,12 @@ export class MasterListComponent extends JsonFormsArrayControl {
   highlightedIdx: number;
 
   constructor(
-    jsonformsService: JsonFormsAngularService,
+    private jsonFormsAngularService: JsonFormsAngularService,
+    private publiserService: PublisherService,
     private changeDetectorRef: ChangeDetectorRef,
-    private dialog: MatDialog) {
-    super(jsonformsService);
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar) {
+    super(jsonFormsAngularService);
   }
 
   onListItemHover(idx: number) {
@@ -137,6 +146,8 @@ export class MasterListComponent extends JsonFormsArrayControl {
     const { addItem, removeItems } = mapDispatchToArrayControlProps(dispatch);
     this.addItem = addItem;
     this.removeItems = removeItems;
+
+    this.registerPublish();
   }
 
   mapAdditionalProps(props: ArrayControlProps) {
@@ -232,6 +243,33 @@ export class MasterListComponent extends JsonFormsArrayControl {
   protected mapToProps(state: JsonFormsState): StatePropsOfArrayControl {
     const props = mapStateToArrayControlProps(state, this.getOwnProps());
     return { ...props };
+  }
+
+  registerPublish() {
+    this.publiserService.publishAllEmit$
+      .pipe(untilDestroyed(this), filter<string[]>(Boolean))
+      .subscribe((idx: string[]) => {
+        this.jsonFormsService.setReadonly(true);
+        const apid: ApiDetail = { ...this.selectedItem.data };
+
+        apid.apiDefinition = (typeof apid.apiDefinition === 'string') ? apid.apiDefinition : JSON.stringify(apid.apiDefinition);
+
+        if (apid.endpointConfig.sandbox_endpoints?.url === '') {
+          delete (apid.endpointConfig.sandbox_endpoints);
+        }
+        apid.endpointConfig = JSON.stringify(apid.endpointConfig);
+
+        this.publiserService.createOrUpdateApi(apid)
+          .pipe(untilDestroyed(this), finalize(() => this.jsonFormsService.setReadonly(false)))
+          .subscribe(data => {
+            this.selectedItem.data.id = data.id;
+            this.jsonFormsAngularService.refresh();
+            this.snackBar.openFromComponent(SnackbarNotifComponent, {
+              data: { message: 'Save and publish API successfully', type: 'success' },
+              duration: 5000
+            });
+          });
+      });
   }
 }
 

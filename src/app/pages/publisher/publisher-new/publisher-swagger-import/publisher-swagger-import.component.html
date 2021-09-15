@@ -18,7 +18,7 @@
     </ng-template>
 
     <mat-step [stepControl]="form">
-      <form (ngSubmit)="submit()" [formGroup]="form" autocomplete="off" fxLayout="column">
+      <form (ngSubmit)="submit()" [formGroup]="form" fxLayout="column" autocomplete="off">
         <ng-template matStepLabel>General Detail</ng-template>
         <p class="mt-0 mb-4 text-secondary">
           Base config for all imported operation from swagger. You can custome individually later on API Designer!
@@ -58,6 +58,15 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline">
+          <mat-label>Server Host</mat-label>
+          <input formControlName="server" matInput required placeholder="http://">
+          <mat-hint>Server or host must start with http:// or https:// prefix</mat-hint>
+          <mat-error *ngIf="(formControl.server.touched) && formControl.server.errors?.required">
+            Server Host is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
           <mat-label>Tags</mat-label>
           <mat-chip-list #chipList formControlName="tags">
             <mat-chip *ngFor="let tag of tags.value" (removed)="removeTag(tag)">
@@ -65,7 +74,8 @@
               <mat-icon matChipRemove [icIcon]="icDelete"></mat-icon>
             </mat-chip>
             <input type="text" placeholder="touchpoint name, api-economy, etc" [matChipInputFor]="chipList"
-              [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="addTag($event)">
+              matChipInputAddOnBlur="'true'" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              (matChipInputTokenEnd)="addTag($event)">
           </mat-chip-list>
           <mat-hint>Use keywords and common search terms as tags to group APIs</mat-hint>
         </mat-form-field>
@@ -75,7 +85,7 @@
       </div>
     </mat-step>
     <mat-step [stepControl]="form2nd">
-      <form (ngSubmit)="submit()" [formGroup]="form2nd" fxLayout="column">
+      <form (ngSubmit)="goForward()" [formGroup]="form2nd" fxLayout="column">
         <ng-template matStepLabel>Business Information</ng-template>
         <p class="mt-0 mb-4 text-secondary">
           This information will be displayed in the store API owner.
@@ -110,18 +120,21 @@
             placeholder="E.g., someyou@xl.co.id" autocomplete="email">
           <mat-error
             *ngIf="(formControl2nd.technicalOwnerEmail.touched) && formControl2nd.technicalOwnerEmail.errors?.required">
-            Technical Owner is required
+            Technical Owner Email is required
           </mat-error>
         </mat-form-field>
+        <div fxLayout="row" fxLayoutAlign="end center">
+          <button mat-button matStepperPrevious>PREV</button>
+          <button mat-button type="submit" [disabled]="!nextable2nd">NEXT</button>
+        </div>
       </form>
-      <div fxLayout="row" fxLayoutAlign="end center">
-        <button mat-button matStepperPrevious>PREV</button>
-        <button mat-button matStepperNext [disabled]="!nextable2nd">NEXT</button>
-      </div>
     </mat-step>
     <mat-step>
       <ng-template matStepLabel>Choose Operations</ng-template>
-      <mat-dialog-content>
+      <mat-dialog-content class="mb-4">
+        <p class="mt-0 mb-4 text-secondary">
+          Please select the operation:
+        </p>
         <div *ngFor="let path of swagger.paths | keyvalue" class="swagger-ui">
           <div class="operation-tag-content" *ngFor="let method of path.value | keyvalue">
             <mat-checkbox [(ngModel)]="method.value.selected"

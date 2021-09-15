@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 import icArrowBack from '@iconify/icons-ic/twotone-arrow-back';
 import icPencil from '@iconify/icons-ic/edit';
@@ -15,9 +15,8 @@ import { scaleIn400ms } from 'src/@vex/animations/scale-in.animation';
 import { scaleFadeIn400ms } from 'src/@vex/animations/scale-fade-in.animation';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
 
-import { SwaggerUIBundle } from 'swagger-ui-dist';
+import { SwaggerUIBundle, SwaggerUIStandalonePreset } from 'swagger-ui-dist';
 import { MatFormFieldDefaultOptions, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
-
 import uischemaAsset from 'src/assets/static-data/publisher/uischema.json';
 import schemaAsset from 'src/assets/static-data/publisher/schema.json';
 import { angularMaterialRenderers } from '@jsonforms/angular-material';
@@ -60,6 +59,7 @@ export class PublisherListDetailComponent implements OnInit {
   schema = schemaAsset;
   angularMaterialRenderers = angularMaterialRenderers;
 
+  @ViewChild('swagger') swaggerDom: ElementRef<HTMLDivElement>;
   constructor(
     private route: ActivatedRoute,
     private publisherService: PublisherService) { }
@@ -83,14 +83,12 @@ export class PublisherListDetailComponent implements OnInit {
 
       // swagger initialize
       SwaggerUIBundle({
-        dom_id: '#swagger-ui',
+        domNode: this.swaggerDom.nativeElement,
+        deepLinking: true,
+        presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
+        operationsSorter: 'alpha',
         layout: 'BaseLayout',
-        presets: [
-          SwaggerUIBundle.presets.apis,
-          SwaggerUIBundle.SwaggerUIStandalonePreset
-        ],
         spec: JSON.parse(this.model.apiDefinition),
-        operationsSorter: 'alpha'
       });
 
       delete (this.model.apiDefinition);

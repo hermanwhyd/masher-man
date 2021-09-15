@@ -46,7 +46,7 @@ import { apiSpecificationExample } from 'src/assets/static-data/template/api-spe
           </div>
           <json-editor [options]="options" [data]="apiDef"></json-editor>
         </div>
-        <div class="text-secondary caption py-2">If you need a inspiration, you can see an <a (click)="showExample()" class="text-teal cursor-pointer">example</a></div>
+        <div class="text-secondary caption py-2">If you need a inspiration, here is an <a (click)="showExample()" class="text-teal cursor-pointer">example</a></div>
       </mat-tab>
     </mat-tab-group>
   `,
@@ -54,6 +54,10 @@ import { apiSpecificationExample } from 'src/assets/static-data/template/api-spe
     `
       ::ng-deep .swagger-ui .info {
         margin: 20px 0;
+      }
+
+      ::ng-deep .swagger-ui .wrapper {
+        padding: 0;
       }
 
       :host ::ng-deep json-editor,

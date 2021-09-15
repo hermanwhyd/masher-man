@@ -56,7 +56,7 @@ export class PublisherNewComponent implements OnInit {
           .afterClosed().subscribe((drafts: ApiDetail[]) => {
             if (drafts) {
               this.publisherService.draftAPIs.next(drafts);
-              this.createNew();
+              this.router.navigate(['../', 'edit'], { relativeTo: this.route });
             }
           });
       },

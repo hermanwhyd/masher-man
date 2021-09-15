@@ -13,10 +13,10 @@
 
     <span fxFlex></span>
     <p *ngIf="!isLoading" class="text-lg leading-normal">
-      <span class="ml-2 text-sm px-2 py-1 rounded-full text-orange bg-orange-light">
+      <span class="ml-2 text-sm px-2 py-1 rounded-full text-orange bg-orange-light" matTooltip="Vendor">
         {{ model?.provider }}
       </span>
-      <span class="ml-2 text-sm px-2 py-1 rounded-full" [ngClass]="statusClass(model?.status)">
+      <span class="ml-2 text-sm px-2 py-1 rounded-full" [ngClass]="statusClass(model?.status)" matTooltip="Status">
         {{ model?.status}}
       </span>
     </p>
@@ -26,9 +26,28 @@
   </div>
 
   <div @stagger>
-    <mat-tab-group>
+    <mat-tab-group dynamicHeight>
+      <mat-tab label="Overview">
+        <div *ngIf="isLoading" class="p-6">
+          <div class="block mt-1">
+            <ngx-shimmer-loading [height]="'45px'" [width]="'50%'"></ngx-shimmer-loading>
+            <ngx-shimmer-loading [height]="'45px'" [width]="'50%'"></ngx-shimmer-loading>
+          </div>
+          <ngx-shimmer-loading [height]="'40px'" [width]="'100%'" class="block"></ngx-shimmer-loading>
+          <ngx-shimmer-loading [height]="'100px'" [width]="'100%'" class="block"></ngx-shimmer-loading>
+          <ngx-shimmer-loading [height]="'40px'" [width]="'100%'" class="block"></ngx-shimmer-loading>
+        </div>
+        <div @fadeInUp *ngIf="!isLoading" class="p-6">
+          <jsonforms [data]="model" [schema]="schema" [renderers]="angularMaterialRenderers" [uischema]="uischema"
+            readonly="'true'">
+          </jsonforms>
+          <div class="card p-4">
+            <ngx-json-viewer [json]="model"></ngx-json-viewer>
+          </div>
+        </div>
+      </mat-tab>
       <mat-tab label="Swagger">
-        <div id="swagger-ui" class="px-2 -mt-6 mb-4">
+        <div #swagger class="px-2 -mt-6 mb-4">
           <div class="p-6 mt-6">
             <ngx-shimmer-loading [width]="'20%'" [height]="'60px'" class="block"></ngx-shimmer-loading>
             <ngx-shimmer-loading [width]="'20%'" [height]="'40px'" class="block mt-2"></ngx-shimmer-loading>
@@ -40,16 +59,6 @@
               <ngx-shimmer-loading [width]="'10%'" [height]="'20px'" class="mr-2"></ngx-shimmer-loading>
               <ngx-shimmer-loading [height]="'15px'"></ngx-shimmer-loading>
             </div>
-          </div>
-        </div>
-      </mat-tab>
-      <mat-tab label="Overview">
-        <div class="p-6">
-          <jsonforms [data]="model" [schema]="schema" [renderers]="angularMaterialRenderers" [uischema]="uischema"
-            readonly="'true'">
-          </jsonforms>
-          <div class="card p-4">
-            <ngx-json-viewer [json]="model"></ngx-json-viewer>
           </div>
         </div>
       </mat-tab>

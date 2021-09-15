@@ -14,6 +14,9 @@ import { LoginRq } from '../../access/auth-manager/services/oauth.interface';
 })
 export class PublisherService {
 
+  public publishAllEmit = new BehaviorSubject<string[]>(null);
+  public publishAllEmit$ = this.publishAllEmit.asObservable();
+
   public draftAPIs = new BehaviorSubject<ApiDetail[]>([]);
   public draftAPIs$ = this.draftAPIs.asObservable();
 
@@ -86,7 +89,7 @@ export class PublisherService {
       .pipe(switchMap(token => {
         const headers = new HttpHeaders({ Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' });
         if (api.id) {
-          return this.httpClient.post(
+          return this.httpClient.put(
             [this.apiConfigService.getApiUrl(), this.URL, api.id].join('/'), api, { headers }
           ) as Observable<ApiDetail>;
         } else {
