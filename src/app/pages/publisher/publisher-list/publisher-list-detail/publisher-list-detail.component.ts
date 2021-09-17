@@ -15,12 +15,17 @@ import { scaleIn400ms } from 'src/@vex/animations/scale-in.animation';
 import { scaleFadeIn400ms } from 'src/@vex/animations/scale-fade-in.animation';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
 
-import { SwaggerUIBundle, SwaggerUIStandalonePreset } from 'swagger-ui-dist';
 import { MatFormFieldDefaultOptions, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import uischemaAsset from 'src/assets/static-data/publisher/uischema.json';
 import schemaAsset from 'src/assets/static-data/publisher/schema.json';
 import { angularMaterialRenderers } from '@jsonforms/angular-material';
 import { statusClass } from 'src/app/utilities/function/api-status';
+import { JsonEditorOptions } from 'ang-jsoneditor';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { ApiDefinitionControlComponent, apiDefinitionTester } from '../../publisher-edit/controls/api-definition-control.component';
+import { PublisherArrayControlComponent, arrayPrimitiveTester } from '../../publisher-edit/controls/publisher-array-control.component';
+import { AccountPortalComponent } from '../../publisher-edit/controls/account-portal.component';
+import { and, isControl, rankWith, scopeEndsWith } from '@jsonforms/core';
 
 const appearance: MatFormFieldDefaultOptions = {
   appearance: 'outline'
@@ -55,14 +60,34 @@ export class PublisherListDetailComponent implements OnInit {
 
   statusClass = statusClass;
 
+  options = new JsonEditorOptions();
+  isShowJsonRaw = false;
+
   uischema = uischemaAsset;
   schema = schemaAsset;
-  angularMaterialRenderers = angularMaterialRenderers;
+  renderers = [
+    ...angularMaterialRenderers,
+    {
+      renderer: ApiDefinitionControlComponent,
+      tester: apiDefinitionTester
+    },
+    {
+      renderer: PublisherArrayControlComponent,
+      tester: rankWith(5, arrayPrimitiveTester)
+    },
+    {
+      renderer: AccountPortalComponent,
+      tester: rankWith(6, and(isControl, scopeEndsWith('___portal')))
+    }
+  ];
 
   @ViewChild('swagger') swaggerDom: ElementRef<HTMLDivElement>;
   constructor(
     private route: ActivatedRoute,
-    private publisherService: PublisherService) { }
+    private publisherService: PublisherService) {
+    this.options.mode = 'code';
+    this.options.modes = ['code', 'tree'];
+  }
 
   ngOnInit(): void {
     this.route.queryParamMap.pipe(
@@ -72,7 +97,6 @@ export class PublisherListDetailComponent implements OnInit {
       filter<string>(Boolean),
       switchMap(apiId => this.publisherService.getApiDetail(apiId).pipe(finalize(() => this.isLoading = false)))
     ).subscribe((data: ApiDetail) => {
-
       try {
         const endpointConfig = {} as EndPointConfig;
         Object.assign(endpointConfig, JSON.parse(data.endpointConfig as string));
@@ -80,18 +104,10 @@ export class PublisherListDetailComponent implements OnInit {
       } catch (e) {
         this.model = data;
       }
-
-      // swagger initialize
-      SwaggerUIBundle({
-        domNode: this.swaggerDom.nativeElement,
-        deepLinking: true,
-        presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
-        operationsSorter: 'alpha',
-        layout: 'BaseLayout',
-        spec: JSON.parse(this.model.apiDefinition),
-      });
-
-      delete (this.model.apiDefinition);
     });
+  }
+
+  togleJsonView(change: MatSlideToggleChange) {
+    this.isShowJsonRaw = change.checked;
   }
 }

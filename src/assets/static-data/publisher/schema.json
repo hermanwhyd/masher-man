@@ -1,21 +1,28 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
   "properties": {
     "id": {
-      "type": "string"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "name": {
-      "type": "string"
+      "type": "string",
+      "minLength": 10
     },
     "description": {
-      "type": "string"
+      "type": "string",
+      "minLength": 10
     },
     "context": {
-      "type": "string"
+      "type": "string",
+      "minLength": 10
     },
     "version": {
-      "type": "string"
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 3
     },
     "provider": {
       "type": "string"
@@ -24,13 +31,22 @@
       "type": "string"
     },
     "thumbnailUri": {
-      "type": "null"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "apiDefinition": {
-      "type": "string"
+      "type": [
+        "string",
+        "object"
+      ]
     },
     "wsdlUri": {
-      "type": "null"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "responseCaching": {
       "type": "string"
@@ -39,7 +55,10 @@
       "type": "integer"
     },
     "destinationStatsEnabled": {
-      "type": "null"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "isDefaultVersion": {
       "type": "boolean"
@@ -66,13 +85,22 @@
       }
     },
     "apiLevelPolicy": {
-      "type": "null"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "authorizationHeader": {
-      "type": "null"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "maxTps": {
-      "type": "null"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "visibility": {
       "type": "string"
@@ -94,19 +122,21 @@
           "type": "object",
           "properties": {
             "url": {
-              "type": "string"
+              "type": "string",
+              "minLength": 10
             },
             "config": {
-              "type": "null"
+              "type": [
+                "string",
+                "null"
+              ]
             },
             "template_not_supported": {
               "type": "boolean"
             }
           },
           "required": [
-            "url",
-            "config",
-            "template_not_supported"
+            "url"
           ]
         },
         "sandbox_endpoints": {
@@ -116,44 +146,46 @@
               "type": "string"
             },
             "config": {
-              "type": "null"
+              "type": [
+                "string",
+                "null"
+              ]
             },
             "template_not_supported": {
               "type": "boolean"
             }
-          },
-          "required": [
-            "url",
-            "config",
-            "template_not_supported"
-          ]
+          }
         },
         "endpoint_type": {
           "type": "string"
         }
-      }
+      },
+      "required": [
+        "production_endpoints"
+      ]
     },
     "endpointImplementationType": {
       "type": "string"
     },
     "endpointSecurity": {
-      "type": "object",
+      "type": [
+        "object",
+        "null"
+      ],
       "properties": {
         "type": {
           "type": "string"
         },
         "username": {
-          "type": "null"
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "password": {
           "type": "string"
         }
-      },
-      "required": [
-        "type",
-        "username",
-        "password"
-      ]
+      }
     },
     "gatewayEnvironments": {
       "type": "string"
@@ -167,7 +199,10 @@
       "items": {}
     },
     "subscriptionAvailability": {
-      "type": "null"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "subscriptionAvailableTenants": {
       "type": "array",
@@ -187,21 +222,27 @@
       "type": "object",
       "properties": {
         "businessOwner": {
-          "type": "string"
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "businessOwnerEmail": {
-          "type": "string"
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "technicalOwner": {
-          "type": "null"
+          "type": "string",
+          "minLength": 5
         },
         "technicalOwnerEmail": {
-          "type": "null"
+          "type": "string",
+          "minLength": 10
         }
       },
       "required": [
-        "businessOwner",
-        "businessOwnerEmail",
         "technicalOwner",
         "technicalOwnerEmail"
       ]
@@ -214,81 +255,35 @@
         },
         "accessControlAllowOrigins": {
           "type": "array",
-          "items": [
-            {
-              "type": "string"
-            }
-          ]
+          "items": {
+            "type": "string"
+          }
         },
         "accessControlAllowCredentials": {
           "type": "boolean"
         },
         "accessControlAllowHeaders": {
           "type": "array",
-          "items": [
-            {
-              "type": "string"
-            }
-          ]
+          "items": {
+            "type": "string",
+            "minLength": 2
+          }
         },
         "accessControlAllowMethods": {
           "type": "array",
-          "items": [
-            {
-              "type": "string"
-            }
-          ]
+          "items": {
+            "type": "string"
+          }
         }
-      },
-      "required": [
-        "corsConfigurationEnabled",
-        "accessControlAllowOrigins",
-        "accessControlAllowCredentials",
-        "accessControlAllowHeaders",
-        "accessControlAllowMethods"
-      ]
+      }
     }
   },
   "required": [
-    "id",
     "name",
     "description",
     "context",
     "version",
-    "provider",
-    "status",
-    "thumbnailUri",
-    "apiDefinition",
-    "wsdlUri",
-    "responseCaching",
-    "cacheTimeout",
-    "destinationStatsEnabled",
-    "isDefaultVersion",
-    "type",
-    "transport",
-    "tags",
-    "tiers",
-    "apiLevelPolicy",
-    "authorizationHeader",
-    "maxTps",
-    "visibility",
-    "visibleRoles",
-    "visibleTenants",
     "endpointConfig",
-    "endpointImplementationType",
-    "endpointSecurity",
-    "gatewayEnvironments",
-    "labels",
-    "sequences",
-    "subscriptionAvailability",
-    "subscriptionAvailableTenants",
-    "additionalProperties",
-    "accessControl",
-    "accessControlRoles",
-    "businessInformation",
-    "corsConfiguration",
-    "production_endpoints",
-    "sandbox_endpoints",
-    "endpoint_type"
+    "businessInformation"
   ]
 }

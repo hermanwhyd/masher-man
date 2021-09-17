@@ -28,6 +28,7 @@ import { ApiDetail } from 'src/app/types/api.interface';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { SnackbarNotifComponent } from 'src/app/utilities/snackbar-notif/snackbar-notif.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { PublisherMasterListService } from '../../../services/publisher-master-list.service';
 
 const keywords = ['#', 'properties', 'items'];
 
@@ -45,7 +46,7 @@ export const removeSchemaKeywords = (path: string) => {
     <mat-sidenav-container [fxHide]="hidden">
       <mat-sidenav mode="side" class="pr-2" opened>
         <mat-nav-list>
-          <mat-list-item *ngIf="masterItems.length === 0">No items</mat-list-item>
+          <mat-list-item *ngIf="masterItems.length === 0"><span class="w-full text-center">No items</span></mat-list-item>
           <mat-list-item
             *ngFor="let item of masterItems;let i = index;trackBy: trackElement"
             [class.selected]="item === selectedItem"
@@ -55,8 +56,9 @@ export const removeSchemaKeywords = (path: string) => {
             (mouseout)="onListItemHover(undefined)"
           >
             <a matLine [matTooltip]="item.label" matTooltipPosition="above">{{ item.label || 'No api name set' }}</a>
-            <button mat-icon-button class="button hide" (click)="onDeleteClick(i)" [ngClass]="{ show: highlightedIdx == i }" *ngIf="isEnabled()">
-              <mat-icon mat-list-icon>delete</mat-icon>
+            <button mat-icon-button class="button hide" (click)="onDeleteClick(i)" [ngClass]="{ show: highlightedIdx == i }"
+              matTooltip="Close Designer" *ngIf="isEnabled()">
+              <mat-icon mat-list-icon>remove_circle_outline</mat-icon>
             </button>
             <button mat-icon-button [loading]="!isEnabled()" *ngIf="!isEnabled()"><mat-icon mat-list-icon>delete</mat-icon></button>
           </mat-list-item>
@@ -105,11 +107,11 @@ export const removeSchemaKeywords = (path: string) => {
         display: inline-block;
       }
       mat-sidenav {
-        width: 30%;
+        width: 25%;
       }
-      /* ::ng-deep .mat-list-text {
+      ::ng-deep .mat-list-item-content {
         padding: 0 !important;
-      } */
+      }
     `
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -125,6 +127,7 @@ export class MasterListComponent extends JsonFormsArrayControl {
 
   constructor(
     private jsonFormsAngularService: JsonFormsAngularService,
+    private publisherMasterListService: PublisherMasterListService,
     private publiserService: PublisherService,
     private changeDetectorRef: ChangeDetectorRef,
     private dialog: MatDialog,
@@ -147,6 +150,8 @@ export class MasterListComponent extends JsonFormsArrayControl {
     this.addItem = addItem;
     this.removeItems = removeItems;
 
+    this.registerCreate();
+    this.registerRefresh();
     this.registerPublish();
   }
 
@@ -225,7 +230,7 @@ export class MasterListComponent extends JsonFormsArrayControl {
   onDeleteClick(item: number) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
-        message: 'Are you sure you want to delete the selected entry?',
+        message: 'Are you sure you want to close the selected entry?',
         buttonText: {
           ok: 'Yes',
           cancel: 'No'
@@ -245,8 +250,24 @@ export class MasterListComponent extends JsonFormsArrayControl {
     return { ...props };
   }
 
+  registerCreate() {
+    this.publisherMasterListService.createEmit$
+      .pipe(filter<ApiDetail>(Boolean), untilDestroyed(this))
+      .subscribe((api) => {
+        this.addItem(this.propsPath, api)();
+      });
+  }
+
+  registerRefresh() {
+    this.publisherMasterListService.refreshEmit$
+      .pipe(untilDestroyed(this))
+      .subscribe((idx: string) => {
+        this.jsonFormsService.refresh();
+      });
+  }
+
   registerPublish() {
-    this.publiserService.publishAllEmit$
+    this.publisherMasterListService.publishEmit$
       .pipe(untilDestroyed(this), filter<string[]>(Boolean))
       .subscribe((idx: string[]) => {
         this.jsonFormsService.setReadonly(true);

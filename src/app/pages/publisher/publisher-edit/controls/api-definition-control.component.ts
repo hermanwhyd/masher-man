@@ -22,7 +22,7 @@ import { apiSpecificationExample } from 'src/assets/static-data/template/api-spe
       <mat-tab label="Swagger">
         <div #swagger></div>
       </mat-tab>
-      <mat-tab label="Source">
+      <mat-tab label="Source" [disabled]="!this.isEnabled()">
         <p class="mt-0 py-2 text-secondary">
           Use extenal editor, e.g. <a href="https://editor.swagger.io" target="_blank" class="text-cyan">swagger.io</a>, <a class="text-cyan" href="https://www.apibldr.com" target="_blank">apibldr.com</a>
           or others for better experience while editing Open Api Specification document.

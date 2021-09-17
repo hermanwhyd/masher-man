@@ -2,42 +2,126 @@
   "type": "VerticalLayout",
   "elements": [
     {
-      "type": "HorizontalLayout",
+      "type": "Control",
+      "scope": "#/___portal"
+    },
+    {
+      "type": "Group",
+      "label": "General Details",
       "elements": [
         {
-          "type": "Control",
-          "label": "Name",
-          "scope": "#/properties/name"
-        },
-        {
-          "type": "Control",
-          "label": "Version",
-          "scope": "#/properties/version"
+          "type": "HorizontalLayout",
+          "elements": [
+            {
+              "type": "Control",
+              "label": "Name",
+              "scope": "#/properties/name"
+            },
+            {
+              "type": "Control",
+              "label": "Version",
+              "scope": "#/properties/version"
+            }
+          ]
         },
         {
           "type": "Control",
           "label": "Context",
           "scope": "#/properties/context"
+        },
+        {
+          "type": "Control",
+          "label": "Description",
+          "scope": "#/properties/description",
+          "options": {
+            "multi": true
+          }
+        },
+        {
+          "type": "Control",
+          "label": "Tags",
+          "scope": "#/properties/tags"
         }
       ]
     },
     {
-      "type": "Control",
-      "label": "Description",
-      "scope": "#/properties/description",
-      "options": {
-        "multi": true
-      }
+      "type": "Group",
+      "label": "Endpoint Config",
+      "elements": [
+        {
+          "type": "Control",
+          "label": "Production Endpoint URL",
+          "scope": "#/properties/endpointConfig/properties/production_endpoints/properties/url"
+        },
+        {
+          "type": "Control",
+          "label": "Sandbox Endpoint URL",
+          "scope": "#/properties/endpointConfig/properties/sandbox_endpoints/properties/url"
+        }
+      ]
     },
     {
-      "type": "Control",
-      "label": "Production Endpoint URL",
-      "scope": "#/properties/endpointConfig/properties/production_endpoints/properties/url"
+      "type": "Group",
+      "label": "Business Information",
+      "elements": [
+        {
+          "type": "HorizontalLayout",
+          "elements": [
+            {
+              "type": "Control",
+              "label": "Business Owner",
+              "scope": "#/properties/businessInformation/properties/businessOwner"
+            },
+            {
+              "type": "Control",
+              "label": "Business Owner Email",
+              "scope": "#/properties/businessInformation/properties/businessOwnerEmail"
+            }
+          ]
+        },
+        {
+          "type": "HorizontalLayout",
+          "elements": [
+            {
+              "type": "Control",
+              "label": "Technical Owner",
+              "scope": "#/properties/businessInformation/properties/technicalOwner"
+            },
+            {
+              "type": "Control",
+              "label": "Technical Owner Email",
+              "scope": "#/properties/businessInformation/properties/technicalOwnerEmail"
+            }
+          ]
+        }
+      ]
     },
     {
-      "type": "Control",
-      "label": "Sandbox Endpoint URL",
-      "scope": "#/properties/endpointConfig/properties/sandbox_endpoints/properties/url"
+      "type": "Group",
+      "label": "Cors Config",
+      "elements": [
+        {
+          "type": "Control",
+          "label": "Allow Headers",
+          "scope": "#/properties/corsConfiguration/properties/accessControlAllowHeaders"
+        },
+        {
+          "type": "Control",
+          "label": "Allow Methods",
+          "scope": "#/properties/corsConfiguration/properties/accessControlAllowMethods"
+        }
+      ]
+    },
+    {
+      "type": "Group",
+      "label": "API Specifications",
+      "elements": [
+        {
+          "type": "Control",
+          "label": "Allow Methods",
+          "scope": "#/properties/apiDefinition"
+        }
+      ]
     }
   ]
 }

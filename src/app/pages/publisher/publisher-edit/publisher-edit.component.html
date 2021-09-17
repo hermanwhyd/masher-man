@@ -4,7 +4,7 @@
     Validate
   </button>
   <button *ngIf="(errorsSubject | async).length == 0" mat-raised-button (click)="publish()"
-    [disabled]="(draftCountSubject | async) == 0" [loading]="isPublishing" color="primary">
+    [disabled]="(draftCountSubject | async) == 0" [loading]="isLoading" color="primary">
     Publish
   </button>
 </vex-secondary-toolbar>

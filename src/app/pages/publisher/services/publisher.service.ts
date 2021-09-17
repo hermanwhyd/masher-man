@@ -14,14 +14,11 @@ import { LoginRq } from '../../access/auth-manager/services/oauth.interface';
 })
 export class PublisherService {
 
-  public publishAllEmit = new BehaviorSubject<string[]>(null);
-  public publishAllEmit$ = this.publishAllEmit.asObservable();
+  private readonly URL = 'apis';
+  private readonly URL_PROXY = 'proxy';
 
   public draftAPIs = new BehaviorSubject<ApiDetail[]>([]);
   public draftAPIs$ = this.draftAPIs.asObservable();
-
-  private readonly URL = 'apis';
-  private readonly URL_PROXY = 'proxy';
 
   constructor(
     private httpClient: HttpClient,

@@ -1,0 +1,16 @@
+:host ::ng-deep json-editor,
+:host ::ng-deep json-editor .jsoneditor,
+:host ::ng-deep json-editor > div,
+:host ::ng-deep json-editor jsoneditor-outer {
+  height: 600px;
+}
+
+::ng-deep .mat-form-field-disabled {
+  .mat-input-element {
+    opacity: 1;
+
+  }
+  .mat-form-field-label {
+    opacity: 1;
+  }
+}

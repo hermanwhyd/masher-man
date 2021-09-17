@@ -9,22 +9,40 @@
     <mat-expansion-panel expanded="'true'">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          I Have an Existing API
+          I Have an Existing API #1
         </mat-panel-title>
         <mat-panel-description>
-          Import from Open API or API Swagger definition to create an API.
+          Import from Open API or API Swagger definition from URL.
         </mat-panel-description>
       </mat-expansion-panel-header>
       <div class="p-2">
         <div class="bg-card border">
           <input [formControl]="swaggerCtrl" class="px-4 py-3 border-0 outline-none w-full bg-transparent"
-            placeholder="http://localhost:8080/v3/api-docs" name="swaggerUrl" (keyup.enter)="importFromSwagger()">
+            placeholder="http://localhost:8080/v3/api-docs" name="swaggerUrl" (keyup.enter)="importFromURL()">
         </div>
-        <button mat-raised-button color="primary" class="mt-2" (click)="importFromSwagger()"
+        <button mat-raised-button color="primary" class="mt-2" (click)="importFromURL()"
           [disabled]="!isSubmitableImport()" [loading]="isLoading">Start Creating</button>
       </div>
     </mat-expansion-panel>
-
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          I Have an Existing API #2
+        </mat-panel-title>
+        <mat-panel-description>
+          Import from Open API or API Swagger definition from Clipboard.
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="p-2">
+        <div class="bg-card border">
+          <json-editor [options]="options" [data]="json"></json-editor>
+        </div>
+        <button mat-raised-button color="primary" class="mt-2" (click)="importFromClipboard()"
+          [disabled]="!isSubmitableImportClipboard()">
+          Start Creating
+        </button>
+      </div>
+    </mat-expansion-panel>
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>

@@ -1,18 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { PublisherService } from '../services/publisher.service';
 
 import jmespath from 'jmespath';
-import { ApiDetail } from 'src/app/types/api.interface';
+import { ApiDetail, EndPointConfig } from 'src/app/types/api.interface';
 
 import { angularMaterialRenderers } from '@jsonforms/angular-material';
-import { and, isControl, or, rankWith, schemaTypeIs, scopeEndsWith, Tester } from '@jsonforms/core';
+import { and, isControl, rankWith, scopeEndsWith } from '@jsonforms/core';
 import { ErrorObject } from 'ajv';
 
 import { PublisherDataDisplayComponent } from './controls/publisher-data-display.component';
 
 import uischemaAsset from 'src/assets/static-data/publisher/uischema-list.json';
 import schemaAsset from 'src/assets/static-data/publisher/schema-list.json';
-import { PublisherArrayControlComponent } from './controls/publisher-array-control.component';
+import { arrayPrimitiveTester, PublisherArrayControlComponent } from './controls/publisher-array-control.component';
 import { BehaviorSubject } from 'rxjs';
 import { MatFormFieldDefaultOptions, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { masterDetailTester, MasterListComponent } from './controls/master-detail/master-list.component';
@@ -20,28 +20,17 @@ import { MatDialog } from '@angular/material/dialog';
 import { InformationDialogComponent } from 'src/app/utilities/information-dialog/information-dialog.component';
 import { ApiDefinitionControlComponent, apiDefinitionTester } from './controls/api-definition-control.component';
 import { AccountPortalComponent } from './controls/account-portal.component';
-import { delay } from 'rxjs/operators';
+import { delay, distinctUntilChanged, filter, finalize, map, switchMap } from 'rxjs/operators';
 import { LoadingService } from 'src/app/services/loading-service.service';
-
-const arrayPrimitiveTester: Tester = or(
-  and(
-    schemaTypeIs('array'),
-    scopeEndsWith('accessControlAllowMethods')
-  ),
-  and(
-    schemaTypeIs('array'),
-    scopeEndsWith('accessControlAllowHeaders')
-  ),
-  and(
-    schemaTypeIs('array'),
-    scopeEndsWith('tags')
-  )
-);
+import { ActivatedRoute } from '@angular/router';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { PublisherMasterListService } from '../services/publisher-master-list.service';
 
 const appearance: MatFormFieldDefaultOptions = {
   appearance: 'outline'
 };
 
+@UntilDestroy()
 @Component({
   selector: 'vex-publisher-edit',
   templateUrl: './publisher-edit.component.html',
@@ -51,7 +40,8 @@ const appearance: MatFormFieldDefaultOptions = {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: appearance
     }
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PublisherEditComponent implements OnInit {
   jmespath = jmespath;
@@ -61,11 +51,12 @@ export class PublisherEditComponent implements OnInit {
 
   model = { apis: [] as ApiDetail[] };
 
+  isLoading = false;
+
   uischema = uischemaAsset;
   schema = schemaAsset;
 
   isDraftValid = new BehaviorSubject<boolean>(false);
-  isPublishing = false;
 
   renderers = [
     ...angularMaterialRenderers,
@@ -92,19 +83,49 @@ export class PublisherEditComponent implements OnInit {
   ];
 
   constructor(
-    private publiserService: PublisherService,
+    private cd: ChangeDetectorRef,
+    private route: ActivatedRoute,
+    private publisherService: PublisherService,
+    private publisherMasterListService: PublisherMasterListService,
     private dialog: MatDialog,
     private loadingSvc: LoadingService) { }
 
   ngOnInit(): void {
-    this.publiserService.draftAPIs$.subscribe(data => {
-      this.model.apis = data;
-    });
+    this.publisherService.draftAPIs$.pipe(untilDestroyed(this), distinctUntilChanged())
+      .subscribe(data => {
+        this.model.apis = data;
+      });
 
+    this.routerParseParams();
     this.listenToLoading();
   }
 
+  routerParseParams() {
+    this.route.queryParamMap.pipe(
+      untilDestroyed(this),
+      map((params: any) => params.get('apiId')),
+      distinctUntilChanged(),
+      filter<string>(Boolean),
+      switchMap(apiId => {
+        this.isLoading = true;
+        return this.publisherService.getApiDetail(apiId).pipe(finalize(() => this.isLoading = false));
+      })
+    ).subscribe((data: ApiDetail) => {
+      try {
+        const endpointConfig = {} as EndPointConfig;
+        Object.assign(endpointConfig, JSON.parse(data.endpointConfig as string));
+        const model = { ...data, endpointConfig };
+        this.model.apis.push(model);
+      } catch (e) {
+        this.model.apis.push(data);
+      } finally {
+        this.publisherMasterListService.refreshEmit.next('R');
+      }
+    });
+  }
+
   onChange(event) {
+    this.cd.markForCheck();
     this.draftCountSubject.next(event.apis?.length || 0);
   }
 
@@ -124,14 +145,14 @@ export class PublisherEditComponent implements OnInit {
   }
 
   publish() {
-    this.publiserService.publishAllEmit.next([]);
+    this.publisherMasterListService.publishEmit.next([]);
   }
 
   listenToLoading(): void {
     this.loadingSvc.loadingSub
       .pipe(delay(0))
       .subscribe((loading) => {
-        this.isPublishing = loading;
+        this.isLoading = loading;
       });
   }
 }
