@@ -8,7 +8,6 @@ import { NavigationService } from '../@vex/services/navigation.service';
 import icLayers from '@iconify/icons-ic/twotone-layers';
 import icSettings from '@iconify/icons-ic/twotone-settings';
 import icTraining from '@iconify/icons-ic/baseline-model-training';
-import icUser from '@iconify/icons-ic/baseline-supervised-user-circle';
 import icStyle from '@iconify/icons-ic/style';
 import icAuth from '@iconify/icons-ic/outline-supervised-user-circle';
 
@@ -55,28 +54,6 @@ export class AppComponent {
             type: 'link',
             label: 'Navigasi',
             route: '/dashboard'
-          }
-        ]
-      },
-      {
-        type: 'dropdown',
-        label: 'Auth Manager',
-        icon: icAuth,
-        children: [
-          {
-            type: 'link',
-            label: 'Publisher',
-            route: '/auth-manager/publisher'
-          },
-          {
-            type: 'link',
-            label: 'Store',
-            route: '/auth-manager/store'
-          },
-          {
-            type: 'link',
-            label: 'Api Manager',
-            route: '/auth-manager/api-manager'
           }
         ]
       },

@@ -15,10 +15,6 @@ const routes: VexRoutes = [
         pathMatch: 'full'
       },
       {
-        path: 'auth-manager',
-        loadChildren: () => import('./pages/access/auth-manager/auth-manager.module').then(m => m.AuthManagerModule)
-      },
-      {
         path: 'dashboard',
         loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule),
         data: { roles: [] }
