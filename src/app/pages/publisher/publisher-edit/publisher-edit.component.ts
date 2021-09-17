@@ -8,23 +8,23 @@ import { angularMaterialRenderers } from '@jsonforms/angular-material';
 import { and, isControl, rankWith, scopeEndsWith } from '@jsonforms/core';
 import { ErrorObject } from 'ajv';
 
-import { PublisherDataDisplayComponent } from './controls/publisher-data-display.component';
 
 import uischemaAsset from 'src/assets/static-data/publisher/uischema-list.json';
 import schemaAsset from 'src/assets/static-data/publisher/schema-list.json';
-import { arrayPrimitiveTester, PublisherArrayControlComponent } from './controls/publisher-array-control.component';
 import { BehaviorSubject } from 'rxjs';
 import { MatFormFieldDefaultOptions, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
-import { masterDetailTester, MasterListComponent } from './controls/master-detail/master-list.component';
 import { MatDialog } from '@angular/material/dialog';
 import { InformationDialogComponent } from 'src/app/utilities/information-dialog/information-dialog.component';
-import { ApiDefinitionControlComponent, apiDefinitionTester } from './controls/api-definition-control.component';
-import { AccountPortalComponent } from './controls/account-portal.component';
 import { delay, distinctUntilChanged, filter, finalize, map, switchMap } from 'rxjs/operators';
 import { LoadingService } from 'src/app/services/loading-service.service';
 import { ActivatedRoute } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { PublisherMasterListService } from '../services/publisher-master-list.service';
+import { PublisherMasterListService } from '../../shared/controls/services/publisher-master-list.service';
+import { ApiDefinitionControlComponent, apiDefinitionTester } from '../../shared/controls/api-definition-control.component';
+import { masterDetailTester, MasterListComponent } from '../../shared/controls/master-detail/master-list.component';
+import { arrayPrimitiveTester, PublisherArrayControlComponent } from '../../shared/controls/publisher-array-control.component';
+import { PublisherDataDisplayComponent } from '../../shared/controls/publisher-data-display.component';
+import { AccountPortalComponent } from '../../shared/controls/account-portal.component';
 
 const appearance: MatFormFieldDefaultOptions = {
   appearance: 'outline'

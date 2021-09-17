@@ -22,10 +22,10 @@ import { angularMaterialRenderers } from '@jsonforms/angular-material';
 import { statusClass } from 'src/app/utilities/function/api-status';
 import { JsonEditorOptions } from 'ang-jsoneditor';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { ApiDefinitionControlComponent, apiDefinitionTester } from '../../publisher-edit/controls/api-definition-control.component';
-import { PublisherArrayControlComponent, arrayPrimitiveTester } from '../../publisher-edit/controls/publisher-array-control.component';
-import { AccountPortalComponent } from '../../publisher-edit/controls/account-portal.component';
 import { and, isControl, rankWith, scopeEndsWith } from '@jsonforms/core';
+import { ApiDefinitionControlComponent, apiDefinitionTester } from 'src/app/pages/shared/controls/api-definition-control.component';
+import { arrayPrimitiveTester, PublisherArrayControlComponent } from 'src/app/pages/shared/controls/publisher-array-control.component';
+import { AccountPortalComponent } from 'src/app/pages/shared/controls/account-portal.component';
 
 const appearance: MatFormFieldDefaultOptions = {
   appearance: 'outline'

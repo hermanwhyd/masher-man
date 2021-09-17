@@ -21,14 +21,14 @@ import {
 import { ApiDetailTemplate } from 'src/assets/static-data/template/api-detail';
 import { ConfirmationDialogComponent } from 'src/app/utilities/confirmation-dialog/confirmation-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { PublisherService } from '../../../services/publisher.service';
 import { filter, finalize } from 'rxjs/operators';
 import { ApiDetail } from 'src/app/types/api.interface';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { SnackbarNotifComponent } from 'src/app/utilities/snackbar-notif/snackbar-notif.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { PublisherMasterListService } from '../../../services/publisher-master-list.service';
+import { PublisherMasterListService } from '../services/publisher-master-list.service';
+import { PublisherService } from 'src/app/pages/publisher/services/publisher.service';
 
 const keywords = ['#', 'properties', 'items'];
 

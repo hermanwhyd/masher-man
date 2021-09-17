@@ -6,8 +6,8 @@ import icGlobe from '@iconify/icons-fa-solid/globe';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import { ApiConfigService } from 'src/app/services/api-config.service';
 import { Profile } from 'src/app/types/api-config.interface';
-import { PublisherMasterListService } from '../../services/publisher-master-list.service';
 import { ApiDetail } from 'src/app/types/api.interface';
+import { PublisherMasterListService } from './services/publisher-master-list.service';
 
 @Component({
   selector: 'vex-publisher-data-display',

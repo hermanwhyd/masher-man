@@ -35,19 +35,13 @@ import { PublisherSwaggerImportComponent } from './publisher-new/publisher-swagg
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatStepperModule } from '@angular/material/stepper';
-import { PublisherDataDisplayComponent } from './publisher-edit/controls/publisher-data-display.component';
 import { SecondaryToolbarModule } from 'src/@vex/components/secondary-toolbar/secondary-toolbar.module';
-import { PublisherArrayControlComponent } from './publisher-edit/controls/publisher-array-control.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import { NgJsonEditorModule } from 'ang-jsoneditor';
 
 import { JsonFormsModule } from '@jsonforms/angular';
 import { JsonFormsAngularMaterialModule } from '@jsonforms/angular-material';
-import { MasterListComponent } from './publisher-edit/controls/master-detail/master-list.component';
-import { JsonFormsDetailComponent } from './publisher-edit/controls/master-detail/jsonforms-detail.component';
-import { JsonformEmptyComponent } from './publisher-edit/controls/master-detail/jsonform-empty.component';
-import { ApiDefinitionControlComponent } from './publisher-edit/controls/api-definition-control.component';
-import { AccountPortalComponent } from './publisher-edit/controls/account-portal.component';
+import { JsonFormsCustomModule } from '../shared/controls/json-forms-custom.module';
 
 const routes: Routes = [
   {
@@ -79,14 +73,7 @@ const routes: Routes = [
     PublisherSwaggerComponent,
     PublisherListDetailComponent,
     PublisherNewComponent,
-    PublisherSwaggerImportComponent,
-    PublisherDataDisplayComponent,
-    PublisherArrayControlComponent,
-    MasterListComponent,
-    JsonFormsDetailComponent,
-    JsonformEmptyComponent,
-    ApiDefinitionControlComponent,
-    AccountPortalComponent
+    PublisherSwaggerImportComponent
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -123,7 +110,8 @@ const routes: Routes = [
     MatStepperModule,
     SecondaryToolbarModule,
     MatBadgeModule,
-    NgJsonEditorModule
+    NgJsonEditorModule,
+    JsonFormsCustomModule
   ],
   exports: [
     RouterModule,
