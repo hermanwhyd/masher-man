@@ -77,6 +77,18 @@ export class AppComponent {
                 route: '/publisher/add'
               }
             ]
+          },
+          {
+            type: 'dropdown',
+            label: 'Store',
+            icon: icTraining,
+            children: [
+              {
+                type: 'link',
+                label: 'Listed API',
+                route: '/store/list'
+              }
+            ]
           }
         ]
       },

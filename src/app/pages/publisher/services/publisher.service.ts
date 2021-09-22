@@ -14,7 +14,7 @@ import { LoginRq } from '../../access/auth-manager/services/oauth.interface';
 })
 export class PublisherService {
 
-  private readonly URL = 'apis';
+  private readonly URL = 'publisher/apis';
   private readonly URL_PROXY = 'proxy';
 
   public draftAPIs = new BehaviorSubject<ApiDetail[]>([]);

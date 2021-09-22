@@ -12,6 +12,7 @@ import icClose from '@iconify/icons-ic/twotone-close';
 import icRestore from '@iconify/icons-ic/baseline-restore-from-trash';
 import icInfo from '@iconify/icons-ic/outline-info';
 import icGlobe from '@iconify/icons-fa-solid/globe';
+import icRemove from '@iconify/icons-ic/outline-remove-circle-outline';
 
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { fadeInRight400ms } from 'src/@vex/animations/fade-in-right.animation';
@@ -26,7 +27,6 @@ import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { BehaviorSubject, Observable } from 'rxjs';
 import _ from 'lodash';
 import { Api } from 'src/app/types/api.interface';
-import { PublisherService } from '../services/publisher.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Paginate } from 'src/app/types/paginate.interface';
 import { PageEvent } from '@angular/material/paginator';
@@ -35,12 +35,17 @@ import { untilDestroyed, UntilDestroy } from '@ngneat/until-destroy';
 import { SnackbarNotifComponent } from 'src/app/utilities/snackbar-notif/snackbar-notif.component';
 import { ActivatedRoute } from '@angular/router';
 import { statusClass } from 'src/app/utilities/function/api-status';
+import { StoreService } from '../services/store.service';
+import { SelectionModel } from '@angular/cdk/collections';
+import icFolderPlush from '@iconify/icons-fa-solid/folder-plus';
+import { MatDialog } from '@angular/material/dialog';
+import { StoreSubscribeComponent } from '../store-subscribe/store-subscribe.component';
 
 @UntilDestroy()
 @Component({
-  selector: 'vex-publisher-list',
-  templateUrl: './publisher-list.component.html',
-  styleUrls: ['./publisher-list.component.scss'],
+  selector: 'vex-store-list',
+  templateUrl: './store-list.component.html',
+  styleUrls: ['./store-list.component.scss'],
   animations: [
     fadeInUp400ms,
     fadeInRight400ms,
@@ -49,7 +54,7 @@ import { statusClass } from 'src/app/utilities/function/api-status';
     scaleFadeIn400ms
   ],
 })
-export class PublisherListComponent implements OnInit {
+export class StoreListComponent implements OnInit {
 
   icEdit = icEdit;
   icSearch = icSearch;
@@ -63,9 +68,12 @@ export class PublisherListComponent implements OnInit {
   icRestore = icRestore;
   icInfo = icInfo;
   icGlobe = icGlobe;
+  icFolderPlush = icFolderPlush;
+  icRemove = icRemove;
 
   @Input()
   columns: TableColumn<Api>[] = [
+    { label: 'Checkbox', property: 'checkbox', type: 'checkbox', visible: true },
     { label: 'Thumbnail', property: 'thumbnailUri', type: 'image', visible: true },
     { label: 'Name', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Portal', property: 'portal', type: 'button', visible: true },
@@ -73,7 +81,7 @@ export class PublisherListComponent implements OnInit {
     { label: 'Context', property: 'context', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Version', property: 'version', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Provider', property: 'provider', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Status', property: 'status', type: 'status', visible: true, cssClasses: ['text-secondary', 'font-medium'] }
+    { label: 'Status', property: 'status', type: 'status', visible: false, cssClasses: ['text-secondary', 'font-medium'] }
   ];
 
   pageSizeOptions: number[] = [5, 10, 25, 100];
@@ -83,6 +91,8 @@ export class PublisherListComponent implements OnInit {
   searchCtrl = new FormControl();
 
   statusClass = statusClass;
+
+  selection = new SelectionModel<Api>(true, []);
 
   isLoading = false;
   apisSubject: BehaviorSubject<Api[]> = new BehaviorSubject([]);
@@ -94,7 +104,8 @@ export class PublisherListComponent implements OnInit {
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
     private apiConfigService: ApiConfigService,
-    private publisherService: PublisherService,
+    private storeService: StoreService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -113,7 +124,7 @@ export class PublisherListComponent implements OnInit {
       .asObservable()
       .pipe(filter<PageEvent>(Boolean))
       .subscribe(event => {
-        this.publisherService.paginate((event.pageIndex * event.pageSize), event.pageSize, this.searchCtrl.value)
+        this.storeService.paginate((event.pageIndex * event.pageSize), event.pageSize, this.searchCtrl.value)
           .subscribe((rs) => {
             this.pagination = rs;
             this.apisSubject.next(rs.list);
@@ -141,7 +152,7 @@ export class PublisherListComponent implements OnInit {
 
   fetchData() {
     this.isLoading = true;
-    this.publisherService.paginate(0, 10)
+    this.storeService.paginate(0, 10)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(rs => {
         this.pagination = rs;
@@ -167,6 +178,14 @@ export class PublisherListComponent implements OnInit {
   }
 
   getPortalLink(api: Api) {
-    return `${this.apiConfigService.getActiveProfile()?.portalUrl}/publisher/info?name=${api.name}&version=${api.version}&provider=${api.provider}`;
+    return `${this.apiConfigService.getActiveProfile()?.portalUrl}/store/apis/info?name=${api.name}&version=${api.version}&provider=${api.provider}`;
+  }
+
+  subscribeAPIs(apis: Api[]) {
+    this.dialog.open(StoreSubscribeComponent, {
+      data: apis,
+      width: '600px',
+      disableClose: true
+    });
   }
 }

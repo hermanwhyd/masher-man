@@ -4,7 +4,7 @@ import { JsonFormsAngularMaterialModule } from '@jsonforms/angular-material';
 import { AccountPortalComponent } from './account-portal.component';
 import { ApiDefinitionControlComponent } from './api-definition-control.component';
 import { JsonformEmptyComponent } from './master-detail/jsonform-empty.component';
-import { PublisherArrayControlComponent } from './publisher-array-control.component';
+import { PublisherArrayPrimitiveControlComponent } from './publisher-array-primitive-control.component';
 import { PublisherDataDisplayComponent } from './publisher-data-display.component';
 import { JsonFormsModule } from '@jsonforms/angular';
 import { MatTableModule } from '@angular/material/table';
@@ -18,15 +18,17 @@ import { MatChipsModule } from '@angular/material/chips';
 import { NgJsonEditorModule } from 'ang-jsoneditor';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { PublisherEndpointUrlControlComponent } from './publisher-endpointurl-control.component';
 
 const ARRAY_COMPONENTS = [
   PublisherDataDisplayComponent,
-  PublisherArrayControlComponent,
+  PublisherArrayPrimitiveControlComponent,
   MasterListComponent,
   JsonFormsDetailComponent,
   JsonformEmptyComponent,
   ApiDefinitionControlComponent,
-  AccountPortalComponent
+  AccountPortalComponent,
+  PublisherEndpointUrlControlComponent
 ];
 
 @NgModule({

@@ -24,30 +24,21 @@
     </div>
 
     <div class="section">
-      <h5 class="subheading">API MANAGER</h5>
-      <mat-radio-group fxLayout="column" fxLayoutGap="12px">
-        <mat-radio-button *ngFor="let user of account?.userApiManagers" [value]="user" [checked]="user.active">
-          {{ user.username }}
-        </mat-radio-button>
-      </mat-radio-group>
-    </div>
-
-    <div class="section">
       <h5 class="subheading">STORE</h5>
       <mat-radio-group fxLayout="column" fxLayoutGap="12px">
         <mat-radio-button *ngFor="let user of account?.userStores" [value]="user" [checked]="user.active">
           {{ user.username }}
         </mat-radio-button>
       </mat-radio-group>
+    </div>
 
-      <div class="section-content">
-        <h5 class="subheading">APPLICATIONS</h5>
-        <mat-radio-group fxLayout="column" fxLayoutGap="12px">
-          <mat-radio-button *ngFor="let user of account?.userStores" [value]="user" [checked]="user.active">
-            {{ user.username }}
-          </mat-radio-button>
-        </mat-radio-group>
-      </div>
+    <div class="section">
+      <h5 class="subheading">API MANAGER</h5>
+      <mat-radio-group fxLayout="column" fxLayoutGap="12px">
+        <mat-radio-button *ngFor="let user of account?.userApiManagers" [value]="user" [checked]="user.active">
+          {{ user.username }}
+        </mat-radio-button>
+      </mat-radio-group>
     </div>
 
   </div>

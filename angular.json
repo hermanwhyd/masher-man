@@ -68,7 +68,8 @@
               "file-saver",
               "jmespath",
               "qrcode",
-              "file-saver"
+              "@jsonforms/angular",
+              "@jsonforms/angular-material"
             ],
             "vendorChunk": true,
             "extractLicenses": false,

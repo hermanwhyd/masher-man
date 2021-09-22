@@ -1,0 +1,64 @@
+<div fxLayout="row" fxLayoutAlign="start center" mat-dialog-title>
+  <h2 class="headline m-0" fxFlex="auto">APIs Subscription</h2>
+
+  <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
+    <mat-icon [icIcon]="icClose"></mat-icon>
+  </button>
+</div>
+
+<mat-divider class="-mx-6 text-border"></mat-divider>
+
+<p class="subheading-2 text-hint py-2">Subscriber APIs for selected applications of active store account.</p>
+
+<mat-slide-toggle (change)="isShowId = !isShowId" [checked]="isShowId">Show ID</mat-slide-toggle>
+
+<mat-dialog-content fxLayout="column">
+  <div class="mt-3">
+    <p class="text-secondary ">Select Applications</p>
+    <div *ngIf="isLoading">
+      <ngx-shimmer-loading [height]="'30px'" [width]="'100%'" class="block"></ngx-shimmer-loading>
+      <ngx-shimmer-loading [height]="'30px'" [width]="'100%'" class="block"></ngx-shimmer-loading>
+      <ngx-shimmer-loading [height]="'30px'" [width]="'100%'" class="block"></ngx-shimmer-loading>
+    </div>
+    <mat-selection-list #sapps (selectionChange)="onSelectionChange()" [style.overflow]="'auto'"
+      [style.max-height.px]="'250'">
+      <mat-list-option *ngFor="let item of applicationList" [value]="item">
+        <span class="block">
+          {{ item.name + ' &#8212; ' + item.throttlingTier }}
+        </span>
+        <span class="text-secondary" [style.font-size]="'0.625rem'" *ngIf="isShowId">
+          {{ item.applicationId }}
+        </span>
+      </mat-list-option>
+    </mat-selection-list>
+  </div>
+
+  <div class="mt-6">
+    <p class="text-secondary">Selected APIs</p>
+    <mat-selection-list #sapis (selectionChange)="onSelectionChange()" [style.overflow]="'auto'"
+      [style.max-height.px]="'250'">
+      <mat-list-option *ngFor="let item of apis" [value]="item" [selected]="'true'">
+        <span class="block">
+          {{ item.name + ' &#8212; ' + item.version }}
+        </span>
+        <span class="text-secondary" [style.font-size]="'0.625rem'" *ngIf="isShowId">
+          {{ item.id }}
+        </span>
+      </mat-list-option>
+    </mat-selection-list>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="space-between center" *ngIf="isShowError"
+    class="p-2 text-orange bg-orange-light rounded-sm">
+    <p>Some subscription failed. But otherwise maybe success with status ON_HOLD, pending for approval!</p>
+    <mat-icon [icIcon]="icClose" size="20px" (click)="isShowError = false;" class="cursor-pointer"></mat-icon>
+  </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close type="button">CANCEL</button>
+  <button color="primary" mat-button (click)="submit(sapps.selectedOptions.selected, sapis.selectedOptions.selected)"
+    [disabled]="sapps.selectedOptions.selected.length === 0 || sapis.selectedOptions.selected.length === 0 "
+    [loading]='isSubmitting'>SUBSCRIBE</button>
+</mat-dialog-actions>

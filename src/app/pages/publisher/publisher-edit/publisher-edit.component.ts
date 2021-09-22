@@ -22,7 +22,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { PublisherMasterListService } from '../../shared/controls/services/publisher-master-list.service';
 import { ApiDefinitionControlComponent, apiDefinitionTester } from '../../shared/controls/api-definition-control.component';
 import { masterDetailTester, MasterListComponent } from '../../shared/controls/master-detail/master-list.component';
-import { arrayPrimitiveTester, PublisherArrayControlComponent } from '../../shared/controls/publisher-array-control.component';
+import { arrayPrimitiveTester, PublisherArrayPrimitiveControlComponent } from '../../shared/controls/publisher-array-primitive-control.component';
 import { PublisherDataDisplayComponent } from '../../shared/controls/publisher-data-display.component';
 import { AccountPortalComponent } from '../../shared/controls/account-portal.component';
 
@@ -69,7 +69,7 @@ export class PublisherEditComponent implements OnInit {
       tester: masterDetailTester
     },
     {
-      renderer: PublisherArrayControlComponent,
+      renderer: PublisherArrayPrimitiveControlComponent,
       tester: rankWith(5, arrayPrimitiveTester)
     },
     {

@@ -25,6 +25,11 @@ const routes: VexRoutes = [
         data: { roles: [] }
       },
       {
+        path: 'store',
+        loadChildren: () => import('./pages/store/store.module').then(m => m.StoreModule),
+        data: { roles: [] }
+      },
+      {
         path: 'setup',
         loadChildren: () => import('./pages/setup/setup.module').then(m => m.SetupModule),
         data: { roles: [] }

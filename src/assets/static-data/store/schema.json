@@ -1,0 +1,316 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "name": {
+      "type": "string",
+      "minLength": 10
+    },
+    "description": {
+      "type": "string",
+      "minLength": 10
+    },
+    "context": {
+      "type": "string",
+      "minLength": 10
+    },
+    "version": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 3
+    },
+    "provider": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "thumbnailUri": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "apiDefinition": {
+      "type": [
+        "string",
+        "object"
+      ]
+    },
+    "wsdlUri": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "responseCaching": {
+      "type": "string"
+    },
+    "cacheTimeout": {
+      "type": "integer"
+    },
+    "destinationStatsEnabled": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "isDefaultVersion": {
+      "type": "boolean"
+    },
+    "type": {
+      "type": "string"
+    },
+    "transport": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "tiers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "apiLevelPolicy": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "authorizationHeader": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "maxTps": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "visibility": {
+      "type": "string"
+    },
+    "visibleRoles": {
+      "type": "array",
+      "items": {}
+    },
+    "visibleTenants": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "endpointConfig": {
+      "type": "object",
+      "properties": {
+        "production_endpoints": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "minLength": 10
+            },
+            "config": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "template_not_supported": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "url"
+          ]
+        },
+        "sandbox_endpoints": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string"
+            },
+            "config": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "template_not_supported": {
+              "type": "boolean"
+            }
+          }
+        },
+        "endpoint_type": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "production_endpoints"
+      ]
+    },
+    "endpointImplementationType": {
+      "type": "string"
+    },
+    "endpointSecurity": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "username": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "gatewayEnvironments": {
+      "type": "string"
+    },
+    "endpointURLs": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "environmentName": {
+              "type": "string"
+            },
+            "environmentType": {
+              "type": "string"
+            },
+            "environmentURLs": {
+              "type": "object",
+              "properties": {
+                "http": {
+                  "type": "string"
+                },
+                "https": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "labels": {
+      "type": "array",
+      "items": {}
+    },
+    "sequences": {
+      "type": "array",
+      "items": {}
+    },
+    "subscriptionAvailability": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "subscriptionAvailableTenants": {
+      "type": "array",
+      "items": {}
+    },
+    "additionalProperties": {
+      "type": "object"
+    },
+    "accessControl": {
+      "type": "string"
+    },
+    "accessControlRoles": {
+      "type": "array",
+      "items": {}
+    },
+    "businessInformation": {
+      "type": "object",
+      "properties": {
+        "businessOwner": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "businessOwnerEmail": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "technicalOwner": {
+          "type": "string",
+          "minLength": 5
+        },
+        "technicalOwnerEmail": {
+          "type": "string",
+          "minLength": 10
+        }
+      },
+      "required": [
+        "technicalOwner",
+        "technicalOwnerEmail"
+      ]
+    },
+    "corsConfiguration": {
+      "type": "object",
+      "properties": {
+        "corsConfigurationEnabled": {
+          "type": "boolean"
+        },
+        "accessControlAllowOrigins": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "accessControlAllowCredentials": {
+          "type": "boolean"
+        },
+        "accessControlAllowHeaders": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 2
+          }
+        },
+        "accessControlAllowMethods": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "name",
+    "description",
+    "context",
+    "version",
+    "endpointConfig",
+    "businessInformation"
+  ]
+}

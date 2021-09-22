@@ -56,6 +56,10 @@ export class ApiConfigService {
     return this.getActiveAccount().userPublishers.find(p => p.active === true);
   }
 
+  public getActiveStore() {
+    return this.getActiveAccount().userStores.find(p => p.active === true);
+  }
+
   public setActiveProfile(profile: Profile) {
     this.profiles.value.forEach(p => p.active = p === profile ? true : false);
     this.profiles.next(this.profiles.value);

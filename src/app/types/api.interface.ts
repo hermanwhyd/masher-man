@@ -42,6 +42,7 @@ export interface ApiDetail extends Api {
   visibleRoles?: any[];
   visibleTenants?: any[];
   endpointConfig?: any | EndPointConfig;
+  endpointUrls?: any | EndPointUrl[];
   endpointImplementationType?: string;
   endpointSecurity?: any;
   gatewayEnvironments?: string;
@@ -66,4 +67,15 @@ export interface EndPointConfig {
   production_endpoints: EnvEndpoints;
   sandbox_endpoints: EnvEndpoints;
   endpoint_type: string;
+}
+
+export interface EndPointUrl {
+  environmentName?: string;
+  environmentType?: string;
+  environmentURLs?: EnvironmentURLs;
+}
+
+export interface EnvironmentURLs {
+  http?: string;
+  https?: string;
 }

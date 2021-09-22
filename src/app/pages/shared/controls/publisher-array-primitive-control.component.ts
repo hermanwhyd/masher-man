@@ -37,7 +37,7 @@ import jmespath from 'jmespath';
     </form>
   `
 })
-export class PublisherArrayControlComponent extends JsonFormsArrayControl implements OnInit {
+export class PublisherArrayPrimitiveControlComponent extends JsonFormsArrayControl implements OnInit {
 
   icDelete = icDelete;
 

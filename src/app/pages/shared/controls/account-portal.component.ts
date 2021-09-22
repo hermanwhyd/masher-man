@@ -12,7 +12,7 @@ import { PublisherMasterListService } from './services/publisher-master-list.ser
 @Component({
   selector: 'vex-publisher-data-display',
   template: `
-    <div *ngIf="api.id" fxFlexLayout="column" fxLayoutAlign="space-between center" fxFlexLayout.gt-sm="row" fxLayoutGap="8px">
+    <div *ngIf="api?.id" fxFlexLayout="column" fxLayoutAlign="space-between center" fxFlexLayout.gt-sm="row" fxLayoutGap="8px">
       <div fxFlexLayout="row" fxLayoutGap="8px">
         <a mat-stroked-button color="primary" href="{{activeProfile.portalUrl}}/store/apis/info?name={{api.name}}&version={{api.version}}&provider={{api.provider}}" target="_blank">
           <mat-icon [icIcon]="icGlobe" inline="true" size="20px" class="mr-2"></mat-icon>
