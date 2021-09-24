@@ -25,7 +25,7 @@ export class SetupComponent implements OnInit {
   sidebarMenu: SidebarMenu[] = [
     { type: 'subheader', title: 'BASE CONFIG', element: '', active: false },
     { type: 'link', element: 'setupApi', title: 'API Config', active: true },
-    { type: 'subheader', title: 'USER CONFIG', element: '', active: false },
+    { type: 'subheader', title: 'ACCOUNT CONFIG', element: '', active: false },
     { type: 'link', element: 'setupUser', title: 'Publisher', active: false },
     { type: 'link', element: 'setupUser', title: 'Store', active: false },
   ];

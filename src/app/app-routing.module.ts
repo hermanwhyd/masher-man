@@ -35,12 +35,8 @@ const routes: VexRoutes = [
         data: { roles: [] }
       },
       {
-        path: 'no-access',
-        loadChildren: () => import('./pages/access/error-403/error-403.module').then(m => m.Error403Module)
-      },
-      {
         path: '**',
-        loadChildren: () => import('./pages/access/maintenance/maintenance.module').then(m => m.MaintenanceModule)
+        loadChildren: () => import('./pages/access/error-404/error-404-routing.module').then(m => m.Error404RoutingModule)
       }
     ]
   }

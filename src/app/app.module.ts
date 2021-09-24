@@ -9,6 +9,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CustomLayoutModule } from './custom-layout/custom-layout.module';
 import { HttpErrorInterceptor } from './config/http-error.interceptor';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { InformationDialogModule } from './utilities/information-dialog/information-dialog.module';
+import { SnackBarNotifModule } from './utilities/snackbar-notif/snackbar-notif.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,7 +23,15 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 
     // Vex
     VexModule,
-    CustomLayoutModule
+    CustomLayoutModule,
+
+    // App
+    InformationDialogModule,
+    SnackBarNotifModule
+  ],
+  exports: [
+    InformationDialogModule,
+    SnackBarNotifModule
   ],
   providers: [
     {

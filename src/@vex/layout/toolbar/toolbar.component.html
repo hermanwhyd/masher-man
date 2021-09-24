@@ -3,12 +3,6 @@
     <mat-icon [icIcon]="icMenu"></mat-icon>
   </button>
 
-  <a *ngIf="isVerticalLayout$ | async" [routerLink]="['/']" class="ltr:mr-4 rtl:ml-4 block" fxLayout="row"
-    fxLayoutAlign="start center">
-    <img class="w-8 select-none" src="assets/img/default/masherman-square.png">
-    <h1 [fxHide]="mobileQuery" class="title ltr:pl-4 rtl:pr-4 m-0 select-none">MasherMan</h1>
-  </a>
-
   <button type="button" [fxHide]="mobileQuery" color="primary" mat-button>
     API MANAGER
   </button>
@@ -17,7 +11,7 @@
     fxFlex="none" fxLayout="row" fxLayoutAlign="start center">
     <vex-navigation-item *ngFor="let item of navigationItems" [item]="item"></vex-navigation-item>
   </div>
-
+  `
   <span fxFlex></span>
 
   <div class="-mx-1 flex items-center">

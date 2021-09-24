@@ -8,7 +8,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { IconModule } from '@visurel/iconify-angular';
-
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [SidenavComponent],
@@ -20,7 +20,8 @@ import { IconModule } from '@visurel/iconify-angular';
     FlexLayoutModule,
     MatButtonModule,
     MatIconModule,
-    IconModule
+    IconModule,
+    RouterModule
   ],
   exports: [SidenavComponent]
 })
