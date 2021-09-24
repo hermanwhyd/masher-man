@@ -7,7 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import icClose from '@iconify/icons-ic/twotone-close';
 import { finalize } from 'rxjs/operators';
 import { Api } from 'src/app/types/api.interface';
-import { Application } from 'src/app/types/application';
+import { Application } from 'src/app/types/application.interface';
 import { Subscription } from 'src/app/types/subscription.interface';
 import { SnackbarNotifComponent } from 'src/app/utilities/snackbar-notif/snackbar-notif.component';
 import { StoreService } from '../services/store.service';

@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { ApiConfigService } from 'src/app/services/api-config.service';
 import { Api, ApiDetail } from 'src/app/types/api.interface';
-import { Application } from 'src/app/types/application';
+import { Application } from 'src/app/types/application.interface';
 import { Paginate } from 'src/app/types/paginate.interface';
 import { decode } from 'src/app/utilities/function/base64-util';
 import { AuthService } from '../../access/auth-manager/services/auth.service';

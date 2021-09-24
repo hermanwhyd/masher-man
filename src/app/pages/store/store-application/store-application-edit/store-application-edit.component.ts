@@ -4,7 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import icClose from '@iconify/icons-ic/twotone-close';
 import { finalize } from 'rxjs/operators';
 import { TierService } from 'src/app/services/tier.service';
-import { Application } from 'src/app/types/application';
+import { Application } from 'src/app/types/application.interface';
 import { Tier } from 'src/app/types/tier.interface';
 import { StoreService } from '../../services/store.service';
 

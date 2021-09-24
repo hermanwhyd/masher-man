@@ -32,7 +32,6 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { SecondaryToolbarModule } from 'src/@vex/components/secondary-toolbar/secondary-toolbar.module';
 import { MatBadgeModule } from '@angular/material/badge';
 import { NgJsonEditorModule } from 'ang-jsoneditor';
-import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
 import { JsonFormsModule } from '@jsonforms/angular';
 import { JsonFormsAngularMaterialModule } from '@jsonforms/angular-material';
@@ -105,7 +104,6 @@ const routes: Routes = [
     MatBadgeModule,
     NgJsonEditorModule,
     JsonFormsCustomModule,
-    Ng2SearchPipeModule
   ],
   exports: [
     RouterModule,

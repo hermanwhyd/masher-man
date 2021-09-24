@@ -33,7 +33,7 @@ import { ActivatedRoute } from '@angular/router';
 import { statusClass } from 'src/app/utilities/function/api-status';
 import { StoreService } from '../services/store.service';
 import icFolderPlush from '@iconify/icons-fa-solid/folder-plus';
-import { Application } from 'src/app/types/application';
+import { Application } from 'src/app/types/application.interface';
 
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';

@@ -28,7 +28,7 @@ import { arrayPrimitiveTester, PublisherArrayPrimitiveControlComponent } from 's
 import { StoreService } from '../../services/store.service';
 import { arrayEndpointUrlTester, PublisherEndpointUrlControlComponent } from 'src/app/pages/shared/controls/publisher-endpointurl-control.component';
 import { ApiConfigService } from 'src/app/services/api-config.service';
-import { Application } from 'src/app/types/application';
+import { Application } from 'src/app/types/application.interface';
 import { Subscription } from 'src/app/types/subscription.interface';
 import { HttpUrlEncodingCodec } from '@angular/common/http';
 import { SubscriptionService } from '../../services/subscription.service';
