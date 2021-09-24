@@ -7,7 +7,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { ThemeConfigService } from '../../@vex/services/theme-config.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { SidebarComponent } from '../../@vex/components/sidebar/sidebar.component';
-import { LoadingService } from '../services/loading-service.service';
+import { LoadingService } from '../services/loading.service';
 
 @UntilDestroy()
 @Component({

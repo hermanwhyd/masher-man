@@ -6,17 +6,13 @@ import { Icon } from '@visurel/iconify-angular';
 import { fadeInUp400ms } from '../../../@vex/animations/fade-in-up.animation';
 import { stagger40ms } from '../../../@vex/animations/stagger.animation';
 
-import icPhoneInTalk from '@iconify/icons-ic/twotone-phone-in-talk';
-import icMail from '@iconify/icons-ic/twotone-mail';
-
-import icPayment from '@iconify/icons-ic/baseline-payment';
-
-import icLandScap from '@iconify/icons-ic/round-landscape';
-import icNote2 from '@iconify/icons-ic/round-sticky-note-2';
+import icFolder from '@iconify/icons-ic/baseline-snippet-folder';
+import icTraining from '@iconify/icons-ic/baseline-model-training';
+import icStore from '@iconify/icons-ic/outline-shopping-cart';
+import icNew from '@iconify/icons-ic/baseline-fiber-new';
 
 import * as _ from 'lodash';
 import { AuthService } from 'src/app/pages/access/auth-manager/services/auth.service';
-import { SharedPropertyService } from '../../services/shared-property.service';
 import { SharedProperty } from 'src/app/types/shared-property.interface';
 
 @Component({
@@ -29,35 +25,37 @@ import { SharedProperty } from 'src/app/types/shared-property.interface';
   ]
 })
 export class DashboardComponent implements OnInit {
-  icPhoneInTalk = icPhoneInTalk;
-  icMail = icMail;
 
   links: (Link & { icon: Icon })[] = [
     {
-      label: 'Dashboard 1',
-      route: '/dashboard/1',
-      icon: icPayment
+      label: 'Publisher - API List',
+      route: '/publisher',
+      icon: icTraining
     },
     {
-      label: 'Dashboard 2',
-      route: '/dashboard/2',
-      icon: icLandScap
+      label: 'New API',
+      route: '/publisher/add',
+      icon: icNew
     },
     {
-      label: 'Dashboard 3',
-      route: '/dashboard/3',
-      icon: icNote2
+      label: 'Store - API List',
+      route: '/store',
+      icon: icStore
+    },
+    {
+      label: 'Application',
+      route: '/store/application',
+      icon: icFolder
     }
   ];
 
   trackByRoute = trackByRoute;
 
-  constructor(private authService: AuthService, private sharedPropService: SharedPropertyService) { }
+  constructor(private authService: AuthService) { }
 
   sharedProps: SharedProperty[] = [];
 
   ngOnInit(): void {
-    this.sharedProps = this.sharedPropService.getSharedPropCache();
   }
 
   sharedPropText(code: string): string {

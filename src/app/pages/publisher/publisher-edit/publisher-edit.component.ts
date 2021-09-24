@@ -16,7 +16,7 @@ import { MatFormFieldDefaultOptions, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@ang
 import { MatDialog } from '@angular/material/dialog';
 import { InformationDialogComponent } from 'src/app/utilities/information-dialog/information-dialog.component';
 import { delay, distinctUntilChanged, filter, finalize, map, switchMap } from 'rxjs/operators';
-import { LoadingService } from 'src/app/services/loading-service.service';
+import { LoadingService } from 'src/app/services/loading.service';
 import { ActivatedRoute } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { PublisherMasterListService } from '../../shared/controls/services/publisher-master-list.service';

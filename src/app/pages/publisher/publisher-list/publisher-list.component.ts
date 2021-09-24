@@ -7,12 +7,13 @@ import icAdd from '@iconify/icons-ic/twotone-add';
 import icFilterList from '@iconify/icons-ic/twotone-filter-list';
 import icMoreHoriz from '@iconify/icons-ic/twotone-more-horiz';
 import icClear from '@iconify/icons-ic/round-clear';
-import icProduk from '@iconify/icons-ic/outline-shopping-cart';
+import icTraining from '@iconify/icons-ic/baseline-model-training';
 import icClose from '@iconify/icons-ic/twotone-close';
 import icRestore from '@iconify/icons-ic/baseline-restore-from-trash';
 import icInfo from '@iconify/icons-ic/outline-info';
 import icGlobe from '@iconify/icons-fa-solid/globe';
 import icRemove from '@iconify/icons-ic/outline-remove-circle-outline';
+import icStore from '@iconify/icons-ic/outline-shopping-cart';
 
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { fadeInRight400ms } from 'src/@vex/animations/fade-in-right.animation';
@@ -60,12 +61,13 @@ export class PublisherListComponent implements OnInit {
   icFilterList = icFilterList;
   icMoreHoriz = icMoreHoriz;
   icClear = icClear;
-  icProduk = icProduk;
+  icTraining = icTraining;
   icClose = icClose;
   icRestore = icRestore;
   icInfo = icInfo;
   icGlobe = icGlobe;
   icRemove = icRemove;
+  icStore = icStore;
 
   @Input()
   columns: TableColumn<Api>[] = [

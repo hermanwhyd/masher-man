@@ -7,7 +7,7 @@ import icAdd from '@iconify/icons-ic/twotone-add';
 import icFilterList from '@iconify/icons-ic/twotone-filter-list';
 import icMoreHoriz from '@iconify/icons-ic/twotone-more-horiz';
 import icClear from '@iconify/icons-ic/round-clear';
-import icProduk from '@iconify/icons-ic/outline-shopping-cart';
+import icStore from '@iconify/icons-ic/outline-shopping-cart';
 import icClose from '@iconify/icons-ic/twotone-close';
 import icRestore from '@iconify/icons-ic/baseline-restore-from-trash';
 import icInfo from '@iconify/icons-ic/outline-info';
@@ -63,7 +63,7 @@ export class StoreListComponent implements OnInit {
   icFilterList = icFilterList;
   icMoreHoriz = icMoreHoriz;
   icClear = icClear;
-  icProduk = icProduk;
+  icStore = icStore;
   icClose = icClose;
   icRestore = icRestore;
   icInfo = icInfo;

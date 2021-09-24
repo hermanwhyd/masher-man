@@ -7,7 +7,7 @@ import {
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators'
-import { LoadingService } from '../services/loading-service.service';
+import { LoadingService } from '../services/loading.service';
 
 /**
  * This class is for intercepting http requests. When a request starts, we set the loadingSub property

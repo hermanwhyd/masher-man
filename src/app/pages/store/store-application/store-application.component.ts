@@ -7,7 +7,7 @@ import icAdd from '@iconify/icons-ic/twotone-add';
 import icFilterList from '@iconify/icons-ic/twotone-filter-list';
 import icMoreHoriz from '@iconify/icons-ic/twotone-more-horiz';
 import icClear from '@iconify/icons-ic/round-clear';
-import icProduk from '@iconify/icons-ic/outline-shopping-cart';
+import icFolder from '@iconify/icons-ic/baseline-snippet-folder';
 import icClose from '@iconify/icons-ic/twotone-close';
 import icRestore from '@iconify/icons-ic/baseline-restore-from-trash';
 import icGlobe from '@iconify/icons-fa-solid/globe';
@@ -62,7 +62,7 @@ export class StoreApplicationComponent implements OnInit {
   icFilterList = icFilterList;
   icMoreHoriz = icMoreHoriz;
   icClear = icClear;
-  icProduk = icProduk;
+  icFolder = icFolder;
   icClose = icClose;
   icRestore = icRestore;
   icGlobe = icGlobe;
@@ -173,6 +173,8 @@ export class StoreApplicationComponent implements OnInit {
       disableClose: true
     })
       .afterClosed().subscribe((newModel: Application) => {
+        if (!newModel) { return; }
+
         const models = this.appsSubject.value;
         if (!model) {
           models.push(newModel);

@@ -29,7 +29,7 @@ import { StoreService } from '../../services/store.service';
 import { arrayEndpointUrlTester, PublisherEndpointUrlControlComponent } from 'src/app/pages/shared/controls/publisher-endpointurl-control.component';
 import { ApiConfigService } from 'src/app/services/api-config.service';
 import { Application } from 'src/app/types/application';
-import { Subscription } from 'src/app/types/subscription';
+import { Subscription } from 'src/app/types/subscription.interface';
 import { HttpUrlEncodingCodec } from '@angular/common/http';
 import { SubscriptionService } from '../../services/subscription.service';
 import { FormControl } from '@angular/forms';

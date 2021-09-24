@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { ApiConfigService } from 'src/app/services/api-config.service';
 import { Paginate } from 'src/app/types/paginate.interface';
-import { Subscription } from 'src/app/types/subscription';
+import { Subscription } from 'src/app/types/subscription.interface';
 import { decode } from 'src/app/utilities/function/base64-util';
 import { AuthService } from '../../access/auth-manager/services/auth.service';
 import { LoginRq } from '../../access/auth-manager/services/oauth.interface';

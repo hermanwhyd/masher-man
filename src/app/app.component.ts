@@ -9,6 +9,8 @@ import icLayers from '@iconify/icons-ic/twotone-layers';
 import icSettings from '@iconify/icons-ic/twotone-settings';
 import icTraining from '@iconify/icons-ic/baseline-model-training';
 import icStyle from '@iconify/icons-ic/style';
+import icStore from '@iconify/icons-ic/outline-shopping-cart';
+import icFolder from '@iconify/icons-ic/baseline-snippet-folder';
 
 import { LayoutService } from '../@vex/services/layout.service';
 import { ActivatedRoute } from '@angular/router';
@@ -45,16 +47,10 @@ export class AppComponent {
 
     this.navigationService.items = [
       {
-        type: 'dropdown',
+        type: 'link',
         label: 'Dashboard',
         icon: icLayers,
-        children: [
-          {
-            type: 'link',
-            label: 'Navigasi',
-            route: '/dashboard'
-          }
-        ]
+        route: '/dashboard'
       },
       {
         type: 'subheading',
@@ -78,21 +74,16 @@ export class AppComponent {
             ]
           },
           {
-            type: 'dropdown',
+            type: 'link',
             label: 'Store',
-            icon: icTraining,
-            children: [
-              {
-                type: 'link',
-                label: 'Listed API',
-                route: '/store/list'
-              },
-              {
-                type: 'link',
-                label: 'Applications',
-                route: '/store/application'
-              }
-            ]
+            icon: icStore,
+            route: '/store/list'
+          },
+          {
+            type: 'link',
+            label: 'Application',
+            icon: icFolder,
+            route: '/store/application'
           }
         ]
       },

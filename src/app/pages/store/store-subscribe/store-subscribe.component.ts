@@ -8,7 +8,7 @@ import icClose from '@iconify/icons-ic/twotone-close';
 import { finalize } from 'rxjs/operators';
 import { Api } from 'src/app/types/api.interface';
 import { Application } from 'src/app/types/application';
-import { Subscription } from 'src/app/types/subscription';
+import { Subscription } from 'src/app/types/subscription.interface';
 import { SnackbarNotifComponent } from 'src/app/utilities/snackbar-notif/snackbar-notif.component';
 import { StoreService } from '../services/store.service';
 import { SubscriptionService } from '../services/subscription.service';
