@@ -1,0 +1,108 @@
+<div class="card overflow-auto -mt-16">
+
+  <div class="bg-app-bar px-6 h-16 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+    <div class="flex items-center">
+      <button [routerLink]="['.']" class="mr-2" mat-icon-button [loading]="isLoading">
+        <mat-icon [icIcon]="icArrowBack" size="24px"></mat-icon>
+      </button>
+      <p *ngIf="!isLoading" class="text-lg leading-normal">
+        <span>{{ model?.name }}</span>
+        <span class="ml-2 text-sm text-white bg-primary px-2 py-1 rounded-full">{{ model?.status }}</span>
+      </p>
+    </div>
+    <span fxFlex></span>
+    <button class="ml-4" color="primary" fxFlex="none" mat-mini-fab matTooltip="Edit" type="button"
+      (click)="addOrUpdateModel.emit(model)">
+      <mat-icon [icIcon]="icPencil" size="20px"></mat-icon>
+    </button>
+  </div>
+
+  <div @stagger>
+    <mat-tab-group dynamicHeight (selectedIndexChange)="tabChange($event)">
+      <mat-tab label="Overview">
+        <div *ngIf="isLoading" class="p-6">
+          <div class="block mt-1">
+            <ngx-shimmer-loading [height]="'45px'" [width]="'50%'"></ngx-shimmer-loading>
+            <ngx-shimmer-loading [height]="'45px'" [width]="'50%'"></ngx-shimmer-loading>
+          </div>
+          <ngx-shimmer-loading [height]="'40px'" [width]="'100%'" class="block"></ngx-shimmer-loading>
+          <ngx-shimmer-loading [height]="'100px'" [width]="'100%'" class="block"></ngx-shimmer-loading>
+          <ngx-shimmer-loading [height]="'40px'" [width]="'100%'" class="block"></ngx-shimmer-loading>
+        </div>
+        <div @fadeInUp *ngIf="!isLoading" class="p-6">
+          <jsonforms [data]="model" [schema]="schema" [renderers]="renderers" [uischema]="uischema" readonly="'true'">
+          </jsonforms>
+        </div>
+      </mat-tab>
+      <mat-tab label="Raw JSON">
+        <mat-slide-toggle class="p-6" (change)="togleJsonView($event)" [checked]="isShowJsonRaw" color="primary">
+          Raw JSON
+        </mat-slide-toggle>
+        <div class="p-6" *ngIf="isShowJsonRaw">
+          <json-editor [options]="options" [data]="model"></json-editor>
+        </div>
+        <div class="p-gutter" *ngIf="!isShowJsonRaw">
+          <ngx-json-viewer [json]="model"></ngx-json-viewer>
+        </div>
+      </mat-tab>
+      <mat-tab label="Subscriptions">
+
+        <div class="px-6 pt-10">
+          <div @fadeInUp
+            class="flex items-center bg-card overflow-hidden relative pl-3 h-12 w-full shadow-6 border mb-4">
+            <ic-icon [icon]="icSearch" class="text-secondary flex-none" size="24px"></ic-icon>
+            <input [formControl]="searchCtrl" placeholder="Search APIs.." type="text"
+              class="border-0 h-12 outline-none pl-4 placeholder:text-secondary bg-card flex-auto" />
+            <ic-icon [icon]="icClear" *ngIf="searchCtrl.value" (click)="searchCtrl.reset()"
+              class="text-secondary flex-none mr-2 cursor-pointer" size="20px"></ic-icon>
+            <mat-slide-toggle (change)="onAdvancedSearchTogle($event)" [checked]="isAdvancedSrc" class="pr-3"
+              matTooltip="Enable search outside subscribed API" matTooltipPosition="above"></mat-slide-toggle>
+          </div>
+        </div>
+
+        <div *ngIf="isLoading" class="p-6">
+          <ngx-shimmer-loading [height]="'40px'" [width]="'100%'" class="block"></ngx-shimmer-loading>
+          <ngx-shimmer-loading [height]="'40px'" [width]="'100%'" class="block"></ngx-shimmer-loading>
+          <ngx-shimmer-loading [height]="'40px'" [width]="'100%'" class="block"></ngx-shimmer-loading>
+          <ngx-shimmer-loading [height]="'40px'" [width]="'100%'" class="block"></ngx-shimmer-loading>
+        </div>
+
+        <div *ngIf="!isLoading" class="p-6 bg-card">
+          <div *ngIf="subscriptionsFiltered?.length === 0" @scaleFadeIn
+            class="flex-auto flex flex-col justify-center items-center">
+            <h2 class="headline m-0 mb-12 text-center">
+              No subscription found.
+            </h2>
+          </div>
+
+          <div @fadeInUp fxLayout="column">
+            <div @stagger class="p-4 border-b" *ngFor="let item of subscriptionsFiltered" fxLayout="row"
+              fxLayoutAlign="start center" fxLayoutGap="8px">
+              <div @fadeInRight fxFlex="auto">
+                <h4 class="body-2 m-0 leading-snug">
+                  <a [routerLink]="['/store/list']" [queryParams]="{apiIdentifier: item?.apiIdentifier}"
+                    class="text-cyan underline">
+                    {{ codec.decodeValue(item.apiIdentifier) }}
+                  </a>
+                </h4>
+                <h5 class="text-secondary m-0 caption leading-none" *ngIf="item.subscriptionId">
+                  {{ item.tier }} - {{ item.status }}
+                </h5>
+              </div>
+
+              <button class="rounded-full" color="primary" type="button" fxFlex="none" mat-raised-button type="button"
+                (click)="subscribe(item)" *ngIf="!item.subscriptionId">SUBSCRIBE</button>
+
+              <button class="rounded-full" color="primary" type="button" fxFlex="none" mat-raised-button
+                (click)="approve(item)" *ngIf="item.status === 'ON_HOLD'">APPROVE</button>
+
+              <button class="rounded-full" color="warn" type="button" fxFlex="none" mat-raised-button
+                (click)="unsubscribe(item)" *ngIf="item.subscriptionId" type="button">UNSUBSCRIBE</button>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+
+</div>

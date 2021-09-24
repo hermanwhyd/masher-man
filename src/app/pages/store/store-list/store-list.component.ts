@@ -77,7 +77,7 @@ export class StoreListComponent implements OnInit {
     { label: 'Thumbnail', property: 'thumbnailUri', type: 'image', visible: true },
     { label: 'Name', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Portal', property: 'portal', type: 'button', visible: true },
-    { label: 'Description', property: 'description', type: 'text', visible: false, cssClasses: ['font-medium'] },
+    { label: 'Description', property: 'description', type: 'text', visible: false, cssClasses: ['text-secondary'] },
     { label: 'Context', property: 'context', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Version', property: 'version', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Provider', property: 'provider', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
@@ -134,7 +134,7 @@ export class StoreListComponent implements OnInit {
     this.profiles$.pipe(untilDestroyed(this)).subscribe(() => this.fetchData());
 
     this.route.queryParamMap.pipe(
-      map((params: any) => params.has('apiId')),
+      map((params: any) => params.has('apiId') || params.has('apiIdentifier')),
     ).subscribe((has) => this.isLoadApiDetail.next(has));
   }
 
@@ -181,7 +181,7 @@ export class StoreListComponent implements OnInit {
     return `${this.apiConfigService.getActiveProfile()?.portalUrl}/store/apis/info?name=${api.name}&version=${api.version}&provider=${api.provider}`;
   }
 
-  subscribeAPIs(apis: Api[]) {
+  subscribes(apis: Api[]) {
     this.dialog.open(StoreSubscribeComponent, {
       data: apis,
       width: '600px',

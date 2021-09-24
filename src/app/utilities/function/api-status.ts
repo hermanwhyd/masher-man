@@ -2,11 +2,11 @@
  * Get class by status
  */
 export function statusClass(status: string) {
-  if (status === 'PUBLISHED') {
+  if (status === 'PUBLISHED' || status === 'APPROVED') {
     return 'text-cyan bg-cyan-light';
   }
 
-  if (status === 'CREATED') {
+  if (status === 'CREATED' || status === 'ON_HOLD') {
     return 'text-green bg-green-light';
   }
 

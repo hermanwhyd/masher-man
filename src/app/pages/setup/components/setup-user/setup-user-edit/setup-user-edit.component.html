@@ -18,7 +18,7 @@
       <input cdkFocusInitial formControlName="username" matInput required>
       <mat-hint>Username untuk login ke portal</mat-hint>
       <mat-error *ngIf="(formControl.username.touched) && formControl.username.errors?.required">
-        Username harus diisi
+        Username is required
       </mat-error>
     </mat-form-field>
 
@@ -27,7 +27,7 @@
       <input formControlName="password" matInput required>
       <mat-hint>Password untuk login ke portal</mat-hint>
       <mat-error *ngIf="(formControl.password.touched) && formControl.password.errors?.required">
-        Password harus diisi
+        Password is required
       </mat-error>
     </mat-form-field>
 

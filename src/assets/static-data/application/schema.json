@@ -1,0 +1,107 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "applicationId": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "subscriber": {
+      "type": "string"
+    },
+    "throttlingTier": {
+      "type": "string"
+    },
+    "callbackUrl": {
+      "type": "null"
+    },
+    "description": {
+      "type": "string"
+    },
+    "tokenType": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "groupId": {
+      "type": "string"
+    },
+    "keys": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "consumerKey": {
+            "type": "string"
+          },
+          "consumerSecret": {
+            "type": "string"
+          },
+          "supportedGrantTypes": {
+            "type": "array",
+            "items": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "callbackUrl": {
+            "type": "null"
+          },
+          "keyState": {
+            "type": "string"
+          },
+          "keyType": {
+            "type": "string"
+          },
+          "groupId": {
+            "type": "null"
+          },
+          "token": {
+            "type": "object",
+            "properties": {
+              "accessToken": {
+                "type": "string"
+              },
+              "tokenScopes": {
+                "type": "array",
+                "items": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "validityTime": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "attributes": {
+      "type": "object"
+    }
+  }
+}

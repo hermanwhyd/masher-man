@@ -6,12 +6,20 @@ export interface Application {
   throttlingTier?: string;
   subscriber?: string;
   description?: null;
+  keys?: Key[];
 }
 
-export interface Subscription {
-  tier: string;
-  apiIdentifier: string;
-  applicationId: string;
-  subscriptionId?: string;
-  status?: string;
+export interface Key {
+  consumerKey: string;
+  consumerSecret: string;
+  keyState: string;
+  keyType: string;
+  supportedGrantTypes: null;
+  token: Token;
+}
+
+export interface Token {
+  validityTime: number;
+  accessToken: string;
+  tokenScopes: string[];
 }

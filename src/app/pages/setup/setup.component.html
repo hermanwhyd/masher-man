@@ -16,9 +16,11 @@
 
     <div @stagger class="max-w-6xl w-full" fxLayout="column" fxLayoutGap="24px">
       <vex-setup-api @fadeInUp></vex-setup-api>
-      <vex-setup-user TITLE="PUBLISHER" DESCRIPTION="Brief Description" TYPE="publisher"></vex-setup-user>
-      <vex-setup-user TITLE="STORE" DESCRIPTION="Brief Description" TYPE="store"></vex-setup-user>
-      <vex-setup-user TITLE="API MANAGER" DESCRIPTION="Brief Description" TYPE="apimanager"></vex-setup-user>
+      <vex-setup-user TITLE="PUBLISHER"
+        DESCRIPTION="Pair Publisher account with Admin privileges for View and publish API, subscribe and approve subscription"
+        TYPE="publisher"></vex-setup-user>
+      <vex-setup-user TITLE="STORE" DESCRIPTION="Pair Store account to manage applications, view and subscribe APIs"
+        TYPE="store"></vex-setup-user>
     </div>
   </vex-page-layout-content>
 </vex-page-layout>

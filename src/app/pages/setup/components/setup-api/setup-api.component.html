@@ -9,7 +9,7 @@
           <mat-label>API Config URL</mat-label>
           <input type="text" formControlName="proxyApi" matInput placeholder="https://..." required>
           <mat-error *ngIf="formControl.proxyApi.touched && formControl.proxyApi.errors?.required">
-            Config URL harus diisi
+            Config URL is required
           </mat-error>
           <mat-hint>API for getting profiles</mat-hint>
         </mat-form-field>

@@ -28,7 +28,6 @@ export class SetupComponent implements OnInit {
     { type: 'subheader', title: 'USER CONFIG', element: '', active: false },
     { type: 'link', element: 'setupUser', title: 'Publisher', active: false },
     { type: 'link', element: 'setupUser', title: 'Store', active: false },
-    { type: 'link', element: 'setupUser', title: 'API Manager', active: false },
   ];
 
   @ViewChild(SetupUserComponent, { read: ElementRef, static: true }) private setupUser: ElementRef;

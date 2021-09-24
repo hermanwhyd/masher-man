@@ -7,9 +7,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import icClose from '@iconify/icons-ic/twotone-close';
 import { finalize } from 'rxjs/operators';
 import { Api } from 'src/app/types/api.interface';
-import { Application, Subscription } from 'src/app/types/application';
+import { Application } from 'src/app/types/application';
+import { Subscription } from 'src/app/types/subscription';
 import { SnackbarNotifComponent } from 'src/app/utilities/snackbar-notif/snackbar-notif.component';
 import { StoreService } from '../services/store.service';
+import { SubscriptionService } from '../services/subscription.service';
 import { StoreListComponent } from '../store-list/store-list.component';
 
 @Component({
@@ -36,6 +38,7 @@ export class StoreSubscribeComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: Api[],
     private storeService: StoreService,
+    private subscriptionService: SubscriptionService,
     private snackBar: MatSnackBar,
     private dialogRef: MatDialogRef<StoreListComponent>,
     private cd: ChangeDetectorRef,
@@ -75,7 +78,7 @@ export class StoreSubscribeComponent implements OnInit {
 
     this.isSubmitting = true;
     this.isShowError = false;
-    this.storeService.subscribeApi(subscriptions).pipe(finalize(() => {
+    this.subscriptionService.subscribe(subscriptions).pipe(finalize(() => {
       this.isSubmitting = false;
       this.cd.markForCheck();
     })).subscribe(rs => {

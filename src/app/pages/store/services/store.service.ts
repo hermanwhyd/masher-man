@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { ApiConfigService } from 'src/app/services/api-config.service';
 import { Api, ApiDetail } from 'src/app/types/api.interface';
-import { Application, Subscription } from 'src/app/types/application';
+import { Application } from 'src/app/types/application';
 import { Paginate } from 'src/app/types/paginate.interface';
 import { decode } from 'src/app/utilities/function/base64-util';
 import { AuthService } from '../../access/auth-manager/services/auth.service';
@@ -17,7 +17,6 @@ export class StoreService {
 
   private readonly URL = 'store/apis';
   private readonly URL_APPLICATION = 'store/applications';
-  private readonly URL_SUBSCRIPTION = 'store/subscriptions/multiple';
 
   public draftAPIs = new BehaviorSubject<ApiDetail[]>([]);
   public draftAPIs$ = this.draftAPIs.asObservable();
@@ -37,7 +36,7 @@ export class StoreService {
 
     const store = this.apiConfigService.getActiveStore();
     if (!store) {
-      return throwError('Invalid Profile');
+      return throwError('Invalid Store Profile, please setup its first!');
     }
 
     const loginRq: LoginRq = { username: store.username, password: decode(store.password), grant_type: 'password', scope };
@@ -55,7 +54,7 @@ export class StoreService {
 
     const store = this.apiConfigService.getActiveStore();
     if (!store) {
-      return throwError('Invalid Profile');
+      return throwError('Invalid Store Profile, please setup its first!');
     }
 
     const loginRq: LoginRq = { username: store.username, password: decode(store.password), grant_type: 'password', scope };
@@ -78,7 +77,7 @@ export class StoreService {
 
     const store = this.apiConfigService.getActiveStore();
     if (!store) {
-      return throwError('Invalid Store Profile');
+      return throwError('Invalid Store Profile, please setup its first!');
     }
 
     const loginRq: LoginRq = { username: store.username, password: decode(store.password), grant_type: 'password', scope };
@@ -91,12 +90,12 @@ export class StoreService {
       })) as Observable<Paginate<Application>>;
   }
 
-  public subscribeApi(subscriptions: Subscription[]) {
+  public getApplicationDetail(apiId: Application['applicationId']) {
     const scope = 'apim:subscribe';
 
     const store = this.apiConfigService.getActiveStore();
     if (!store) {
-      return throwError('Invalid Store Profile');
+      return throwError('Invalid Store Profile, please setup its first!');
     }
 
     const loginRq: LoginRq = { username: store.username, password: decode(store.password), grant_type: 'password', scope };
@@ -104,9 +103,34 @@ export class StoreService {
     return this.authService.token(loginRq, store.clientDigest)
       .pipe(switchMap(token => {
         const headers = new HttpHeaders({ Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' });
-        return this.httpClient.post([this.apiConfigService.getApiUrl(), this.URL_SUBSCRIPTION].join('/'),
-          subscriptions, { headers }) as Observable<Subscription[]>;
-      })) as Observable<Subscription[]>;
+        return this.httpClient.get([this.apiConfigService.getApiUrl(), this.URL_APPLICATION, apiId].join('/')
+          , { headers }) as Observable<Application>;
+      })) as Observable<Application>;
+  }
+
+  createOrUpdateApplication(application: Application) {
+
+    const scope = 'apim:subscribe';
+
+    const store = this.apiConfigService.getActiveStore();
+    if (!store) {
+      return throwError('Invalid Store Profile, please setup its first!');
+    }
+
+    const loginRq: LoginRq = { username: store.username, password: decode(store.password), grant_type: 'password', scope };
+
+    return this.authService.token(loginRq, store.clientDigest)
+      .pipe(switchMap(token => {
+        const headers = new HttpHeaders({ Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' });
+        if (!!application.applicationId) {
+          return this.httpClient.put([this.apiConfigService.getApiUrl(), this.URL_APPLICATION, application.applicationId].join('/'),
+            application, { headers }) as Observable<Application>;
+        } else {
+          return this.httpClient.post([this.apiConfigService.getApiUrl(), this.URL_APPLICATION].join('/'),
+            application, { headers }) as Observable<Application>;
+        }
+      })) as Observable<Application>;
+
   }
 
 }

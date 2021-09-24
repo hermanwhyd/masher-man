@@ -1,0 +1,83 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Group",
+      "label": "General Details",
+      "elements": [
+        {
+          "type": "HorizontalLayout",
+          "elements": [
+            {
+              "type": "Control",
+              "label": "Name",
+              "scope": "#/properties/name"
+            },
+            {
+              "type": "Control",
+              "label": "Tier",
+              "scope": "#/properties/throttlingTier"
+            }
+          ]
+        },
+        {
+          "type": "HorizontalLayout",
+          "elements": [
+            {
+              "type": "Control",
+              "label": "Status",
+              "scope": "#/properties/status"
+            },
+            {
+              "type": "Control",
+              "label": "Subscriber",
+              "scope": "#/properties/subscriber"
+            }
+          ]
+        },
+        {
+          "type": "Control",
+          "label": "Description",
+          "scope": "#/properties/description",
+          "options": {
+            "multi": true
+          }
+        }
+      ]
+    },
+    {
+      "type": "Group",
+      "label": "Application Keys",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/keys",
+          "options": {
+            "detail": {
+              "type": "VerticalLayout",
+              "elements": [
+                {
+                  "type": "Control",
+                  "scope": "#/properties/keyType"
+                },
+                {
+                  "type": "HorizontalLayout",
+                  "elements": [
+                    {
+                      "type": "Control",
+                      "scope": "#/properties/consumerKey"
+                    },
+                    {
+                      "type": "Control",
+                      "scope": "#/properties/consumerSecret"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

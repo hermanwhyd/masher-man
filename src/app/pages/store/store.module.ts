@@ -32,6 +32,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { SecondaryToolbarModule } from 'src/@vex/components/secondary-toolbar/secondary-toolbar.module';
 import { MatBadgeModule } from '@angular/material/badge';
 import { NgJsonEditorModule } from 'ang-jsoneditor';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
 import { JsonFormsModule } from '@jsonforms/angular';
 import { JsonFormsAngularMaterialModule } from '@jsonforms/angular-material';
@@ -39,6 +40,9 @@ import { JsonFormsCustomModule } from '../shared/controls/json-forms-custom.modu
 import { StoreListComponent } from './store-list/store-list.component';
 import { StoreListDetailComponent } from './store-list/store-list-detail/store-list-detail.component';
 import { StoreSubscribeComponent } from './store-subscribe/store-subscribe.component';
+import { StoreApplicationComponent } from './store-application/store-application.component';
+import { StoreApplicationDetailComponent } from './store-application/store-application-detail/store-application-detail.component';
+import { StoreApplicationEditComponent } from './store-application/store-application-edit/store-application-edit.component';
 
 const routes: Routes = [
   {
@@ -48,6 +52,10 @@ const routes: Routes = [
   {
     path: 'list',
     component: StoreListComponent
+  },
+  {
+    path: 'application',
+    component: StoreApplicationComponent
   }
 ];
 
@@ -55,7 +63,10 @@ const routes: Routes = [
   declarations: [
     StoreListComponent,
     StoreListDetailComponent,
-    StoreSubscribeComponent
+    StoreSubscribeComponent,
+    StoreApplicationComponent,
+    StoreApplicationDetailComponent,
+    StoreApplicationEditComponent
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -94,6 +105,7 @@ const routes: Routes = [
     MatBadgeModule,
     NgJsonEditorModule,
     JsonFormsCustomModule,
+    Ng2SearchPipeModule
   ],
   exports: [
     RouterModule,

@@ -9,7 +9,6 @@ import icLayers from '@iconify/icons-ic/twotone-layers';
 import icSettings from '@iconify/icons-ic/twotone-settings';
 import icTraining from '@iconify/icons-ic/baseline-model-training';
 import icStyle from '@iconify/icons-ic/style';
-import icAuth from '@iconify/icons-ic/outline-supervised-user-circle';
 
 import { LayoutService } from '../@vex/services/layout.service';
 import { ActivatedRoute } from '@angular/router';
@@ -87,6 +86,11 @@ export class AppComponent {
                 type: 'link',
                 label: 'Listed API',
                 route: '/store/list'
+              },
+              {
+                type: 'link',
+                label: 'Applications',
+                route: '/store/application'
               }
             ]
           }

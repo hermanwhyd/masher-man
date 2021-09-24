@@ -1,0 +1,47 @@
+<form (ngSubmit)="submit()" [formGroup]="form" autocomplete="off">
+  <div fxLayout="row" fxLayoutAlign="start center" mat-dialog-title>
+    <h2 class="headline m-0" fxFlex="auto">
+      {{ formControl.name.value || 'New Application' }}
+    </h2>
+    <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
+      <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+  </div>
+
+  <mat-divider class="-mx-6 text-border"></mat-divider>
+
+  <mat-dialog-content fxLayout="column">
+
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input cdkFocusInitial formControlName="name" matInput required>
+      <mat-error *ngIf="(formControl.name.touched) && formControl.name.errors?.required">
+        Name is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Description</mat-label>
+      <textarea cdkTextareaAutosize formControlName="description" matInput></textarea>
+      <mat-hint>Brief description of application</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Tier</mat-label>
+      <mat-select formControlName="throttlingTier" required>
+        <mat-option *ngFor="let tier of tiers" [value]="tier.name">
+          {{ tier.name }} <span class="ml-1 text-xs text-secondary truncate">{{ tier.description }}</span>
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="(formControl.throttlingTier.touched) && formControl.throttlingTier.errors?.required">
+        Tier is required
+      </mat-error>
+    </mat-form-field>
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close type="button">CANCEL</button>
+    <button color="primary" mat-button type="submit" [loading]="isLoading">SAVE</button>
+  </mat-dialog-actions>
+</form>

@@ -41,7 +41,7 @@ export class PublisherService {
 
     const publisher = this.apiConfigService.getActivePublisher();
     if (!publisher) {
-      return throwError('Invalid Profile');
+      return throwError('Invalid Publisher Profile, please setup its first!');
     }
 
     const loginRq: LoginRq = { username: publisher.username, password: decode(publisher.password), grant_type: 'password', scope };
@@ -59,7 +59,7 @@ export class PublisherService {
 
     const publisher = this.apiConfigService.getActivePublisher();
     if (!publisher) {
-      return throwError('Invalid Profile');
+      return throwError('Invalid Publisher Profile, please setup its first!');
     }
 
     const loginRq: LoginRq = { username: publisher.username, password: decode(publisher.password), grant_type: 'password', scope };
@@ -77,7 +77,7 @@ export class PublisherService {
 
     const publisher = this.apiConfigService.getActivePublisher();
     if (!publisher) {
-      return throwError('Invalid Profile');
+      return throwError('Invalid Publisher Profile, please setup its first!');
     }
 
     const loginRq: LoginRq = { username: publisher.username, password: decode(publisher.password), grant_type: 'password', scope };

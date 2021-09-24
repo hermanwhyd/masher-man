@@ -131,7 +131,41 @@ export class StoreListDetailComponent implements OnInit {
       } catch (e) {
         this.model = data;
       }
-    }, error => console.log(error));
+    });
+
+    this.route.queryParamMap.pipe(
+      untilDestroyed(this),
+      map((params: any) => params.get('apiIdentifier')),
+      distinctUntilChanged(),
+      filter<string>(Boolean),
+      switchMap(apiIdentifier => {
+        apiIdentifier = apiIdentifier.replace('%252D', '%2D');
+        if (this.apiConfigService.getActivePublisher() != null) {
+          return forkJoin({
+            publisher: this.publisherService.getApiDetail(apiIdentifier).pipe(catchError(error => throwError(error))),
+            store: this.storeService.getApiDetail(apiIdentifier).pipe(catchError(error => throwError(error)))
+          })
+            .pipe(
+              finalize(() => this.isLoading = false),
+              switchMap(({ publisher, store }) => {
+                const apis: ApiDetail = { ...publisher, ...store };
+                return of(apis);
+              }
+              )
+            );
+        } else {
+          return this.storeService.getApiDetail(apiIdentifier).pipe(finalize(() => this.isLoading = false));
+        }
+      })
+    ).subscribe((data: ApiDetail) => {
+      try {
+        const endpointConfig = {} as EndPointConfig;
+        Object.assign(endpointConfig, JSON.parse(data.endpointConfig as string));
+        this.model = { ...data, endpointConfig };
+      } catch (e) {
+        this.model = data;
+      }
+    });
   }
 
   togleJsonView(change: MatSlideToggleChange) {

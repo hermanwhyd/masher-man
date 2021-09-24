@@ -103,24 +103,25 @@ export class PublisherEditComponent implements OnInit {
   routerParseParams() {
     this.route.queryParamMap.pipe(
       untilDestroyed(this),
-      map((params: any) => params.get('apiId')),
+      map((params: any) => params.getAll('apiIds')),
       distinctUntilChanged(),
-      filter<string>(Boolean),
-      switchMap(apiId => {
-        this.isLoading = true;
-        return this.publisherService.getApiDetail(apiId).pipe(finalize(() => this.isLoading = false));
-      })
-    ).subscribe((data: ApiDetail) => {
-      try {
-        const endpointConfig = {} as EndPointConfig;
-        Object.assign(endpointConfig, JSON.parse(data.endpointConfig as string));
-        const model = { ...data, endpointConfig };
-        this.model.apis.push(model);
-      } catch (e) {
-        this.model.apis.push(data);
-      } finally {
-        this.publisherMasterListService.refreshEmit.next('R');
-      }
+      filter<string[]>(Boolean),
+    ).subscribe((apiIds: string[]) => {
+      apiIds.forEach((apiId) => {
+        this.publisherService.getApiDetail(apiId)
+          .subscribe(data => {
+            const endpointConfig = {} as EndPointConfig;
+            try {
+              Object.assign(endpointConfig, JSON.parse(data.endpointConfig as string));
+              const model = { ...data, endpointConfig };
+              this.model.apis.push(model);
+            } catch (e) {
+              this.model.apis.push(data);
+            } finally {
+              this.publisherMasterListService.refreshEmit.next('R');
+            }
+          });
+      });
     });
   }
 
@@ -153,6 +154,9 @@ export class PublisherEditComponent implements OnInit {
       .pipe(delay(0))
       .subscribe((loading) => {
         this.isLoading = loading;
+        if (this.isLoading) {
+          setTimeout(() => this.isLoading = false, 10000);
+        }
       });
   }
 }
