@@ -51,7 +51,7 @@ export class SetupUserComponent implements OnInit {
       this.config = this.accounts.find(c => c.active === true);
       if (!this.config) {
         this.config = {
-          profile: this.apiConfigService.getActiveProfile().name, active: true
+          profile: this.apiConfigService.getActiveProfile()?.name, active: true
           , userPublishers: [], userStores: [], userApiManagers: []
         } as Account;
         this.accounts.push(this.config);
@@ -77,7 +77,7 @@ export class SetupUserComponent implements OnInit {
       .afterClosed().subscribe((newModel: User) => {
         if (!newModel) { return; }
 
-        if (this.users.length > 0 && newModel.active === true) {
+        if (this.users && this.users.length > 0 && newModel.active === true) {
           this.users.forEach(u => u.active = false);
         }
 
