@@ -11,7 +11,7 @@ import { Application } from 'src/app/types/application.interface';
 import { Subscription } from 'src/app/types/subscription.interface';
 import { SnackbarNotifComponent } from 'src/app/utilities/snackbar-notif/snackbar-notif.component';
 import { StoreService } from '../services/store.service';
-import { SubscriptionService } from '../services/subscription.service';
+import { SubscriptionService } from '../../../services/subscription.service';
 import { StoreListComponent } from '../store-list/store-list.component';
 
 @Component({
@@ -50,7 +50,7 @@ export class StoreSubscribeComponent implements OnInit {
   }
 
   fetchApplication(): void {
-    this.storeService.getApplications(0, 1000)
+    this.storeService.getApplications()
       .pipe(finalize(() => {
         this.isLoading = false;
         this.cd.markForCheck();

@@ -13,19 +13,12 @@ export interface User {
   grantTypes: string;
   clientDigest: string;
   sessions?: Session[];
-  applications?: Application[];
 }
 
 export interface Profile {
   active: boolean;
   name: string;
   portalUrl: string;
-}
-
-export interface Application {
-  active: boolean;
-  id: string;
-  name: string;
 }
 
 export interface Session {

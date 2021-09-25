@@ -75,9 +75,9 @@ export class PublisherListComponent implements OnInit {
     { label: 'Thumbnail', property: 'thumbnailUri', type: 'image', visible: true },
     { label: 'Name', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'Portal', property: 'portal', type: 'button', visible: true },
+    { label: 'Version', property: 'version', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Description', property: 'description', type: 'text', visible: false, cssClasses: ['font-medium'] },
     { label: 'Context', property: 'context', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
-    { label: 'Version', property: 'version', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Provider', property: 'provider', type: 'text', visible: true, cssClasses: ['text-secondary', 'font-medium'] },
     { label: 'Status', property: 'status', type: 'status', visible: true, cssClasses: ['text-secondary', 'font-medium'] }
   ];

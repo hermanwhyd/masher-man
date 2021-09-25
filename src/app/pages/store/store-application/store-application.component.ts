@@ -141,7 +141,7 @@ export class StoreApplicationComponent implements OnInit {
 
   fetchData() {
     this.isLoading = true;
-    this.storeService.getApplications(0, 1000)
+    this.storeService.getApplications()
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(rs => {
         this.appsSubject.next(rs.list);

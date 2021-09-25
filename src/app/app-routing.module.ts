@@ -36,7 +36,7 @@ const routes: VexRoutes = [
       },
       {
         path: '**',
-        loadChildren: () => import('./pages/access/error-404/error-404-routing.module').then(m => m.Error404RoutingModule)
+        loadChildren: () => import('./pages/access/error-404/error-404.module').then(m => m.Error404Module)
       }
     ]
   }

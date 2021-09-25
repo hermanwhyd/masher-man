@@ -11,6 +11,7 @@ import { HttpErrorInterceptor } from './config/http-error.interceptor';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { InformationDialogModule } from './utilities/information-dialog/information-dialog.module';
 import { SnackBarNotifModule } from './utilities/snackbar-notif/snackbar-notif.module';
+import { ConfirmationDialogModule } from './utilities/confirmation-dialog/confirmation-dialog.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -27,11 +28,12 @@ import { SnackBarNotifModule } from './utilities/snackbar-notif/snackbar-notif.m
 
     // App
     InformationDialogModule,
-    SnackBarNotifModule
+    SnackBarNotifModule,
+    ConfirmationDialogModule
   ],
   exports: [
     InformationDialogModule,
-    SnackBarNotifModule
+    SnackBarNotifModule,
   ],
   providers: [
     {

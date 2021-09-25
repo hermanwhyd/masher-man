@@ -42,6 +42,7 @@ import { NgJsonEditorModule } from 'ang-jsoneditor';
 import { JsonFormsModule } from '@jsonforms/angular';
 import { JsonFormsAngularMaterialModule } from '@jsonforms/angular-material';
 import { JsonFormsCustomModule } from '../shared/controls/json-forms-custom.module';
+import { PublisherAppNamePipe } from 'src/app/pipes/publisher-app-name.pipe';
 
 const routes: Routes = [
   {
@@ -73,7 +74,8 @@ const routes: Routes = [
     PublisherSwaggerComponent,
     PublisherListDetailComponent,
     PublisherNewComponent,
-    PublisherSwaggerImportComponent
+    PublisherSwaggerImportComponent,
+    PublisherAppNamePipe
   ],
   imports: [
     RouterModule.forChild(routes),

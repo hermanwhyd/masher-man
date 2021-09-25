@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { ApiConfigService } from 'src/app/services/api-config.service';
 import { Api, ApiDetail } from 'src/app/types/api.interface';
+import { Application } from 'src/app/types/application.interface';
 import { Paginate } from 'src/app/types/paginate.interface';
 import { decode } from 'src/app/utilities/function/base64-util';
 import { AuthService } from '../../access/auth-manager/services/auth.service';
@@ -16,6 +17,7 @@ export class PublisherService {
 
   private readonly URL = 'publisher/apis';
   private readonly URL_PROXY = 'proxy';
+  private readonly URL_APPLICATION = 'publisher/applications';
 
   public draftAPIs = new BehaviorSubject<ApiDetail[]>([]);
   public draftAPIs$ = this.draftAPIs.asObservable();
@@ -93,5 +95,23 @@ export class PublisherService {
           return this.httpClient.post([this.apiConfigService.getApiUrl(), this.URL].join('/'), api, { headers }) as Observable<ApiDetail>;
         }
       })) as Observable<ApiDetail>;
+  }
+
+  getApplicationDetail(appId: string) {
+    const scope = 'apim:api_create';
+
+    const account = this.apiConfigService.getActivePublisher();
+    if (!account) {
+      return throwError('Invalid Publisher Profile, please setup its first!');
+    }
+
+    const loginRq: LoginRq = { username: account.username, password: decode(account.password), grant_type: 'password', scope };
+
+    return this.authService.token(loginRq, account.clientDigest)
+      .pipe(switchMap(token => {
+        const headers = new HttpHeaders({ Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' });
+        return this.httpClient.get([this.apiConfigService.getApiUrl(), this.URL_APPLICATION, appId].join('/')
+          , { headers }) as Observable<Application>;
+      })) as Observable<Application>;
   }
 }

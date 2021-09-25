@@ -26,6 +26,10 @@ import { and, isControl, rankWith, scopeEndsWith } from '@jsonforms/core';
 import { ApiDefinitionControlComponent, apiDefinitionTester } from 'src/app/pages/shared/controls/api-definition-control.component';
 import { arrayPrimitiveTester, PublisherArrayPrimitiveControlComponent } from 'src/app/pages/shared/controls/publisher-array-primitive-control.component';
 import { AccountPortalComponent } from 'src/app/pages/shared/controls/account-portal.component';
+import { Subscription } from 'src/app/types/subscription.interface';
+import { SubscriptionService } from 'src/app/services/subscription.service';
+import { ConfirmationDialogComponent } from 'src/app/utilities/confirmation-dialog/confirmation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 const appearance: MatFormFieldDefaultOptions = {
   appearance: 'outline'
@@ -54,7 +58,13 @@ export class PublisherListDetailComponent implements OnInit {
 
   icArrowBack = icArrowBack;
   icPencil = icPencil;
+
   model: ApiDetail;
+
+  // subscription tab
+  subscribers = [] as Subscription[];
+  isLoadingSubscription = false;
+
   isLoading = true;
   isSwaggerLoaded = false;
 
@@ -84,7 +94,9 @@ export class PublisherListDetailComponent implements OnInit {
   @ViewChild('swagger') swaggerDom: ElementRef<HTMLDivElement>;
   constructor(
     private route: ActivatedRoute,
-    private publisherService: PublisherService) {
+    private dialog: MatDialog,
+    private publisherService: PublisherService,
+    private subscriptionService: SubscriptionService) {
     this.options.mode = 'code';
     this.options.modes = ['code', 'tree'];
   }
@@ -109,5 +121,25 @@ export class PublisherListDetailComponent implements OnInit {
 
   togleJsonView(change: MatSlideToggleChange) {
     this.isShowJsonRaw = change.checked;
+  }
+
+  tabChange(index: number) {
+    // subscription tab
+    if (index === 2 && this.subscribers.length === 0) {
+      this.isLoadingSubscription = true;
+      this.subscriptionService.getApiPublisherSubscriber(this.model?.id)
+        .pipe(finalize(() => this.isLoadingSubscription = false))
+        .subscribe((rs) => {
+          this.subscribers = rs.list;
+        });
+    }
+  }
+
+  approve(item: Subscription) {
+    this.subscriptionService.approve(item.subscriptionId).subscribe((rs) => {
+      const models = this.subscribers;
+      const idx = models.indexOf(item);
+      models[idx] = rs;
+    });
   }
 }

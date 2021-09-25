@@ -42,6 +42,7 @@ import { StoreSubscribeComponent } from './store-subscribe/store-subscribe.compo
 import { StoreApplicationComponent } from './store-application/store-application.component';
 import { StoreApplicationDetailComponent } from './store-application/store-application-detail/store-application-detail.component';
 import { StoreApplicationEditComponent } from './store-application/store-application-edit/store-application-edit.component';
+import { StoreAppNamePipe } from '../../pipes/store-app-name.pipe';
 
 const routes: Routes = [
   {
@@ -65,7 +66,8 @@ const routes: Routes = [
     StoreSubscribeComponent,
     StoreApplicationComponent,
     StoreApplicationDetailComponent,
-    StoreApplicationEditComponent
+    StoreApplicationEditComponent,
+    StoreAppNamePipe
   ],
   imports: [
     RouterModule.forChild(routes),

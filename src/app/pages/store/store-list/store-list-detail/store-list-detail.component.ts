@@ -30,6 +30,11 @@ import { arrayEndpointUrlTester, PublisherEndpointUrlControlComponent } from 'sr
 import { PublisherService } from 'src/app/pages/publisher/services/publisher.service';
 import { ApiConfigService } from 'src/app/services/api-config.service';
 import { forkJoin, of, throwError } from 'rxjs';
+import { Subscription } from 'src/app/types/subscription.interface';
+import { ConfirmationDialogComponent } from 'src/app/utilities/confirmation-dialog/confirmation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { SubscriptionService } from '../../../../services/subscription.service';
+import { Application } from 'src/app/types/application.interface';
 
 const appearance: MatFormFieldDefaultOptions = {
   appearance: 'outline'
@@ -58,7 +63,13 @@ export class StoreListDetailComponent implements OnInit {
 
   icArrowBack = icArrowBack;
   icPencil = icPencil;
+
   model: ApiDetail;
+
+  // subscription tab
+  subscribers = [] as Subscription[];
+  applications = [] as Application[];
+
   isLoading = true;
   isSwaggerLoaded = false;
 
@@ -94,7 +105,9 @@ export class StoreListDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private apiConfigService: ApiConfigService,
     private storeService: StoreService,
-    private publisherService: PublisherService) {
+    private dialog: MatDialog,
+    private publisherService: PublisherService,
+    private subscriptionService: SubscriptionService) {
     this.options.mode = 'code';
     this.options.modes = ['code', 'tree'];
   }
@@ -150,8 +163,7 @@ export class StoreListDetailComponent implements OnInit {
               switchMap(({ publisher, store }) => {
                 const apis: ApiDetail = { ...publisher, ...store };
                 return of(apis);
-              }
-              )
+              })
             );
         } else {
           return this.storeService.getApiDetail(apiIdentifier).pipe(finalize(() => this.isLoading = false));
@@ -170,5 +182,75 @@ export class StoreListDetailComponent implements OnInit {
 
   togleJsonView(change: MatSlideToggleChange) {
     this.isShowJsonRaw = change.checked;
+  }
+
+  tabChange(index: number) {
+    // subscription tab
+    if (index === 2 && this.subscribers.length === 0) {
+      forkJoin({
+        callApps: this.storeService.getApplications(),
+        callSubs: this.subscriptionService.getApiSubscriber(this.model?.id)
+      })
+        .pipe(
+          finalize(() => this.isLoading = false),
+          switchMap(({ callApps, callSubs }) => {
+            this.applications = callApps.list;
+            const subs: Subscription[] = [];
+            callApps.list?.forEach(app => {
+              let sub = callSubs.list?.find(s => s.applicationId === app.applicationId);
+              if (!sub) {
+                sub = { apiIdentifier: this.model.id, tier: app.throttlingTier, applicationId: app.applicationId };
+              }
+              subs.push(sub);
+            });
+            return of(subs);
+          })
+        ).subscribe((rs) => {
+          this.subscribers = rs;
+        });
+    }
+  }
+
+  subscribe(item: Subscription) {
+    this.subscriptionService.subscribe([item]).subscribe((rs) => {
+      const models = this.subscribers;
+      const idx = models.indexOf(item);
+      models[idx] = rs[0];
+    });
+  }
+
+  approve(item: Subscription) {
+    this.subscriptionService.approve(item.subscriptionId).subscribe((rs) => {
+      const models = this.subscribers;
+      const idx = models.indexOf(item);
+      models[idx] = rs;
+    });
+  }
+
+  unsubscribe(item: Subscription) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: {
+        message: `Are you sure you want to remove selected application subscription?`,
+        buttonText: {
+          ok: 'Yes',
+          cancel: 'No'
+        }
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        this.subscriptionService.unsubscribe(item.subscriptionId).subscribe(() => {
+          const models = this.subscribers;
+          const idx = models.indexOf(item);
+          delete models[idx].status;
+          delete models[idx].subscriptionId;
+        });
+      }
+    });
+  }
+
+  getApplicationName(appId: string) {
+    return this.applications.find(app => app.applicationId === appId)?.name || appId;
   }
 }

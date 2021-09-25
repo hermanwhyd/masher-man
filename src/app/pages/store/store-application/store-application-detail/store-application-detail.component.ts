@@ -4,6 +4,7 @@ import icArrowBack from '@iconify/icons-ic/twotone-arrow-back';
 import icPencil from '@iconify/icons-ic/edit';
 import icSearch from '@iconify/icons-ic/twotone-search';
 import icClear from '@iconify/icons-ic/round-clear';
+import icInfo from '@iconify/icons-ic/outline-info';
 
 import { ActivatedRoute } from '@angular/router';
 import { debounceTime, distinctUntilChanged, filter, finalize, map, switchMap } from 'rxjs/operators';
@@ -31,7 +32,7 @@ import { ApiConfigService } from 'src/app/services/api-config.service';
 import { Application } from 'src/app/types/application.interface';
 import { Subscription } from 'src/app/types/subscription.interface';
 import { HttpUrlEncodingCodec } from '@angular/common/http';
-import { SubscriptionService } from '../../services/subscription.service';
+import { SubscriptionService } from '../../../../services/subscription.service';
 import { FormControl } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
@@ -65,6 +66,7 @@ export class StoreApplicationDetailComponent implements OnInit {
   icArrowBack = icArrowBack;
   icPencil = icPencil;
   icClear = icClear;
+  icInfo = icInfo;
 
   @Output() addOrUpdateModel = new EventEmitter<Application>();
 
@@ -84,7 +86,7 @@ export class StoreApplicationDetailComponent implements OnInit {
 
   icSearch = icSearch;
   searchCtrl = new FormControl();
-  isAdvancedSrc = true;
+  isAdvancedSrc = false;
 
   uischema = uischemaAsset;
   schema = schemaAsset;
@@ -140,7 +142,7 @@ export class StoreApplicationDetailComponent implements OnInit {
 
   fetchSubscriptions() {
     this.isLoading = true;
-    this.subscriptionService.getSubscriptions(0, 1000, this.model?.applicationId)
+    this.subscriptionService.getAppSubscription(this.model?.applicationId)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(rs => {
         this.subscriptionsSubject.next(rs.list);

@@ -27,7 +27,7 @@
   </div>
 
   <div @stagger>
-    <mat-tab-group dynamicHeight>
+    <mat-tab-group dynamicHeight (selectedIndexChange)="tabChange($event)">
       <mat-tab label="Overview">
         <div *ngIf="isLoading" class="p-6">
           <div class="block mt-1">
@@ -52,6 +52,42 @@
         </div>
         <div class="p-gutter" *ngIf="!isShowJsonRaw">
           <ngx-json-viewer [json]="model"></ngx-json-viewer>
+        </div>
+      </mat-tab>
+      <mat-tab label="Subscriptions">
+
+        <div *ngIf="isLoadingSubscription" class="p-6">
+          <ngx-shimmer-loading [height]="'40px'" [width]="'100%'" class="block"></ngx-shimmer-loading>
+          <ngx-shimmer-loading [height]="'40px'" [width]="'100%'" class="block"></ngx-shimmer-loading>
+          <ngx-shimmer-loading [height]="'40px'" [width]="'100%'" class="block"></ngx-shimmer-loading>
+          <ngx-shimmer-loading [height]="'40px'" [width]="'100%'" class="block"></ngx-shimmer-loading>
+        </div>
+
+        <div *ngIf="!isLoadingSubscription" class="p-6 bg-card">
+          <div *ngIf="subscribers?.length === 0" @scaleFadeIn
+            class="flex-auto flex flex-col justify-center items-center">
+            <h2 class="headline m-0 text-center">This api has no subscriber</h2>
+          </div>
+
+          <div @fadeInUp fxLayout="column">
+            <div @stagger class="p-2 border-b" *ngFor="let item of subscribers" fxLayout="row"
+              fxLayoutAlign="start center" fxLayoutGap="8px">
+              <div @fadeInRight fxFlex="auto">
+                <h4 class="body-2 m-0 leading-snug">
+                  <a [routerLink]="['/store/application']" [queryParams]="{appId: item?.applicationId}"
+                    class="text-cyan underline" matTooltip="user | application name" matTooltipPosition="above">
+                    {{ (item.applicationId | publisherAppName) | async }}
+                  </a>
+                </h4>
+                <h5 class="text-secondary m-0 caption leading-none" *ngIf="item.subscriptionId">
+                  {{ item.tier }} - {{ item.status }}
+                </h5>
+              </div>
+
+              <button class="rounded-full" color="primary" type="button" fxFlex="none" mat-raised-button
+                (click)="approve(item)" *ngIf="item.status === 'ON_HOLD'">APPROVE</button>
+            </div>
+          </div>
         </div>
       </mat-tab>
     </mat-tab-group>

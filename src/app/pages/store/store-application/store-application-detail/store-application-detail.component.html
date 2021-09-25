@@ -49,13 +49,17 @@
 
         <div class="px-6 pt-10">
           <div @fadeInUp
-            class="flex items-center bg-card overflow-hidden relative pl-3 h-12 w-full shadow-6 border mb-4">
+            class="flex items-center bg-card overflow-hidden relative px-3 h-12 w-full shadow-6 border mb-4">
             <ic-icon [icon]="icSearch" class="text-secondary flex-none" size="24px"></ic-icon>
             <input [formControl]="searchCtrl" placeholder="Search APIs.." type="text"
               class="border-0 h-12 outline-none pl-4 placeholder:text-secondary bg-card flex-auto" />
             <ic-icon [icon]="icClear" *ngIf="searchCtrl.value" (click)="searchCtrl.reset()"
               class="text-secondary flex-none mr-2 cursor-pointer" size="20px"></ic-icon>
-            <mat-slide-toggle (change)="onAdvancedSearchTogle($event)" [checked]="isAdvancedSrc" class="pr-3"
+            <ic-icon *ngIf="isAdvancedSrc" [icon]="icInfo" class="text-secondary flex-none cursor-pointer mr-1"
+              matTooltip="Advance search with prefix `context:`, `provider:`, `tags:`. Default search by Name"
+              matTooltipPosition="above" size="20px">
+            </ic-icon>
+            <mat-slide-toggle (change)="onAdvancedSearchTogle($event)" [checked]="isAdvancedSrc"
               matTooltip="Enable search outside subscribed API" matTooltipPosition="above"></mat-slide-toggle>
           </div>
         </div>
@@ -70,13 +74,13 @@
         <div *ngIf="!isLoading" class="p-6 bg-card">
           <div *ngIf="subscriptionsFiltered?.length === 0" @scaleFadeIn
             class="flex-auto flex flex-col justify-center items-center">
-            <h2 class="headline m-0 mb-12 text-center">
+            <h2 class="headline m-0 text-center">
               No subscription found.
             </h2>
           </div>
 
           <div @fadeInUp fxLayout="column">
-            <div @stagger class="p-4 border-b" *ngFor="let item of subscriptionsFiltered" fxLayout="row"
+            <div @stagger class="p-2 border-b" *ngFor="let item of subscriptionsFiltered" fxLayout="row"
               fxLayoutAlign="start center" fxLayoutGap="8px">
               <div @fadeInRight fxFlex="auto">
                 <h4 class="body-2 m-0 leading-snug">

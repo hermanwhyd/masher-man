@@ -67,7 +67,7 @@ export class StoreService {
       })) as Observable<ApiDetail>;
   }
 
-  public getApplications(offset: number, limit: number, query?: string) {
+  public getApplications(offset: number = 0, limit: number = 1000, query?: string) {
     const scope = 'apim:subscribe';
 
     let params = new HttpParams().append('offset', offset).append('limit', limit);
@@ -90,7 +90,7 @@ export class StoreService {
       })) as Observable<Paginate<Application>>;
   }
 
-  public getApplicationDetail(apiId: Application['applicationId']) {
+  public getApplicationDetail(appId: Application['applicationId']) {
     const scope = 'apim:subscribe';
 
     const store = this.apiConfigService.getActiveStore();
@@ -103,7 +103,7 @@ export class StoreService {
     return this.authService.token(loginRq, store.clientDigest)
       .pipe(switchMap(token => {
         const headers = new HttpHeaders({ Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' });
-        return this.httpClient.get([this.apiConfigService.getApiUrl(), this.URL_APPLICATION, apiId].join('/')
+        return this.httpClient.get([this.apiConfigService.getApiUrl(), this.URL_APPLICATION, appId].join('/')
           , { headers }) as Observable<Application>;
       })) as Observable<Application>;
   }
