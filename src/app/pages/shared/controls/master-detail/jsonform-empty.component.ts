@@ -5,8 +5,7 @@ import { Component, OnInit } from '@angular/core';
   styles: [`
   :host {
     @apply flex-auto flex flex-col;
-  }.
-  vex-view-empty {
+  }.vex-view-empty {
     background: linear-gradient(135deg, var(--background-card) 22px, var(--background-hover) 22px, var(--background-hover) 24px, transparent 24px, transparent 67px, var(--background-hover) 67px, var(--background-hover) 69px, transparent 69px),
     linear-gradient(225deg, var(--background-card) 22px, var(--background-hover) 22px, var(--background-hover) 24px, transparent 24px, transparent 67px, var(--background-hover) 67px, var(--background-hover) 69px, transparent 69px) 0 64px;
     background-color: var(--background-card);
