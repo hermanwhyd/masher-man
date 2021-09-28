@@ -9,7 +9,10 @@ You can manage API such as Publising, Editing, Make a copy and replublish to oth
 Also, you can manage Application, add and update, subscribe and unsubscriber API, approve subscription (using publisher account).
 
 # Live Demo
-https://masher-man.web.app
+[https://masher-man.web.app](https://masher-man.web.app)
+
+# Screenshot
+Please goto src/asset/screenshot
 
 # Run this project
 With angular CLI:
