@@ -90,6 +90,7 @@ export class AccountPortalComponent extends JsonFormsControl {
         apiSpec.push({ code: { language: 'typescript', content: `${method} ${path}` } });
 
         // construct http param and header
+        let httpBody: any = {};
         const httpParams: any = {};
         const httpHeaders: any = {
           'Content-type': (!value.consumes) ? 'application/json' : value.consumes.join(', '),
@@ -114,6 +115,11 @@ export class AccountPortalComponent extends JsonFormsControl {
 
             if (p.in === 'header') {
               httpHeaders[p.name] = `{{${p.name}}}`;
+            }
+
+            if (p.in === 'body' && p.schema) {
+              // $RefParser.dereference(p.schema).then(out => console.log(out));
+              httpBody = {};
             }
           });
 
