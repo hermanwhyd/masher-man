@@ -126,10 +126,13 @@ export class AccountPortalComponent extends JsonFormsControl {
         }
 
         // add usage example
+        const finalHost = (!!this.api.endpointURLs)
+          ? (this.api.endpointURLs[0]?.environmentURLs.https || this.api.endpointURLs[0]?.environmentURLs.https)
+          : this.activeProfile.gatewayUrl + this.api.context.replace('{version}', this.api.version);
         const finalUrl = queryString.stringifyUrl({ url: path === '/*' ? '' : path, query: httpParams });
 
         const params: any = {
-          url: (this.api.endpointURLs[0]?.environmentURLs.https || this.api.endpointURLs[0]?.environmentURLs.https) + finalUrl,
+          url: finalHost + finalUrl,
           method: upperCase(method),
           headers: httpHeaders,
           body: null

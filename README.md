@@ -12,7 +12,7 @@ Also, you can manage Application, add and update, subscribe and unsubscriber API
 [https://masher-man.web.app](https://masher-man.web.app)
 
 # Screenshot
-Please goto src/asset/screenshot
+Please goto src/assets/screenshot
 
 # Run this project
 With angular CLI:
