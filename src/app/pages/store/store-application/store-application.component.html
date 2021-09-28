@@ -6,6 +6,11 @@
         <ic-icon @scaleIn [icon]="icFolder" class="hidden sm:block"></ic-icon>
         <span @fadeInRight class="ml-4 block">Application</span>
       </h2>
+
+      <a href="{{ activeProfile.portalUrl }}/store/site/pages/applications.jag" mat-raised-button
+        class="bg-contrast-white text-orange hidden sm:block py-1 px-4" target="_blank">
+        <mat-icon [icIcon]="icGlobe" size="18px" inline="true" class="mr-1"></mat-icon> PORTAL
+      </a>
     </div>
   </vex-page-layout-header>
 

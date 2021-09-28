@@ -39,6 +39,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { StoreApplicationEditComponent } from './store-application-edit/store-application-edit.component';
+import { Profile } from 'src/app/types/api-config.interface';
 
 @UntilDestroy()
 @Component({
@@ -90,6 +91,7 @@ export class StoreApplicationComponent implements OnInit {
   data$: Observable<Application[]> = this.appsSubject.asObservable();
   profiles$ = this.apiConfigService.profiles$;
   accounts$ = this.apiConfigService.accounts$;
+  activeProfile: Profile;
 
   isLoadApiDetail = new BehaviorSubject<boolean>(false);
 
@@ -120,7 +122,10 @@ export class StoreApplicationComponent implements OnInit {
       this.dataSource.data = models;
     });
 
-    combineLatest([this.profiles$, this.accounts$]).pipe(untilDestroyed(this)).subscribe(() => this.fetchData());
+    combineLatest([this.profiles$, this.accounts$]).pipe(untilDestroyed(this)).subscribe(() => {
+      this.activeProfile = this.apiConfigService.getActiveProfile();
+      this.fetchData();
+    });
 
     this.route.queryParamMap.pipe(
       map((params: any) => params.has('appId')),

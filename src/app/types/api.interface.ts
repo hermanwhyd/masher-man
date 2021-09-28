@@ -42,7 +42,7 @@ export interface ApiDetail extends Api {
   visibleRoles?: any[];
   visibleTenants?: any[];
   endpointConfig?: any | EndPointConfig;
-  endpointUrls?: any | EndPointUrl[];
+  endpointURLs?: any | EndPointUrl[];
   endpointImplementationType?: string;
   endpointSecurity?: any;
   gatewayEnvironments?: string;

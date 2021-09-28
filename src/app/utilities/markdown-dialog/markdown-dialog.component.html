@@ -1,0 +1,22 @@
+<div fxLayout="row" fxLayoutAlign="start center" mat-dialog-title>
+  <h2 class="headline m-0" fxFlex="auto">{{ title }}</h2>
+
+  <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
+    <mat-icon [icIcon]="icClose"></mat-icon>
+  </button>
+</div>
+<mat-divider class="-mx-6 text-border"></mat-divider>
+
+<mat-dialog-content>
+  <showdown id="mdpdf" [value]="text" [sanitize]="'true'"></showdown>
+</mat-dialog-content>
+
+<mat-dialog-actions class="m-0 -mb-3" fxLayout="row" fxLayoutAlign="end center">
+  <button mat-button class="mr-4" mat-dialog-close>CLOSE</button>
+  <button mat-button color="primary" (click)="mdDownload()">
+    <icon [icIcon]="icDownload" inline='true'></icon> MD
+  </button>
+  <button mat-button color="primary" (click)="pdfDownload()">
+    <icon [icIcon]="icDownload" inline='true'></icon> PDF
+  </button>
+</mat-dialog-actions>

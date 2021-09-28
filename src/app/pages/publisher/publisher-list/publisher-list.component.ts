@@ -38,6 +38,7 @@ import { SnackbarNotifComponent } from 'src/app/utilities/snackbar-notif/snackba
 import { ActivatedRoute, Router } from '@angular/router';
 import { statusClass } from 'src/app/utilities/function/api-status';
 import { SelectionModel } from '@angular/cdk/collections';
+import { Profile } from 'src/app/types/api-config.interface';
 
 @UntilDestroy()
 @Component({
@@ -96,6 +97,8 @@ export class PublisherListComponent implements OnInit {
   apisSubject: BehaviorSubject<Api[]> = new BehaviorSubject([]);
   data$: Observable<Api[]> = this.apisSubject.asObservable();
   profiles$ = this.apiConfigService.profiles$;
+  activeProfile: Profile;
+
   isLoadApiDetail = new BehaviorSubject<boolean>(false);
 
   constructor(
@@ -129,7 +132,10 @@ export class PublisherListComponent implements OnInit {
           });
       });
 
-    this.profiles$.pipe(untilDestroyed(this)).subscribe(() => this.fetchData());
+    this.profiles$.pipe(untilDestroyed(this)).subscribe(() => {
+      this.fetchData();
+      this.activeProfile = this.apiConfigService.getActiveProfile();
+    });
 
     this.route.queryParamMap.pipe(
       map((params: any) => params.has('apiId')),

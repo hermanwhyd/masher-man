@@ -19,6 +19,7 @@ export interface Profile {
   active: boolean;
   name: string;
   portalUrl: string;
+  gatewayUrl: string;
 }
 
 export interface Session {

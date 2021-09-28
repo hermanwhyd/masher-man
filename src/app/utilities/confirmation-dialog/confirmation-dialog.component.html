@@ -11,7 +11,7 @@
   <p class="py-5" [innerHtml]="message"></p>
 </mat-dialog-content>
 
-<mat-dialog-actions class="m-0 p-2" fxLayout="row" fxLayoutAlign="end center">
+<mat-dialog-actions class="m-0 -mb-3" fxLayout="row" fxLayoutAlign="end center">
   <button mat-button class="mr-4" mat-dialog-close tabindex="-1">{{cancelButtonText | uppercase}}</button>
   <button mat-button color="primary" (click)="onConfirmClick()" tabindex="1">{{confirmButtonText | uppercase}}</button>
 </mat-dialog-actions>

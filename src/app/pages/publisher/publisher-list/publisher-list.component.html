@@ -7,10 +7,10 @@
         <span @fadeInRight class="ml-4 block">Publisher</span>
       </h2>
 
-      <!-- <mat-button-toggle-group class="mt-4 sm:mt-0">
-        <mat-button-toggle>AKTIF</mat-button-toggle>
-        <mat-button-toggle>ARSIP</mat-button-toggle>
-      </mat-button-toggle-group> -->
+      <a href="{{ activeProfile.portalUrl }}/publisher/apis" mat-raised-button
+        class="bg-contrast-white text-orange hidden sm:block py-1 px-4" target="_blank">
+        <mat-icon [icIcon]="icGlobe" size="18px" inline="true" class="mr-1"></mat-icon> PORTAL
+      </a>
     </div>
   </vex-page-layout-header>
 

@@ -40,6 +40,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import icFolderPlush from '@iconify/icons-fa-solid/folder-plus';
 import { MatDialog } from '@angular/material/dialog';
 import { StoreSubscribeComponent } from '../store-subscribe/store-subscribe.component';
+import { Profile } from 'src/app/types/api-config.interface';
 
 @UntilDestroy()
 @Component({
@@ -98,6 +99,8 @@ export class StoreListComponent implements OnInit {
   apisSubject: BehaviorSubject<Api[]> = new BehaviorSubject([]);
   data$: Observable<Api[]> = this.apisSubject.asObservable();
   profiles$ = this.apiConfigService.profiles$;
+  activeProfile: Profile;
+
   isLoadApiDetail = new BehaviorSubject<boolean>(false);
 
   constructor(
@@ -131,7 +134,10 @@ export class StoreListComponent implements OnInit {
           });
       });
 
-    this.profiles$.pipe(untilDestroyed(this)).subscribe(() => this.fetchData());
+    this.profiles$.pipe(untilDestroyed(this)).subscribe(() => {
+      this.fetchData();
+      this.activeProfile = this.apiConfigService.getActiveProfile();
+    });
 
     this.route.queryParamMap.pipe(
       map((params: any) => params.has('apiId') || params.has('apiIdentifier')),

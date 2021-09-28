@@ -28,7 +28,6 @@ import { arrayPrimitiveTester, PublisherArrayPrimitiveControlComponent } from 's
 import { AccountPortalComponent } from 'src/app/pages/shared/controls/account-portal.component';
 import { Subscription } from 'src/app/types/subscription.interface';
 import { SubscriptionService } from 'src/app/services/subscription.service';
-import { ConfirmationDialogComponent } from 'src/app/utilities/confirmation-dialog/confirmation-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 
 const appearance: MatFormFieldDefaultOptions = {
