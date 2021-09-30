@@ -5,6 +5,8 @@ import icPencil from '@iconify/icons-ic/edit';
 import icSearch from '@iconify/icons-ic/twotone-search';
 import icClear from '@iconify/icons-ic/round-clear';
 import icInfo from '@iconify/icons-ic/outline-info';
+import icFile from '@iconify/icons-fa-solid/file-code';
+import icSetting from '@iconify/icons-ic/settings';
 
 import { ActivatedRoute } from '@angular/router';
 import { debounceTime, distinctUntilChanged, filter, finalize, map, switchMap } from 'rxjs/operators';
@@ -37,6 +39,10 @@ import { FormControl } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from 'src/app/utilities/confirmation-dialog/confirmation-dialog.component';
+import { upperCase } from 'lodash';
+
+import { CurlGenerator } from 'curl-generator';
+import { MarkdownDialogComponent } from 'src/app/utilities/markdown-dialog/markdown-dialog.component';
 
 const appearance: MatFormFieldDefaultOptions = {
   appearance: 'outline'
@@ -67,6 +73,8 @@ export class StoreApplicationDetailComponent implements OnInit {
   icPencil = icPencil;
   icClear = icClear;
   icInfo = icInfo;
+  icFile = icFile;
+  icSetting = icSetting;
 
   @Output() addOrUpdateModel = new EventEmitter<Application>();
 
@@ -216,5 +224,49 @@ export class StoreApplicationDetailComponent implements OnInit {
 
   onAdvancedSearchTogle(change: MatSlideToggleChange) {
     this.isAdvancedSrc = change.checked;
+  }
+
+  public createDocs() {
+    // header
+    const appSpec: any = [
+      { h1: this.model.name },
+      { p: this.model.description || '' }
+    ];
+
+    // contents
+    appSpec.push({ h2: 'Application Keys' });
+
+    const rows = [];
+    this.model.keys.forEach(k => {
+      rows.push([k.keyType, k.consumerKey, k.consumerSecret]);
+    });
+
+    appSpec.push({
+      table: {
+        headers: ['Type', 'Consumer Key', 'Consumer Secret'],
+        rows: [...rows]
+      }
+    });
+
+    // add usage example
+    const finalHost = this.apiConfigService.getActiveProfile().gatewayUrl;
+
+    const contentRq: any = `curl -k -d "grant_type=client_credentials" -H "Authorization: Basic Base64(consumer-key:consumer-secret)" ${finalHost}/token`;
+    appSpec.push({ h4: 'Request Payload' });
+    appSpec.push({ code: { language: 'shell', content: contentRq } });
+
+
+    const contentRs: any = '{"access_token":"54880ec2-12d5-3e37-b748-5a53bbf0aac5","scope":"am_application_scope default","token_type":"Bearer","expires_in":3600}';
+    appSpec.push({ h4: 'Response Payload' });
+    appSpec.push({ code: { language: 'json', content: contentRs } });
+
+    // footer
+    appSpec.push({ h2: 'Support' });
+    appSpec.push({ p: 'For support please contact key account manager.' });
+
+    this.dialog.open(MarkdownDialogComponent, {
+      data: appSpec,
+      width: '750px'
+    });
   }
 }

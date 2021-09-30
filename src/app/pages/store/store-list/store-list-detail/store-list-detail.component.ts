@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 import icArrowBack from '@iconify/icons-ic/twotone-arrow-back';
 import icPencil from '@iconify/icons-ic/edit';
+import icFile from '@iconify/icons-fa-solid/file-code';
 
 import { ApiDetail, EndPointConfig } from 'src/app/types/api.interface';
 import { ActivatedRoute } from '@angular/router';
@@ -35,6 +36,13 @@ import { ConfirmationDialogComponent } from 'src/app/utilities/confirmation-dial
 import { MatDialog } from '@angular/material/dialog';
 import { SubscriptionService } from '../../../../services/subscription.service';
 import { Application } from 'src/app/types/application.interface';
+import { MarkdownDialogComponent } from 'src/app/utilities/markdown-dialog/markdown-dialog.component';
+import { upperCase } from 'lodash';
+import * as queryString from 'query-string';
+
+import { Resolver } from '@stoplight/json-ref-resolver';
+import { CurlGenerator } from 'curl-generator';
+const resolver = new Resolver();
 
 const appearance: MatFormFieldDefaultOptions = {
   appearance: 'outline'
@@ -63,6 +71,7 @@ export class StoreListDetailComponent implements OnInit {
 
   icArrowBack = icArrowBack;
   icPencil = icPencil;
+  icFile = icFile;
 
   model: ApiDetail;
 
@@ -252,5 +261,94 @@ export class StoreListDetailComponent implements OnInit {
 
   getApplicationName(appId: string) {
     return this.applications.find(app => app.applicationId === appId)?.name || appId;
+  }
+
+  public async createDocs() {
+
+    // header
+    const apiSpec: any = [
+      { h1: this.model.name },
+      { p: this.model.description || '' }
+    ];
+
+    // contents
+    const resolved = await resolver.resolve(JSON.parse(this.model.apiDefinition));
+    const apiDefinition = JSON.parse(JSON.stringify(resolved.result));
+
+    apiSpec.push({ h2: 'API Reference' });
+
+    for (const [path, methods] of Object.entries(apiDefinition.paths)) {
+      for (const [method, value] of Object.entries(methods)) {
+        apiSpec.push({ h3: value.summary || 'Default' });
+        apiSpec.push({ code: { language: 'typescript', content: `${method} ${path}` } });
+
+        // construct http param and header
+        let httpBody: any = {};
+        const httpParams: any = {};
+        const httpHeaders: any = {
+          'Content-type': (!value.consumes) ? 'application/json' : value.consumes.join(', '),
+          Authorization: 'bearer {{access_token}}'
+        };
+
+        // add parameter
+        if (!!value.parameters) {
+          const rows = [];
+          value.parameters.forEach(p => {
+            const row = [p.name || '', p.description || '', p.in || '', p.type || '', String(p.required || 'false')];
+
+            if (p.in === 'query') {
+              httpParams[p.name] = p.name;
+            }
+
+            if (p.in === 'header') {
+              httpHeaders[p.name] = `{{${p.name}}}`;
+            }
+
+            if (p.in === 'body' && p.schema) {
+              httpBody = p.schema;
+              row[3] = 'object';
+            }
+
+            rows.push(row);
+          });
+
+          if (value.requestBody) {
+
+          }
+
+          apiSpec.push({
+            table: {
+              headers: ['Parameter Name', 'Description', 'Parameter Type', 'Data Type', 'Required'],
+              rows: [...rows]
+            }
+          });
+        }
+
+        // add usage example
+        const finalHost = this.model.endpointURLs[0]?.environmentURLs.https || this.model.endpointURLs[0]?.environmentURLs.https;
+        const finalUrl = queryString.stringifyUrl({ url: path === '/*' ? '' : path, query: httpParams });
+
+        const params: any = {
+          url: finalHost + finalUrl,
+          method: upperCase(method),
+          headers: httpHeaders,
+          body: httpBody
+        };
+
+        const content: any = CurlGenerator(params);
+
+        apiSpec.push({ h4: 'Usage/Example' });
+        apiSpec.push({ code: { language: 'shell', content } });
+      }
+    }
+
+    // footer
+    apiSpec.push({ h2: 'Support' });
+    apiSpec.push({ p: 'For support please contact key account manager.' });
+
+    this.dialog.open(MarkdownDialogComponent, {
+      data: apiSpec,
+      width: '720px'
+    });
   }
 }

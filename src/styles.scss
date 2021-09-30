@@ -1,20 +1,20 @@
 @import "~simplebar/dist/simplebar.css";
 @import "./@vex/styles/core";
-
-@import '~jsoneditor/dist/jsoneditor.min.css';
+@import "~highlight.js/styles/androidstudio.css";
+@import "~jsoneditor/dist/jsoneditor.min.css";
 
 /**
   Class directive for mat button loading
  */
 .mat-loading {
-	.mat-button-wrapper {
-		visibility: hidden;
-	}
-	.mat-progress-spinner {
-		position: absolute;
-		top: calc(50% - 10px);
-		left: calc(50% - 10px);
-	}
+  .mat-button-wrapper {
+    visibility: hidden;
+  }
+  .mat-progress-spinner {
+    position: absolute;
+    top: calc(50% - 10px);
+    left: calc(50% - 10px);
+  }
 }
 
 /**
@@ -41,7 +41,7 @@
     margin-top: -5px;
   }
 }
-@each $name,$color in (default,#777),(info,#5bc0de), {
+@each $name, $color in (default, #777), (info, #5bc0de) {
   .callout-#{$name} {
     border-left-color: $color;
     h4 {

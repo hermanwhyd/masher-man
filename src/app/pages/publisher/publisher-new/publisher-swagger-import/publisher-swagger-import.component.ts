@@ -51,16 +51,15 @@ export class PublisherSwaggerImportComponent implements OnInit {
   @ViewChild('stepper') private myStepper: MatStepper;
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: any,
-    private dialogRef: MatDialogRef<PublisherSwaggerImportComponent>,
+    public dialogRef: MatDialogRef<PublisherSwaggerImportComponent>,
     private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.swagger = this.data;
-
     this.isOpenApi = this.data.swagger === undefined;
 
     const host = this.isOpenApi ? this.swagger.servers[0].url : 'http://' + this.swagger.host;
-    const title = this.isOpenApi ? this.swagger.info.title : this.swagger.host.split('.')[0];
+    const title = this.isOpenApi ? this.swagger.info?.title : this.swagger.host?.split('.')[0];
 
     this.formControl.name.setValue(pascalCase(title) + '-v1');
     this.formControl.context.setValue(paramCase(title) + '/{version}');

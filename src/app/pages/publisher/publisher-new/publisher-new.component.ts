@@ -5,13 +5,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import icCreate from '@iconify/icons-ic/outline-build-circle';
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
-import { finalize } from 'rxjs/operators';
 
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger40ms } from 'src/@vex/animations/stagger.animation';
 import { ApiDetail } from 'src/app/types/api.interface';
 import { PublisherService } from '../services/publisher.service';
 import { PublisherSwaggerImportComponent } from './publisher-swagger-import/publisher-swagger-import.component';
+
+import { Resolver } from '@stoplight/json-ref-resolver';
+const resolver = new Resolver();
 
 @Component({
   selector: 'vex-publisher-new',
@@ -55,9 +57,15 @@ export class PublisherNewComponent implements OnInit {
     return this.editor && this.editor.isValidJson();
   }
 
-  importFromClipboard() {
+  async importFromClipboard() {
+    const resolved = await resolver.resolve(this.editor.get());
+    const swagger = JSON.parse(JSON.stringify(resolved.result));
+    delete (swagger.definitions);
+    delete (swagger.components);
+    delete (swagger.tags);
+
     this.dialog.open(PublisherSwaggerImportComponent, {
-      data: this.editor.get(),
+      data: swagger,
       width: '900px',
       disableClose: true
     })
@@ -69,31 +77,40 @@ export class PublisherNewComponent implements OnInit {
       });
   }
 
-  importFromURL() {
+  async importFromURL() {
     this.isLoading = true;
     this.publisherService.getSwaggerJson(this.swaggerCtrl.value)
-      .pipe(finalize(() => this.isLoading = false))
-      .subscribe((data) => {
-        this.dialog.open(PublisherSwaggerImportComponent, {
-          data,
-          width: '900px',
-          disableClose: true
-        })
-          .afterClosed().subscribe((drafts: ApiDetail[]) => {
-            if (drafts) {
-              this.publisherService.draftAPIs.next(drafts);
-              this.router.navigate(['../', 'edit'], { relativeTo: this.route });
-            }
-          });
-      },
-        () => {
-          this.isLoading = false;
-        }
-      );
+      .toPromise()
+      .then(data => {
+        resolver.resolve(data).then(resolved => {
+          const swagger = JSON.parse(JSON.stringify(resolved.result));
+          delete (swagger.definitions);
+          delete (swagger.components);
+          delete (swagger.tags);
+
+          this.dialog.open(PublisherSwaggerImportComponent, {
+            data: swagger,
+            width: '900px',
+            disableClose: true
+          })
+            .afterClosed()
+            .subscribe((drafts: ApiDetail[]) => {
+              if (drafts) {
+                this.publisherService.draftAPIs.next(drafts);
+                this.router.navigate(['../', 'edit'], { relativeTo: this.route });
+              } else {
+                this.isLoading = false;
+                this.cd.markForCheck();
+              }
+            });
+        });
+      }).catch(() => {
+        this.isLoading = false;
+        this.cd.markForCheck();
+      });
   }
 
   createNew() {
     this.router.navigate(['../', 'edit'], { relativeTo: this.route });
   }
-
 }

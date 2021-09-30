@@ -8,9 +8,18 @@
 ::ng-deep .mat-form-field-disabled {
   .mat-input-element {
     opacity: 1;
-
   }
   .mat-form-field-label {
     opacity: 1;
   }
+}
+
+::ng-deep .mat-input-element:disabled,
+.mat-form-field-type-mat-native-select.mat-form-field-disabled
+  .mat-form-field-infix::after {
+  color: currentColor;
+}
+
+::ng-deep .mat-chip.mat-standard-chip.mat-chip-disabled {
+  opacity: 1;
 }
