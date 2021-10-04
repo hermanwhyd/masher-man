@@ -42,6 +42,7 @@ import * as queryString from 'query-string';
 
 import { Resolver } from '@stoplight/json-ref-resolver';
 import { CurlGenerator } from 'curl-generator';
+import { ApplicationService } from 'src/app/services/application.service';
 const resolver = new Resolver();
 
 const appearance: MatFormFieldDefaultOptions = {
@@ -114,6 +115,7 @@ export class StoreListDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private apiConfigService: ApiConfigService,
     private storeService: StoreService,
+    private applicationService: ApplicationService,
     private dialog: MatDialog,
     private publisherService: PublisherService,
     private subscriptionService: SubscriptionService) {
@@ -197,7 +199,7 @@ export class StoreListDetailComponent implements OnInit {
     // subscription tab
     if (index === 2 && this.subscribers.length === 0) {
       forkJoin({
-        callApps: this.storeService.getApplications(),
+        callApps: this.applicationService.getApplications(),
         callSubs: this.subscriptionService.getApiSubscriber(this.model?.id)
       })
         .pipe(

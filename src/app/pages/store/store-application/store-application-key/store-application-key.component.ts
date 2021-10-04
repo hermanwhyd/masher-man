@@ -4,49 +4,38 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import icClose from '@iconify/icons-ic/twotone-close';
 import { finalize } from 'rxjs/operators';
 import { ApplicationService } from 'src/app/services/application.service';
-import { TierService } from 'src/app/services/tier.service';
 import { Application } from 'src/app/types/application.interface';
-import { Tier } from 'src/app/types/tier.interface';
 
 @Component({
-  selector: 'vex-store-application-edit',
-  templateUrl: './store-application-edit.component.html',
-  styleUrls: ['./store-application-edit.component.scss']
+  selector: 'vex-store-application-key',
+  templateUrl: './store-application-key.component.html',
+  styleUrls: ['./store-application-key.component.scss']
 })
-export class StoreApplicationEditComponent implements OnInit {
+export class StoreApplicationKeyComponent implements OnInit {
 
-  isNew = true;
   isLoading = false;
 
   model: Application;
-  tiers: Tier[];
+  keyTypes: string[] = ['PRODUCTION', 'SANDBOX'];
 
   icClose = icClose;
 
   form = this.fb.group({
-    name: ['', Validators.required],
-    description: [''],
-    throttlingTier: ['Unlimited', Validators.required],
-    callbackUrl: [''],
-    groupId: ['']
+    validityTime: [3600, Validators.required],
+    keyType: ['PRODUCTION', Validators.required],
+    accessAllowDomains: [['ALL']],
+    scopes: [['am_application_scope', 'default']],
+    supportedGrantTypes: [['urn:ietf:params:oauth:grant-type:saml2-bearer', 'iwa:ntlm', 'refresh_token', 'client_credentials', 'password']]
   });
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: any,
-    private dialogRef: MatDialogRef<StoreApplicationEditComponent>,
-    private tierService: TierService,
+    private dialogRef: MatDialogRef<StoreApplicationKeyComponent>,
     private applicationService: ApplicationService,
     private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.model = this.data;
-
-    if (this.model?.applicationId) {
-      this.isNew = true;
-      this.form.patchValue(this.model);
-    }
-
-    this.tierService.applicationTiers().subscribe(rs => this.tiers = rs.list);
   }
 
   get submitable(): boolean {
@@ -59,13 +48,19 @@ export class StoreApplicationEditComponent implements OnInit {
 
   submit() {
     const formData = this.form.getRawValue();
-    const application = { ...this.model, ...formData };
-
-    this.isLoading = true;
-    this.applicationService.createOrUpdateApplication(application)
+    this.applicationService.generateKey(this.model.applicationId, formData)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(data => {
-        this.dialogRef.close(data);
+        const keys = [...this.model.keys];
+        const idx = keys.findIndex(k => k.keyType === formData.keyType);
+
+        if (idx > -1) {
+          keys[idx] = data;
+        } else {
+          keys.push(data);
+        }
+
+        this.dialogRef.close(keys);
       });
   }
 }

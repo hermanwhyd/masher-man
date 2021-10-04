@@ -31,7 +31,6 @@ import { untilDestroyed, UntilDestroy } from '@ngneat/until-destroy';
 import { SnackbarNotifComponent } from 'src/app/utilities/snackbar-notif/snackbar-notif.component';
 import { ActivatedRoute } from '@angular/router';
 import { statusClass } from 'src/app/utilities/function/api-status';
-import { StoreService } from '../services/store.service';
 import icFolderPlush from '@iconify/icons-fa-solid/folder-plus';
 import { Application } from 'src/app/types/application.interface';
 
@@ -40,6 +39,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { StoreApplicationEditComponent } from './store-application-edit/store-application-edit.component';
 import { Profile } from 'src/app/types/api-config.interface';
+import { ApplicationService } from 'src/app/services/application.service';
 
 @UntilDestroy()
 @Component({
@@ -106,7 +106,7 @@ export class StoreApplicationComponent implements OnInit {
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
     private apiConfigService: ApiConfigService,
-    private storeService: StoreService,
+    private applicationService: ApplicationService,
     private dialog: MatDialog,
   ) { }
 
@@ -146,7 +146,7 @@ export class StoreApplicationComponent implements OnInit {
 
   fetchData() {
     this.isLoading = true;
-    this.storeService.getApplications()
+    this.applicationService.getApplications()
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(rs => {
         this.appsSubject.next(rs.list);

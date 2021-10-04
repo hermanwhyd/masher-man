@@ -9,9 +9,12 @@ export interface Application {
   keys?: Key[];
 }
 
-export interface Key {
+export interface Consumer {
   consumerKey: string;
   consumerSecret: string;
+}
+
+export interface Key extends Consumer {
   keyState: string;
   keyType: string;
   supportedGrantTypes: null;
@@ -22,4 +25,12 @@ export interface Token {
   validityTime: number;
   accessToken: string;
   tokenScopes: string[];
+}
+
+export interface GenerateKey {
+  validityTime: string;
+  keyType: string;
+  accessAllowDomains: string[];
+  scopes: string[];
+  supportedGrantTypes: string[];
 }

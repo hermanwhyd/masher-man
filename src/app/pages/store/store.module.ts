@@ -43,6 +43,7 @@ import { StoreApplicationComponent } from './store-application/store-application
 import { StoreApplicationDetailComponent } from './store-application/store-application-detail/store-application-detail.component';
 import { StoreApplicationEditComponent } from './store-application/store-application-edit/store-application-edit.component';
 import { StoreAppNamePipe } from '../../pipes/store-app-name.pipe';
+import { StoreApplicationKeyComponent } from './store-application/store-application-key/store-application-key.component';
 
 const routes: Routes = [
   {
@@ -67,7 +68,8 @@ const routes: Routes = [
     StoreApplicationComponent,
     StoreApplicationDetailComponent,
     StoreApplicationEditComponent,
-    StoreAppNamePipe
+    StoreAppNamePipe,
+    StoreApplicationKeyComponent
   ],
   imports: [
     RouterModule.forChild(routes),

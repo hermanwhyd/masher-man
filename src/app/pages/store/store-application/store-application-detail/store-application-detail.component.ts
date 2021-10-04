@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 import icArrowBack from '@iconify/icons-ic/twotone-arrow-back';
 import icPencil from '@iconify/icons-ic/edit';
@@ -39,10 +39,10 @@ import { FormControl } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from 'src/app/utilities/confirmation-dialog/confirmation-dialog.component';
-import { upperCase } from 'lodash';
 
-import { CurlGenerator } from 'curl-generator';
 import { MarkdownDialogComponent } from 'src/app/utilities/markdown-dialog/markdown-dialog.component';
+import { StoreApplicationKeyComponent } from '../store-application-key/store-application-key.component';
+import { ApplicationService } from 'src/app/services/application.service';
 
 const appearance: MatFormFieldDefaultOptions = {
   appearance: 'outline'
@@ -114,12 +114,12 @@ export class StoreApplicationDetailComponent implements OnInit {
     }
   ];
 
-  @ViewChild('swagger') swaggerDom: ElementRef<HTMLDivElement>;
   constructor(
     private route: ActivatedRoute,
     private apiConfigService: ApiConfigService,
     private dialog: MatDialog,
     private storeService: StoreService,
+    private applicationService: ApplicationService,
     private subscriptionService: SubscriptionService) {
     this.options.mode = 'code';
     this.options.modes = ['code', 'tree'];
@@ -138,7 +138,7 @@ export class StoreApplicationDetailComponent implements OnInit {
       map((params: any) => params.get('appId')),
       distinctUntilChanged(),
       filter<string>(Boolean),
-      switchMap(appId => this.storeService.getApplicationDetail(appId).pipe(finalize(() => this.isLoading = false)))
+      switchMap(appId => this.applicationService.getApplicationDetail(appId).pipe(finalize(() => this.isLoading = false)))
     ).subscribe((data: Application) => {
       this.model = data;
     });
@@ -226,7 +226,19 @@ export class StoreApplicationDetailComponent implements OnInit {
     this.isAdvancedSrc = change.checked;
   }
 
-  public createDocs() {
+  generateKey() {
+    this.dialog.open(StoreApplicationKeyComponent, {
+      data: this.model,
+      width: '500px'
+    })
+      .afterClosed().subscribe(keys => {
+        if (!!keys) {
+          this.model = { ...this.model, keys };
+        }
+      });
+  }
+
+  createDocs() {
     // header
     const appSpec: any = [
       { h1: this.model.name },

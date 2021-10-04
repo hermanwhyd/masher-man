@@ -1,0 +1,41 @@
+<form (ngSubmit)="submit()" [formGroup]="form" autocomplete="off">
+  <div fxLayout="row" fxLayoutAlign="start center" mat-dialog-title>
+    <h2 class="headline m-0" fxFlex="auto">
+      Application Key
+    </h2>
+    <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
+      <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+  </div>
+
+  <mat-divider class="-mx-6 text-border"></mat-divider>
+
+  <mat-dialog-content fxLayout="column">
+
+    <mat-form-field appearance="outline" class="mt-6">
+      <mat-label>Key Type</mat-label>
+      <mat-select cdkFocusInitial formControlName="keyType" required>
+        <mat-option *ngFor="let item of keyTypes" [value]="item">
+          {{ item }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="(formControl.keyType.touched) && formControl.keyType.errors?.required">
+        Key Type is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Validity Period</mat-label>
+      <input formControlName="validityTime" type="number" min="-1" matInput required>
+      <mat-error *ngIf="(formControl.validityTime.touched) && formControl.validityTime.errors?.required">
+        Validity Period is required
+      </mat-error>
+    </mat-form-field>
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close type="button">CANCEL</button>
+    <button color="primary" mat-button type="submit" [loading]="isLoading">GENERATE</button>
+  </mat-dialog-actions>
+</form>

@@ -10,9 +10,9 @@ import { Api } from 'src/app/types/api.interface';
 import { Application } from 'src/app/types/application.interface';
 import { Subscription } from 'src/app/types/subscription.interface';
 import { SnackbarNotifComponent } from 'src/app/utilities/snackbar-notif/snackbar-notif.component';
-import { StoreService } from '../services/store.service';
 import { SubscriptionService } from '../../../services/subscription.service';
 import { StoreListComponent } from '../store-list/store-list.component';
+import { ApplicationService } from 'src/app/services/application.service';
 
 @Component({
   selector: 'vex-store-subscribe',
@@ -37,7 +37,7 @@ export class StoreSubscribeComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: Api[],
-    private storeService: StoreService,
+    private applicationService: ApplicationService,
     private subscriptionService: SubscriptionService,
     private snackBar: MatSnackBar,
     private dialogRef: MatDialogRef<StoreListComponent>,
@@ -50,7 +50,7 @@ export class StoreSubscribeComponent implements OnInit {
   }
 
   fetchApplication(): void {
-    this.storeService.getApplications()
+    this.applicationService.getApplications()
       .pipe(finalize(() => {
         this.isLoading = false;
         this.cd.markForCheck();

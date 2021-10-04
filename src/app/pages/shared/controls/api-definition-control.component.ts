@@ -22,7 +22,7 @@ import { apiSpecificationExample } from 'src/assets/static-data/template/api-spe
       <mat-tab label="Swagger">
         <div #swagger></div>
       </mat-tab>
-      <mat-tab label="Source" [disabled]="!this.isEnabled()">
+      <mat-tab label="Editor" [disabled]="!this.isEnabled()">
         <p class="mt-0 py-2 text-secondary">
           Use extenal editor, e.g. <a href="https://editor.swagger.io" target="_blank" class="text-cyan">swagger.io</a>, <a class="text-cyan" href="https://www.apibldr.com" target="_blank">apibldr.com</a>
           or others for better experience while editing Open Api Specification document.
@@ -46,7 +46,7 @@ import { apiSpecificationExample } from 'src/assets/static-data/template/api-spe
           </div>
           <json-editor [options]="options" [data]="apiDef"></json-editor>
         </div>
-        <div class="text-secondary caption py-2">If you need a inspiration, here is an <a (click)="showExample()" class="text-teal cursor-pointer">example</a></div>
+        <div class="text-secondary caption py-2">After make a changes, don't forget to click Apply Changes. If you need a inspiration, here is an <a (click)="showExample()" class="text-teal cursor-pointer">example</a>.</div>
       </mat-tab>
     </mat-tab-group>
   `,

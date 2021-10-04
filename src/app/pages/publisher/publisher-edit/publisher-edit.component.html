@@ -5,7 +5,7 @@
   </button>
   <button *ngIf="(errorsSubject | async).length == 0" mat-raised-button (click)="publish()"
     [disabled]="(draftCountSubject | async) == 0" [loading]="isLoading" color="primary">
-    Publish
+    Save and Publish
   </button>
 </vex-secondary-toolbar>
 <div class="bg-card" vexContainer>

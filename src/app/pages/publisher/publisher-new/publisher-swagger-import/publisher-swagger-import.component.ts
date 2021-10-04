@@ -134,8 +134,16 @@ export class PublisherSwaggerImportComponent implements OnInit {
         const apiContext = `${form.context}/${lowerCase(method)}-${paramCase(path.split('/').pop())}`;
 
         const apiDefinitionSwagger = {
-          ...this.swagger, ... { info: { title: apiName }, paths: { ['/*']: { [`${method}`]: spec } } }
+          openapi: '3.0.0',
+          ...{ paths: this.swagger.paths },
+          ...{ paths: { ['/*']: { [`${method}`]: spec } } }
         };
+
+        // delete (apiDefinitionSwagger.info);
+        // delete (apiDefinitionSwagger.externalDocs);
+        // delete (apiDefinitionSwagger.servers);
+        // delete (apiDefinitionSwagger.host);
+        // delete (apiDefinitionSwagger.basePath);
 
         let allowedHeaders = [];
         if (spec.parameters) {
