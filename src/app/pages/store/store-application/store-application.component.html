@@ -1,15 +1,20 @@
 <vex-page-layout>
 
   <vex-page-layout-header class="pb-4 pt-6" fxLayout="column" fxLayoutAlign="start start">
-    <div class="w-full flex flex-col sm:flex-row justify-between">
-      <h2 class="headline text-primary-contrast m-0 flex items-center mr-6">
+    <div class="w-full flex flex-col sm:flex-row justify-between gap-3">
+      <h2 class="flex-auto headline text-primary-contrast m-0 flex items-center mr-6">
         <ic-icon @scaleIn [icon]="icFolder" class="hidden sm:block"></ic-icon>
         <span @fadeInRight class="ml-4 block">Application</span>
       </h2>
 
-      <a href="{{ activeProfile.portalUrl }}/store/site/pages/applications.jag" mat-raised-button
-        class="bg-contrast-white text-orange hidden sm:block py-1 px-4" target="_blank">
-        <mat-icon [icIcon]="icGlobe" size="18px" inline="true" class="mr-1"></mat-icon> PORTAL
+      <a href="{{ activeProfile.portalUrl }}/manage-service" mat-raised-button
+        class="flex-none bg-contrast-white text-cyan hidden sm:block py-1 px-4" target="_blank">
+        <mat-icon [icIcon]="icGlobe" size="18px" inline="true" class="mr-1"></mat-icon> MANAGE
+      </a>
+
+      <a href="{{ activeProfile.portalUrl }}/store/apis/list" mat-raised-button
+        class="flex-none bg-contrast-white text-orange hidden sm:block py-1 px-4" target="_blank">
+        <mat-icon [icIcon]="icGlobe" size="18px" inline="true" class="mr-1"></mat-icon> STORE
       </a>
     </div>
   </vex-page-layout-header>

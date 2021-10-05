@@ -43,6 +43,8 @@ import * as queryString from 'query-string';
 import { Resolver } from '@stoplight/json-ref-resolver';
 import { CurlGenerator } from 'curl-generator';
 import { ApplicationService } from 'src/app/services/application.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackbarNotifComponent } from 'src/app/utilities/snackbar-notif/snackbar-notif.component';
 const resolver = new Resolver();
 
 const appearance: MatFormFieldDefaultOptions = {
@@ -117,6 +119,7 @@ export class StoreListDetailComponent implements OnInit {
     private storeService: StoreService,
     private applicationService: ApplicationService,
     private dialog: MatDialog,
+    private snackBar: MatSnackBar,
     private publisherService: PublisherService,
     private subscriptionService: SubscriptionService) {
     this.options.mode = 'code';
@@ -163,7 +166,7 @@ export class StoreListDetailComponent implements OnInit {
       distinctUntilChanged(),
       filter<string>(Boolean),
       switchMap(apiIdentifier => {
-        apiIdentifier = apiIdentifier.replace('%252D', '%2D');
+        apiIdentifier = apiIdentifier.split('%252D').join('%2D');
         if (this.apiConfigService.getActivePublisher() != null) {
           return forkJoin({
             publisher: this.publisherService.getApiDetail(apiIdentifier).pipe(catchError(error => throwError(error))),
@@ -227,6 +230,10 @@ export class StoreListDetailComponent implements OnInit {
       const models = this.subscribers;
       const idx = models.indexOf(item);
       models[idx] = rs[0];
+      this.snackBar.openFromComponent(
+        SnackbarNotifComponent,
+        { data: { message: 'APIs subscription success, pending for approval via manage-service portal!', type: 'success' } }
+      );
     });
   }
 
@@ -285,7 +292,7 @@ export class StoreListDetailComponent implements OnInit {
         apiSpec.push({ code: { language: 'typescript', content: `${method} ${path}` } });
 
         // construct http param and header
-        let httpBody: any = {};
+        let httpBody: any = '{{json body}}';
         const httpParams: any = {};
         const httpHeaders: any = {
           'Content-type': (!value.consumes) ? 'application/json' : value.consumes.join(', '),
@@ -307,7 +314,7 @@ export class StoreListDetailComponent implements OnInit {
             }
 
             if (p.in === 'body' && p.schema) {
-              httpBody = p.schema;
+              // httpBody = '@body.json';
               row[3] = 'object';
             }
 

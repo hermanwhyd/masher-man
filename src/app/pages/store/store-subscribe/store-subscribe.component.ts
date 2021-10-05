@@ -84,10 +84,10 @@ export class StoreSubscribeComponent implements OnInit {
     })).subscribe(rs => {
       this.snackBar.openFromComponent(
         SnackbarNotifComponent,
-        { data: { message: 'APIs subscription success with status ON_HOLD, pending for approval!', type: 'success' } }
+        { data: { message: 'APIs subscription success, pending for approval via manage-service portal!', type: 'success' } }
       );
       this.dialogRef.close();
-    }, error => {
+    }, () => {
       this.isShowError = true;
     });
   }

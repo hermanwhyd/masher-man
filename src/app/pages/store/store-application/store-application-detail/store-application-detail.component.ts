@@ -43,6 +43,8 @@ import { ConfirmationDialogComponent } from 'src/app/utilities/confirmation-dial
 import { MarkdownDialogComponent } from 'src/app/utilities/markdown-dialog/markdown-dialog.component';
 import { StoreApplicationKeyComponent } from '../store-application-key/store-application-key.component';
 import { ApplicationService } from 'src/app/services/application.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackbarNotifComponent } from 'src/app/utilities/snackbar-notif/snackbar-notif.component';
 
 const appearance: MatFormFieldDefaultOptions = {
   appearance: 'outline'
@@ -118,6 +120,7 @@ export class StoreApplicationDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private apiConfigService: ApiConfigService,
     private dialog: MatDialog,
+    private snackBar: MatSnackBar,
     private storeService: StoreService,
     private applicationService: ApplicationService,
     private subscriptionService: SubscriptionService) {
@@ -168,6 +171,10 @@ export class StoreApplicationDetailComponent implements OnInit {
       const models = this.subscriptionsSubject.value;
       models.push(rs[0]);
       this.subscriptionsSubject.next(models);
+      this.snackBar.openFromComponent(
+        SnackbarNotifComponent,
+        { data: { message: 'APIs subscription success, pending for approval via manage-service portal!', type: 'success' } }
+      );
     });
   }
 
@@ -212,7 +219,7 @@ export class StoreApplicationDetailComponent implements OnInit {
       this.storeService.paginate(0, 8, value).subscribe(rs => {
         let count = 0;
         rs.list.forEach((item) => {
-          const apiIdentifier = [item.provider, item.name.replace('-', '%2D'), item.version].join('-');
+          const apiIdentifier = [item.provider, item.name.split('-').join('%2D'), item.version].join('-');
           if (count < 5 && !this.subscriptionsSubject.value.some(s => s.apiIdentifier === apiIdentifier)) {
             this.subscriptionsFiltered.push({ apiIdentifier, tier: this.model.throttlingTier, applicationId: this.model.applicationId });
             count++;
