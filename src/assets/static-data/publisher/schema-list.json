@@ -23,8 +23,8 @@
         },
         "version": {
           "type": "string",
-          "minLength": 2,
-          "maxLength": 3
+          "minLength": 1,
+          "maxLength": 6
         },
         "provider": {
           "type": "string"
