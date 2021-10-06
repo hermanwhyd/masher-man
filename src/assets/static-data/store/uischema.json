@@ -41,6 +41,11 @@
           "type": "Control",
           "label": "Tags",
           "scope": "#/properties/tags"
+        },
+        {
+          "type": "Control",
+          "label": "Subscription Tiers",
+          "scope": "#/properties/tiers"
         }
       ]
     },

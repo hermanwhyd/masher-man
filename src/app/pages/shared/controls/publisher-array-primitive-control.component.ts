@@ -133,5 +133,9 @@ export const arrayPrimitiveTester: Tester = or(
   and(
     schemaTypeIs('array'),
     scopeEndsWith('tags')
+  ),
+  and(
+    schemaTypeIs('array'),
+    scopeEndsWith('tiers')
   )
 );
