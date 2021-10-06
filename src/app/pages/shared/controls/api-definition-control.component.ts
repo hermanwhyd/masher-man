@@ -112,7 +112,7 @@ export class ApiDefinitionControlComponent extends JsonFormsControl implements A
   initSwagger(): void {
     this.swaggerUIBundle = SwaggerUIBundle({
       domNode: this.swaggerDom.nativeElement,
-      deepLinking: true,
+      deepLinking: false,
       presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
       layout: 'BaseLayout',
       spec: this.apiDef,
