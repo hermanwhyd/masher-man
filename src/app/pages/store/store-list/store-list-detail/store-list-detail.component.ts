@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 import icArrowBack from '@iconify/icons-ic/twotone-arrow-back';
 import icPencil from '@iconify/icons-ic/edit';
@@ -6,7 +6,7 @@ import icFile from '@iconify/icons-fa-solid/file-code';
 
 import { ApiDetail, EndPointConfig } from 'src/app/types/api.interface';
 import { ActivatedRoute } from '@angular/router';
-import { catchError, distinctUntilChanged, filter, finalize, map, switchMap } from 'rxjs/operators';
+import { catchError, distinctUntilChanged, filter, finalize, map, mapTo, switchMap } from 'rxjs/operators';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
@@ -35,17 +35,21 @@ import { Subscription } from 'src/app/types/subscription.interface';
 import { ConfirmationDialogComponent } from 'src/app/utilities/confirmation-dialog/confirmation-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { SubscriptionService } from '../../../../services/subscription.service';
-import { Application } from 'src/app/types/application.interface';
+import { Application, Key } from 'src/app/types/application.interface';
 import { MarkdownDialogComponent } from 'src/app/utilities/markdown-dialog/markdown-dialog.component';
 import { upperCase } from 'lodash';
 import * as queryString from 'query-string';
 
-import { Resolver } from '@stoplight/json-ref-resolver';
+import { SwaggerUIBundle, SwaggerUIStandalonePreset } from 'swagger-ui-dist';
+
 import { CurlGenerator } from 'curl-generator';
 import { ApplicationService } from 'src/app/services/application.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarNotifComponent } from 'src/app/utilities/snackbar-notif/snackbar-notif.component';
-const resolver = new Resolver();
+import { FormBuilder } from '@angular/forms';
+import { Resolver } from '@stoplight/json-ref-resolver';
+import { AuthService } from 'src/app/pages/access/auth-manager/services/auth.service';
+const jsonRefResolver = new Resolver();
 
 const appearance: MatFormFieldDefaultOptions = {
   appearance: 'outline'
@@ -70,7 +74,7 @@ const appearance: MatFormFieldDefaultOptions = {
     }
   ]
 })
-export class StoreListDetailComponent implements OnInit {
+export class StoreListDetailComponent implements OnInit, AfterViewInit {
 
   icArrowBack = icArrowBack;
   icPencil = icPencil;
@@ -82,8 +86,18 @@ export class StoreListDetailComponent implements OnInit {
   subscribers = [] as Subscription[];
   applications = [] as Application[];
 
+  // Api Console tab
+  isLoadingToken = false;
+  isAuthUsingApiKey = false;
+  keyTypes: string[] = ['PRODUCTION', 'SANDBOX'];
+  formConsole = this.fb.group({
+    applicationId: [],
+    keyType: this.keyTypes[0],
+    authKey: [{ value: '', disabled: true }]
+  });
+
   isLoading = true;
-  isSwaggerLoaded = false;
+  swaggerUIBundle: SwaggerUIBundle;
 
   statusClass = statusClass;
 
@@ -121,9 +135,14 @@ export class StoreListDetailComponent implements OnInit {
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private publisherService: PublisherService,
-    private subscriptionService: SubscriptionService) {
+    private subscriptionService: SubscriptionService,
+    private authService: AuthService,
+    private fb: FormBuilder) {
     this.options.mode = 'code';
     this.options.modes = ['code', 'tree'];
+  }
+
+  ngAfterViewInit(): void {
   }
 
   ngOnInit(): void {
@@ -194,13 +213,70 @@ export class StoreListDetailComponent implements OnInit {
     });
   }
 
+  async initSwagger() {
+    const resolved = await jsonRefResolver.resolve(JSON.parse(this.model.apiDefinition));
+    const apiDef = JSON.parse(JSON.stringify(resolved.result));
+
+    const finalHost = this.model.endpointURLs[0]?.environmentURLs.https || this.model.endpointURLs[0]?.environmentURLs.http;
+    const finalHostUrl = new URL(finalHost);
+    const proxyHost = [this.apiConfigService.getApiUrl(), '/proxy', finalHost.split(finalHostUrl.host).pop()].join('');
+
+    let components: any = { securitySchemes: { authKey: { type: 'http', scheme: 'bearer' } } };
+    const security: any = [{ authKey: [] }];
+
+    if (this.model.name.endsWith('_CLIENTIDAUTH')) {
+      components = { securitySchemes: { authKey: { type: 'apiKey', in: 'query', name: 'API_KEY' } } };
+      this.isAuthUsingApiKey = true;
+    }
+
+    const apiDefinitionSwagger = {
+      openapi: '3.0.1',
+      info: apiDef.info,
+      servers: [{ url: proxyHost, description: 'Using Proxy Host' }, { url: finalHost, description: 'API endpoint URL' }],
+      components,
+      ...{ paths: apiDef.paths }
+    };
+
+
+    Object.values(apiDefinitionSwagger.paths).forEach(p => {
+      Object.values(p).forEach(op => {
+        op.security = security;
+      });
+    });
+
+    console.log(JSON.stringify(JSON.parse(this.model.apiDefinition), null, 2));
+    console.log(JSON.stringify(apiDefinitionSwagger, null, 2));
+
+    this.swaggerUIBundle = SwaggerUIBundle({
+      domNode: this.swaggerDom.nativeElement,
+      deepLinking: false,
+      presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
+      layout: 'BaseLayout',
+      spec: apiDefinitionSwagger,
+      // spec: JSON.parse(this.model.apiDefinition),
+      operationsSorter: 'alpha',
+      displayRequestDuration: true,
+      requestInterceptor: (request: any) => {
+        console.log(JSON.stringify(request, null, 2));
+
+        // proxy URL
+        request.url = request.url.replace('/*', '');
+
+        request.headers['Content-Type'] = request.headers['Content-Type'] || 'application/json';
+        request.headers['target-url'] = 'http://test.tos';
+
+        return request;
+      }
+    });
+  }
+
   togleJsonView(change: MatSlideToggleChange) {
     this.isShowJsonRaw = change.checked;
   }
 
   tabChange(index: number) {
-    // subscription tab
-    if (index === 2 && this.subscribers.length === 0) {
+    // subscription & apiconsole tab
+    if (index >= 2 && this.subscribers.length === 0) {
       forkJoin({
         callApps: this.applicationService.getApplications(),
         callSubs: this.subscriptionService.getApiSubscriber(this.model?.id)
@@ -221,8 +297,13 @@ export class StoreListDetailComponent implements OnInit {
           })
         ).subscribe((rs) => {
           this.subscribers = rs;
+          this.initSwagger();
         });
     }
+  }
+
+  get subscriberApi() {
+    return this.subscribers.filter(s => s.status === 'UNBLOCKED');
   }
 
   subscribe(item: Subscription) {
@@ -281,7 +362,7 @@ export class StoreListDetailComponent implements OnInit {
     ];
 
     // contents
-    const resolved = await resolver.resolve(JSON.parse(this.model.apiDefinition));
+    const resolved = await jsonRefResolver.resolve(JSON.parse(this.model.apiDefinition));
     const apiDefinition = JSON.parse(JSON.stringify(resolved.result));
 
     apiSpec.push({ h2: 'API Reference' });
@@ -292,7 +373,7 @@ export class StoreListDetailComponent implements OnInit {
         apiSpec.push({ code: { language: 'typescript', content: `${method} ${path}` } });
 
         // construct http param and header
-        let httpBody: any = '{{json body}}';
+        const httpBody: any = '{{json body}}';
         const httpParams: any = {};
         const httpHeaders: any = {
           'Content-type': (!value.consumes) ? 'application/json' : value.consumes.join(', '),
@@ -334,7 +415,7 @@ export class StoreListDetailComponent implements OnInit {
         }
 
         // add usage example
-        const finalHost = this.model.endpointURLs[0]?.environmentURLs.https || this.model.endpointURLs[0]?.environmentURLs.https;
+        const finalHost = this.model.endpointURLs[0]?.environmentURLs.https || this.model.endpointURLs[0]?.environmentURLs.http;
         const finalUrl = queryString.stringifyUrl({ url: path === '/*' ? '' : path, query: httpParams });
 
         const params: any = {
@@ -359,5 +440,26 @@ export class StoreListDetailComponent implements OnInit {
       data: apiSpec,
       width: '720px'
     });
+  }
+
+  generateToken() {
+    const form = this.formConsole.getRawValue();
+    this.isLoadingToken = true;
+    this.applicationService.getKeyDetail(form.applicationId, form.keyType)
+      .pipe(
+        switchMap((key: Key) => {
+          return this.isAuthUsingApiKey
+            ? of(key.consumerKey)
+            : this.authService.tokenClientCredential(key.consumerKey, key.consumerSecret);
+        }))
+      .subscribe(authKey => {
+        this.isLoadingToken = false;
+        this.formConsole.controls.authKey.setValue(authKey);
+        this.swaggerUIBundle.preauthorizeApiKey('authKey', authKey);
+      }, () => this.isLoadingToken = false);
+  }
+
+  get canGenerateToken() {
+    return this.formConsole.dirty && this.formConsole.valid;
   }
 }

@@ -139,12 +139,6 @@ export class PublisherSwaggerImportComponent implements OnInit {
           ...{ paths: { ['/*']: { [`${method}`]: spec } } }
         };
 
-        // delete (apiDefinitionSwagger.info);
-        // delete (apiDefinitionSwagger.externalDocs);
-        // delete (apiDefinitionSwagger.servers);
-        // delete (apiDefinitionSwagger.host);
-        // delete (apiDefinitionSwagger.basePath);
-
         let allowedHeaders = [];
         if (spec.parameters) {
           allowedHeaders = spec.parameters.filter(p => p.in === 'header').map(p => p.name);

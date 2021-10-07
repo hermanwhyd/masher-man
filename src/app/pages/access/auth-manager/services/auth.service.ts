@@ -7,6 +7,7 @@ import { DeepPartial } from 'src/@vex/interfaces/deep-partial.type';
 import { ApiConfigService } from 'src/app/services/api-config.service';
 import { CookieService } from 'ngx-cookie-service';
 import { DateTime } from 'luxon';
+import { encodeDigest } from 'src/app/utilities/function/base64-util';
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +40,21 @@ export class AuthService {
         tap((rs: LoginRs) => this.storeToken(cookieKey, rs.access_token, rs.expires_in)),
         map((rs) => rs.access_token)
       );
+  }
+
+  tokenClientCredential(consumerKey: string, consumerSecret: string) {
+    const body = new HttpParams()
+      .set('grant_type', 'client_credentials')
+      .set('client_id', consumerKey)
+      .set('client_secret', consumerSecret)
+      ;
+
+    const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
+
+    return this.http.post([
+      this.apiConfigService.proxyApi.value,
+      this.apiConfigService.getActiveProfile()?.name, 'token'].join('/'), body.toString(), { headers })
+      .pipe(map((rs: any) => rs.access_token));
   }
 
   register(user: DeepPartial<RegisterRq>, digest: string) {

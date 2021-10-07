@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import icArrowBack from '@iconify/icons-ic/twotone-arrow-back';
 import icPencil from '@iconify/icons-ic/edit';
@@ -65,7 +65,6 @@ export class PublisherListDetailComponent implements OnInit {
   isLoadingSubscription = false;
 
   isLoading = true;
-  isSwaggerLoaded = false;
 
   statusClass = statusClass;
 
@@ -90,7 +89,6 @@ export class PublisherListDetailComponent implements OnInit {
     }
   ];
 
-  @ViewChild('swagger') swaggerDom: ElementRef<HTMLDivElement>;
   constructor(
     private route: ActivatedRoute,
     private dialog: MatDialog,

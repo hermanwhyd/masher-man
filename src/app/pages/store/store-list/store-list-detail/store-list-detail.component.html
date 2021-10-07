@@ -58,6 +58,54 @@
           <ngx-json-viewer [json]="model"></ngx-json-viewer>
         </div>
       </mat-tab>
+      <mat-tab label="API Console">
+        <div class="p-6" fxLayout="column" *ngIf="!isLoading">
+          <form *ngIf="!isLoading" [formGroup]="formConsole" autocomplete="off" fxLayout="column" fxLayoutGap="8px">
+            <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap="8px">
+              <mat-form-field appearance="outline" fxFlex="auto">
+                <mat-label>Try for Application</mat-label>
+                <mat-select cdkFocusInitial formControlName="applicationId" required>
+                  <mat-option *ngFor="let item of subscriberApi" [value]="item.applicationId">
+                    {{ getApplicationName(item.applicationId) }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Using</mat-label>
+                <mat-select formControlName="keyType" required>
+                  <mat-option *ngFor="let item of keyTypes" [value]="item">
+                    {{ item }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <button type="submit" mat-raised-button color="primary" class="h-14 mt-1" (click)="generateToken()"
+                [disabled]="!canGenerateToken" [loading]="isLoadingToken">
+                GENERATE
+              </button>
+            </div>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Authorization Key</mat-label>
+              <span matPrefix class="mr-2">Authorization : {{ isAuthUsingApiKey ? 'API_KEY' : 'Bearer' }}</span>
+              <input matInput formControlName="authKey">
+            </mat-form-field>
+          </form>
+
+          <p class="callout callout-warning" *ngIf="subscriberApi?.length === 0" @scaleFadeIn>
+            Please subscribe to the API to test with active store account. Or you you can place the AUTHKEY by
+            clicking the green Authorize button.
+          </p>
+
+          <div #swagger>
+            <ngx-shimmer-loading [height]="'40px'" [width]="'100%'" class="block"></ngx-shimmer-loading>
+            <ngx-shimmer-loading [height]="'40px'" [width]="'100%'" class="block"></ngx-shimmer-loading>
+            <ngx-shimmer-loading [height]="'40px'" [width]="'100%'" class="block"></ngx-shimmer-loading>
+            <ngx-shimmer-loading [height]="'40px'" [width]="'100%'" class="block"></ngx-shimmer-loading>
+          </div>
+        </div>
+      </mat-tab>
       <mat-tab label="Subscriptions">
 
         <div *ngIf="isLoading" class="p-6">

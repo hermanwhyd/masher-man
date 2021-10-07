@@ -13,7 +13,7 @@ import { PublisherService } from '../services/publisher.service';
 import { PublisherSwaggerImportComponent } from './publisher-swagger-import/publisher-swagger-import.component';
 
 import { Resolver } from '@stoplight/json-ref-resolver';
-const resolver = new Resolver();
+const jsonRefResolver = new Resolver();
 
 @Component({
   selector: 'vex-publisher-new',
@@ -58,7 +58,7 @@ export class PublisherNewComponent implements OnInit {
   }
 
   async importFromClipboard() {
-    const resolved = await resolver.resolve(this.editor.get());
+    const resolved = await jsonRefResolver.resolve(this.editor.get());
     const swagger = JSON.parse(JSON.stringify(resolved.result));
     delete (swagger.definitions);
     delete (swagger.components);
@@ -82,7 +82,7 @@ export class PublisherNewComponent implements OnInit {
     this.publisherService.getSwaggerJson(this.swaggerCtrl.value)
       .toPromise()
       .then(data => {
-        resolver.resolve(data).then(resolved => {
+        jsonRefResolver.resolve(data).then(resolved => {
           const swagger = JSON.parse(JSON.stringify(resolved.result));
           delete (swagger.definitions);
           delete (swagger.components);

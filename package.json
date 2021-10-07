@@ -71,7 +71,7 @@
     "rxjs": "^6.6.7",
     "showdown": "~1.9.1",
     "simplebar": "^5.3.4",
-    "swagger-ui-dist": "^4.0.0-beta.4",
+    "swagger-ui-dist": "^3.52.3",
     "tailwindcss": "^2.0.4",
     "tslib": "^2.3.0",
     "util": "^0.12.4",

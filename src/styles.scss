@@ -41,7 +41,9 @@
     margin-top: -5px;
   }
 }
-@each $name, $color in (default, #777), (info, #5bc0de) {
+@each $name, $color in (default, #777), (primary, #428bca), (success, #5cb85c),
+  (danger, #d9534f), (warning, #f0ad4e), (info, #5bc0de), (bdc, #29527a)
+{
   .callout-#{$name} {
     border-left-color: $color;
     h4 {

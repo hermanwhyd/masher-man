@@ -39,6 +39,26 @@ export class ApplicationService {
       })) as Observable<Consumer>;
   }
 
+  public getKeyDetail(appid: string, keyType: string) {
+    const scope = 'apim:subscribe';
+
+    const params = new HttpParams().append('applicationId', appid);
+
+    const store = this.apiConfigService.getActiveStore();
+    if (!store) {
+      return throwError('Invalid Store Profile, please setup its first!');
+    }
+
+    const loginRq: LoginRq = { username: store.username, password: decode(store.password), grant_type: 'password', scope };
+
+    return this.authService.token(loginRq, store.clientDigest)
+      .pipe(switchMap(token => {
+        const headers = new HttpHeaders({ Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' });
+        return this.httpClient.get([this.apiConfigService.getApiUrl(), this.URL, appid, 'keys', keyType].join('/'),
+          { params, headers }) as Observable<Key>;
+      })) as Observable<Key>;
+  }
+
   public generateKey(appid: string, generateKey: GenerateKey) {
     const scope = 'apim:subscribe';
 
