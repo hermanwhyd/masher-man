@@ -16,25 +16,23 @@ import {
   StatePropsOfArrayLayout,
   Tester
 } from '@jsonforms/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 
 import jmespath from 'jmespath';
 
 @Component({
   selector: 'vex-publisher-array-control',
   template: `
-    <form [formGroup]="formx">
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>{{ jfProps.label }}</mat-label>
-        <mat-chip-list #chipList formControlName="tags">
-          <mat-chip *ngFor="let tag of tags.value; let index = index" (removed)="removeTag(index)">
-            {{ tag }}
-            <mat-icon matChipRemove *ngIf="this.isEnabled()" [icIcon]="icDelete"></mat-icon>
-          </mat-chip>
-          <input type="text" [matChipInputFor]="chipList" matChipInputAddOnBlur="'true'" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="addTag($event)">
-        </mat-chip-list>
-      </mat-form-field>
-    </form>
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>{{ jfProps.label }}</mat-label>
+    <mat-chip-list #chipList [formControl]="formControl">
+      <mat-chip *ngFor="let tag of tags; let index = index" (removed)="removeTag(index)">
+        {{ tag }}
+        <mat-icon matChipRemove *ngIf="this.isEnabled()" [icIcon]="icDelete"></mat-icon>
+      </mat-chip>
+      <input type="text" [matChipInputFor]="chipList" matChipInputAddOnBlur="'true'" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="addTag($event)">
+    </mat-chip-list>
+  </mat-form-field>
   `
 })
 export class PublisherArrayPrimitiveControlComponent extends JsonFormsArrayControl implements OnInit {
@@ -43,9 +41,7 @@ export class PublisherArrayPrimitiveControlComponent extends JsonFormsArrayContr
 
   jmespath = jmespath;
 
-  formx = this.fb.group({
-    tags: [[]]
-  });
+  formControl: FormControl = new FormControl([]);
 
   jfState: JsonFormsState;
   jfProps: StatePropsOfArrayLayout;
@@ -77,7 +73,11 @@ export class PublisherArrayPrimitiveControlComponent extends JsonFormsArrayContr
       : props.path;
 
     const currentValues = jmespath.search(state.jsonforms?.core?.data, path);
-    this.formx.patchValue({ tags: currentValues || [] });
+    this.formControl.patchValue(currentValues || []);
+
+    if (this.isEnabled()) {
+      this.formControl.enable();
+    }
 
     return { ...props };
   }
@@ -93,12 +93,12 @@ export class PublisherArrayPrimitiveControlComponent extends JsonFormsArrayContr
     this.removeItems = removeItems;
 
     if (!this.isEnabled()) {
-      this.formx.get('tags').disable();
+      this.formControl.disable();
     }
   }
 
   get tags() {
-    return this.formx.get('tags');
+    return this.formControl.value;
   }
 
   trackByFn(index: number) {
