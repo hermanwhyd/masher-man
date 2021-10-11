@@ -75,10 +75,6 @@ export class PublisherArrayPrimitiveControlComponent extends JsonFormsArrayContr
     const currentValues = jmespath.search(state.jsonforms?.core?.data, path);
     this.formControl.patchValue(currentValues || []);
 
-    if (this.isEnabled()) {
-      this.formControl.enable();
-    }
-
     return { ...props };
   }
 
