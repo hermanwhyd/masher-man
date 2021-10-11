@@ -125,13 +125,56 @@
                   "elements": [
                     {
                       "type": "Control",
-                      "label": "Allow Headers",
-                      "scope": "#/properties/corsConfiguration/properties/accessControlAllowHeaders"
+                      "scope": "#/properties/corsConfiguration/properties/corsConfigurationEnabled",
+                      "label": "Enable API based CORS Configuration",
+                      "options": {
+                        "toggle": true
+                      }
                     },
                     {
                       "type": "Control",
-                      "label": "Allow Methods",
-                      "scope": "#/properties/corsConfiguration/properties/accessControlAllowMethods"
+                      "label": "Access Control Allow Headers",
+                      "scope": "#/properties/corsConfiguration/properties/accessControlAllowHeaders",
+                      "rule": {
+                        "effect": "DISABLE",
+                        "condition": {
+                          "scope": "#/properties/corsConfiguration/properties/corsConfigurationEnabled",
+                          "schema": {
+                            "const": false
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "Control",
+                      "label": "Access Control Allow Methods",
+                      "scope": "#/properties/corsConfiguration/properties/accessControlAllowMethods",
+                      "rule": {
+                        "effect": "DISABLE",
+                        "condition": {
+                          "scope": "#/properties/corsConfiguration/properties/corsConfigurationEnabled",
+                          "schema": {
+                            "const": false
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "Control",
+                      "scope": "#/properties/corsConfiguration/properties/accessControlAllowCredentials",
+                      "label": "Access Control Allow Credentials",
+                      "options": {
+                        "toggle": true
+                      },
+                      "rule": {
+                        "effect": "DISABLE",
+                        "condition": {
+                          "scope": "#/properties/corsConfiguration/properties/corsConfigurationEnabled",
+                          "schema": {
+                            "const": false
+                          }
+                        }
+                      }
                     }
                   ]
                 }

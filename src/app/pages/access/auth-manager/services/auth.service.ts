@@ -7,7 +7,6 @@ import { DeepPartial } from 'src/@vex/interfaces/deep-partial.type';
 import { ApiConfigService } from 'src/app/services/api-config.service';
 import { CookieService } from 'ngx-cookie-service';
 import { DateTime } from 'luxon';
-import { encodeDigest } from 'src/app/utilities/function/base64-util';
 
 @Injectable({
   providedIn: 'root'

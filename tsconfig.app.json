@@ -6,7 +6,8 @@
   },
   "include": [
     "src/**/*.ts",
-    "src/assets/static-data/**/*.json"
+    "src/assets/static-data/**/*.json",
+    "node_modules/swagger-schema-official/schema.json"
   ],
   "exclude": [
     "src/**/*.spec.ts"

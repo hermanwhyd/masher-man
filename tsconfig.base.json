@@ -23,9 +23,19 @@
       "dom"
     ],
     "paths": {
-      "path": [
-        "./node_modules/path-browserify"
-      ]
+      "path": ["./node_modules/path-browserify"],
+      "crypto": ["./node_modules/crypto-browserify"],
+      "stream": ["./node_modules/stream-browserify"],
+      "assert": ["./node_modules/assert"],
+      "http": ["./node_modules/stream-http"],
+      "https": ["./node_modules/https-browserify"],
+      "os": ["./node_modules/os-browserify"],
+      "timers": ["./node_modules/timers-browserify"],
+      "zlib": ["./node_modules/browserify-zlib"],
+      "util": ["./node_modules/util"],
+      "fs": ["./node_modules/browserify-fs"],
+      "tls": ["./node_modules/tls-browserify"],
+      "net": ["./node_modules/net-browserify"],
     }
   },
   "angularCompilerOptions": {

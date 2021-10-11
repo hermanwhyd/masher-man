@@ -50,7 +50,8 @@
             ],
             "scripts": [
               "node_modules/swagger-ui-dist/swagger-ui-bundle.js",
-              "node_modules/swagger-ui-dist/swagger-ui-standalone-preset.js"
+              "node_modules/swagger-ui-dist/swagger-ui-standalone-preset.js",
+              "node_modules/api-spec-converter/dist/api-spec-converter.js"
             ],
             "allowedCommonJsDependencies": [
               "simplebar",
@@ -73,7 +74,8 @@
               "json2md",
               "raf",
               "html-to-pdfmake",
-              "pdfmake/build/pdfmake"
+              "pdfmake/build/pdfmake",
+              "api-spec-converter"
             ],
             "vendorChunk": true,
             "extractLicenses": false,

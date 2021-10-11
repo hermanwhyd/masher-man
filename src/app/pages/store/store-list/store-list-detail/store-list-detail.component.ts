@@ -6,7 +6,7 @@ import icFile from '@iconify/icons-fa-solid/file-code';
 
 import { ApiDetail, EndPointConfig } from 'src/app/types/api.interface';
 import { ActivatedRoute } from '@angular/router';
-import { catchError, distinctUntilChanged, filter, finalize, map, mapTo, switchMap } from 'rxjs/operators';
+import { catchError, distinctUntilChanged, filter, finalize, map, switchMap } from 'rxjs/operators';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
@@ -49,8 +49,9 @@ import { SnackbarNotifComponent } from 'src/app/utilities/snackbar-notif/snackba
 import { FormBuilder } from '@angular/forms';
 import { Resolver } from '@stoplight/json-ref-resolver';
 import { AuthService } from 'src/app/pages/access/auth-manager/services/auth.service';
-const jsonRefResolver = new Resolver();
+import * as Converter from 'api-spec-converter';
 
+const jsonRefResolver = new Resolver();
 const appearance: MatFormFieldDefaultOptions = {
   appearance: 'outline'
 };
@@ -126,7 +127,7 @@ export class StoreListDetailComponent implements OnInit, AfterViewInit {
     }
   ];
 
-  @ViewChild('swagger') swaggerDom: ElementRef<HTMLDivElement>;
+  @ViewChild('swaggerConsole') swaggerDom: ElementRef<HTMLDivElement>;
   constructor(
     private route: ActivatedRoute,
     private apiConfigService: ApiConfigService,
@@ -220,23 +221,40 @@ export class StoreListDetailComponent implements OnInit, AfterViewInit {
     const finalHost = this.model.endpointURLs[0]?.environmentURLs.https || this.model.endpointURLs[0]?.environmentURLs.http;
     const finalHostUrl = new URL(finalHost);
     const proxyHost = [this.apiConfigService.getApiUrl(), '/proxy', finalHost.split(finalHostUrl.host).pop()].join('');
+    const servers = [
+      { url: finalHost, description: 'API endpoint URL' },
+      { url: proxyHost, description: 'Using Proxy Host' }
+    ];
 
-    let components: any = { securitySchemes: { authKey: { type: 'http', scheme: 'bearer' } } };
+    let securitySchemes: any = { authKey: { type: 'http', scheme: 'bearer' } };
     const security: any = [{ authKey: [] }];
 
     if (this.model.name.endsWith('_CLIENTIDAUTH')) {
-      components = { securitySchemes: { authKey: { type: 'apiKey', in: 'query', name: 'API_KEY' } } };
+      securitySchemes = { authKey: { type: 'apiKey', in: 'query', name: 'API_KEY' } };
       this.isAuthUsingApiKey = true;
     }
 
-    const apiDefinitionSwagger = {
-      openapi: '3.0.1',
-      info: apiDef.info,
-      servers: [{ url: proxyHost, description: 'Using Proxy Host' }, { url: finalHost, description: 'API endpoint URL' }],
-      components,
-      ...{ paths: apiDef.paths }
-    };
+    let apiDefinitionSwagger: any = {};
 
+    if (apiDef.swagger) {
+      const converted: any = await Converter.convert({ from: 'swagger_2', to: 'openapi_3', source: apiDef });
+      const convertedSpec = JSON.parse(JSON.stringify(converted.spec));
+      apiDefinitionSwagger = {
+        ...convertedSpec,
+        ...{
+          servers,
+          components: { securitySchemes }
+        }
+      };
+    } else {
+      apiDefinitionSwagger = {
+        ...apiDef,
+        ...{
+          servers,
+          components: { securitySchemes }
+        }
+      };
+    }
 
     Object.values(apiDefinitionSwagger.paths).forEach(p => {
       Object.values(p).forEach(op => {
@@ -244,26 +262,25 @@ export class StoreListDetailComponent implements OnInit, AfterViewInit {
       });
     });
 
-    console.log(JSON.stringify(JSON.parse(this.model.apiDefinition), null, 2));
-    console.log(JSON.stringify(apiDefinitionSwagger, null, 2));
-
     this.swaggerUIBundle = SwaggerUIBundle({
       domNode: this.swaggerDom.nativeElement,
       deepLinking: false,
       presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
       layout: 'BaseLayout',
       spec: apiDefinitionSwagger,
-      // spec: JSON.parse(this.model.apiDefinition),
       operationsSorter: 'alpha',
       displayRequestDuration: true,
       requestInterceptor: (request: any) => {
-        console.log(JSON.stringify(request, null, 2));
-
-        // proxy URL
-        request.url = request.url.replace('/*', '');
+        if (request.url.endsWith('/*')) {
+          request.url = request.url.replace('/*', '');
+        }
 
         request.headers['Content-Type'] = request.headers['Content-Type'] || 'application/json';
-        request.headers['target-url'] = 'http://test.tos';
+        request.headers.accept = (request.headers.accept === '*/*') ? request.headers['Content-Type'] : request.headers.accept;
+
+        if (request.url.startsWith(proxyHost)) {
+          request.headers['target-url'] = request.url.replace(proxyHost, finalHost);
+        }
 
         return request;
       }

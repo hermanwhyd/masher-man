@@ -292,8 +292,7 @@
         "accessControlAllowHeaders": {
           "type": "array",
           "items": {
-            "type": "string",
-            "minLength": 2
+            "type": "string"
           }
         },
         "accessControlAllowMethods": {
