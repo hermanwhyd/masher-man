@@ -15,6 +15,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { InformationDialogComponent } from 'src/app/utilities/information-dialog/information-dialog.component';
 import { apiSpecificationExample } from 'src/assets/static-data/template/api-specification';
 
+import * as Converter from 'api-spec-converter';
+import { ConfirmationDialogComponent } from 'src/app/utilities/confirmation-dialog/confirmation-dialog.component';
+
 @Component({
   selector: 'vex-api-definition-control',
   template: `
@@ -35,18 +38,18 @@ import { apiSpecificationExample } from 'src/assets/static-data/template/api-spe
             <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="end center">
               <mat-button-toggle-group [formControl]="methodControl" appearance="legacy">
                 <mat-button-toggle value="reset" class="text-teal">RESET</mat-button-toggle>
-                <mat-button-toggle value="get" >GET</mat-button-toggle>
-                <mat-button-toggle value="post">POST</mat-button-toggle>
-                <mat-button-toggle value="put">PUT</mat-button-toggle>
-                <mat-button-toggle value="patch">PATCH</mat-button-toggle>
-                <mat-button-toggle value="delete">DELETE</mat-button-toggle>
+                <mat-button-toggle value="get" class="text-cyan">GET</mat-button-toggle>
+                <mat-button-toggle value="post" class="text-cyan">POST</mat-button-toggle>
+                <mat-button-toggle value="put" class="text-cyan">PUT</mat-button-toggle>
+                <mat-button-toggle value="patch" class="text-cyan">PATCH</mat-button-toggle>
+                <mat-button-toggle value="delete" class="text-cyan">DELETE</mat-button-toggle>
               </mat-button-toggle-group>
               <mat-icon class="cursor-pointer" [icIcon]="icInfo" matTooltip="replace path '/*' to selected method default" matTooltipPosition="above"></mat-icon>
             </div>
           </div>
           <json-editor [options]="options" [data]="apiDef"></json-editor>
         </div>
-        <div class="text-secondary caption py-2">After make a changes, don't forget to click Apply Changes. If you need a inspiration, here is an <a (click)="showExample()" class="text-teal cursor-pointer">example</a>.</div>
+        <div class="text-secondary caption py-2">After making any changes, don't forget to click Apply Changes button. For inspiration, here is an <a (click)="showExample()" class="text-teal cursor-pointer">example</a>.</div>
       </mat-tab>
     </mat-tab-group>
   `,
@@ -96,16 +99,42 @@ export class ApiDefinitionControlComponent extends JsonFormsControl implements A
 
   ngAfterViewInit(): void {
     this.initSwagger();
-    this.methodControl.valueChanges.subscribe((val) => {
+    this.methodControl.valueChanges.subscribe((val: any) => {
       // if reset
       if (val === 'reset') {
         this.resetCode();
         return;
       }
 
-      const resource: any = this.editor.get();
-      resource.paths['/*'] = { [val]: ApiResourceTemplate[val] };
-      this.editor.set(resource);
+      let resource: any = this.editor.get();
+
+      if (resource.swagger) {
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+          data: {
+            message: `
+            To add or override a default operation, API specifications will be converted to OpenApi3 first.
+            </br>This action will not break any API specifications and as long as the changes have not been applied you can reset it.
+            <span class="mt-2 block">Here to see the difference <a href="https://www.google.com/search?q=swagger+vs+openapi" target="_blank" class="text-teal underline">swagger vs openapi</a>.<span>
+            `,
+            buttonText: {
+              ok: 'Continue',
+              cancel: 'Cancel'
+            }
+          }
+        });
+
+        dialogRef.afterClosed().subscribe(async (confirmed: boolean) => {
+          if (confirmed) {
+            const converted: any = await Converter.convert({ from: 'swagger_2', to: 'openapi_3', source: resource });
+            resource = JSON.parse(JSON.stringify(converted.spec));
+            resource.paths['/*'] = { [val]: ApiResourceTemplate[val] };
+            this.editor.set(resource);
+          }
+        });
+      } else {
+        resource.paths['/*'] = { [val]: ApiResourceTemplate[val] };
+        this.editor.set(resource);
+      }
     });
   }
 

@@ -14,8 +14,6 @@ import { PublisherSwaggerImportComponent } from './publisher-swagger-import/publ
 
 import { Resolver } from '@stoplight/json-ref-resolver';
 import * as Converter from 'api-spec-converter';
-import { map, switchMap } from 'rxjs/operators';
-import { of } from 'rxjs';
 
 const jsonRefResolver = new Resolver();
 
