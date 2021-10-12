@@ -13,6 +13,10 @@ import { PublisherService } from '../services/publisher.service';
 import { PublisherSwaggerImportComponent } from './publisher-swagger-import/publisher-swagger-import.component';
 
 import { Resolver } from '@stoplight/json-ref-resolver';
+import * as Converter from 'api-spec-converter';
+import { map, switchMap } from 'rxjs/operators';
+import { of } from 'rxjs';
+
 const jsonRefResolver = new Resolver();
 
 @Component({
@@ -59,13 +63,25 @@ export class PublisherNewComponent implements OnInit {
 
   async importFromClipboard() {
     const resolved = await jsonRefResolver.resolve(this.editor.get());
-    const swagger = JSON.parse(JSON.stringify(resolved.result));
-    delete (swagger.definitions);
-    delete (swagger.components);
-    delete (swagger.tags);
+    let apiDef = JSON.parse(JSON.stringify(resolved.result));
+
+    if (apiDef.swagger) {
+      const converted: any = await Converter.convert({ from: 'swagger_2', to: 'openapi_3', source: apiDef });
+      const convertedSpec = JSON.parse(JSON.stringify(converted.spec));
+      apiDef = {
+        ...convertedSpec,
+        ...{ servers: [{ url: 'http://' + apiDef.host }] },
+        ...{ info: { title: apiDef.host?.split('.')[0] } }
+      };
+    }
+
+    delete (apiDef.definitions);
+    delete (apiDef.components);
+    delete (apiDef.tags);
+
 
     this.dialog.open(PublisherSwaggerImportComponent, {
-      data: swagger,
+      data: apiDef,
       width: '900px',
       disableClose: true
     })
@@ -80,31 +96,45 @@ export class PublisherNewComponent implements OnInit {
   async importFromURL() {
     this.isLoading = true;
     this.publisherService.getSwaggerJson(this.swaggerCtrl.value)
-      .toPromise()
-      .then(data => {
-        jsonRefResolver.resolve(data).then(resolved => {
-          const swagger = JSON.parse(JSON.stringify(resolved.result));
-          delete (swagger.definitions);
-          delete (swagger.components);
-          delete (swagger.tags);
+      .subscribe(async (data: any) => {
+        let apiDef = JSON.parse(JSON.stringify(data));
 
-          this.dialog.open(PublisherSwaggerImportComponent, {
-            data: swagger,
-            width: '900px',
-            disableClose: true
-          })
-            .afterClosed()
-            .subscribe((drafts: ApiDetail[]) => {
-              if (drafts) {
-                this.publisherService.draftAPIs.next(drafts);
-                this.router.navigate(['../', 'edit'], { relativeTo: this.route });
-              } else {
-                this.isLoading = false;
-                this.cd.markForCheck();
-              }
-            });
-        });
-      }).catch(() => {
+        if (apiDef.swagger) {
+          const converted: any = await Converter.convert({ from: 'swagger_2', to: 'openapi_3', source: apiDef });
+          const convertedSpec = JSON.parse(JSON.stringify(converted.spec));
+          const host = (this.swaggerCtrl.value as string).split('/')[2];
+
+          apiDef = {
+            ...convertedSpec,
+            ...{ servers: [{ url: 'http://' + host }] },
+            ...{ info: { title: host?.split('.')[0] } }
+          };
+        }
+
+        const resolved: any = await jsonRefResolver.resolve(apiDef);
+
+        apiDef = JSON.parse(JSON.stringify(resolved.result));
+
+        delete (apiDef.definitions);
+        delete (apiDef.components);
+        delete (apiDef.tags);
+
+        this.dialog.open(PublisherSwaggerImportComponent, {
+          data: apiDef,
+          width: '900px',
+          disableClose: true
+        })
+          .afterClosed()
+          .subscribe((drafts: ApiDetail[]) => {
+            if (drafts) {
+              this.publisherService.draftAPIs.next(drafts);
+              this.router.navigate(['../', 'edit'], { relativeTo: this.route });
+            } else {
+              this.isLoading = false;
+              this.cd.markForCheck();
+            }
+          });
+      }, () => {
         this.isLoading = false;
         this.cd.markForCheck();
       });

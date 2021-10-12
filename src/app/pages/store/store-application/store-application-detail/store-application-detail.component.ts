@@ -231,6 +231,7 @@ export class StoreApplicationDetailComponent implements OnInit {
 
   onAdvancedSearchTogle(change: MatSlideToggleChange) {
     this.isAdvancedSrc = change.checked;
+    this.refreshSubscriptionsFiltered();
   }
 
   generateKey() {
