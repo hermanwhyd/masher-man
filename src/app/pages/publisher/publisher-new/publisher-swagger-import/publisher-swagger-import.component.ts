@@ -130,13 +130,17 @@ export class PublisherSwaggerImportComponent implements OnInit {
 
         delete (spec.selected);
 
-        const apiName = `${form.name}-${upperFirst(method)}${pascalCase(path.split('/').pop())}`;
-        const apiContext = `${form.context}/${lowerCase(method)}-${paramCase(path.split('/').pop())}`;
+        const apiSuffix = path.split('/').pop();
+        const apiResource = (path.includes('/{')) ? '/{' + path.split('{').splice(1).join('{') : '/*';
+        const apiPath = (path.includes('/{')) ? path.split('/{')[0] : path;
+
+        const apiName = `${form.name}-${upperFirst(method)}${pascalCase(apiSuffix)}`;
+        const apiContext = `${form.context}/${lowerCase(method)}-${paramCase(apiSuffix)}`;
 
         const apiDefinitionSwagger = {
           openapi: this.swagger.openapi,
           ...{ paths: this.swagger.paths },
-          ...{ paths: { ['/*']: { [`${method}`]: spec } } }
+          ...{ paths: { [apiResource]: { [`${method}`]: spec } } }
         };
 
         let allowedHeaders = [];
@@ -154,7 +158,7 @@ export class PublisherSwaggerImportComponent implements OnInit {
           tags: form.tags,
           endpointConfig: {
             production_endpoints: {
-              url: [server, path].join(''),
+              url: [server, apiPath].join(''),
               config: null,
               template_not_supported: false
             },

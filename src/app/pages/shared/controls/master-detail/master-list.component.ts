@@ -81,37 +81,40 @@ export const removeSchemaKeywords = (path: string) => {
   `,
   styles: [
     `
-      mat-list-item.selected {
-        background: rgba(0, 0, 0, 0.04);
-      }
-      .container {
-        height: 100vh;
-      }
-      .content {
-        padding: 15px;
-        background-color: #fff;
-      }
-      .add-button {
-        float: right;
-        margin-top: 0.5em;
-        margin-right: 0.25em;
-      }
-      .button {
-        float: right;
-        margin-right: 0.25em;
-      }
-      .hide {
-        display: none;
-      }
-      .show {
-        display: inline-block;
-      }
-      mat-sidenav {
-        width: 25%;
-      }
-      ::ng-deep .mat-list-item-content {
-        padding: 0 !important;
-      }
+    ::ng-deep mat-slide-toggle {
+      @apply mt-2 mb-4;
+    }
+    mat-list-item.selected {
+      background: rgba(0, 0, 0, 0.04);
+    }
+    .container {
+      height: 100vh;
+    }
+    .content {
+      padding: 15px;
+      background-color: #fff;
+    }
+    .add-button {
+      float: right;
+      margin-top: 0.5em;
+      margin-right: 0.25em;
+    }
+    .button {
+      float: right;
+      margin-right: 0.25em;
+    }
+    .hide {
+      display: none;
+    }
+    .show {
+      display: inline-block;
+    }
+    mat-sidenav {
+      width: 25%;
+    }
+    ::ng-deep .mat-list-item-content {
+      padding: 0 !important;
+    }
     `
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
