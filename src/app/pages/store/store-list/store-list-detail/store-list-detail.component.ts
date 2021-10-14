@@ -271,7 +271,7 @@ export class StoreListDetailComponent implements OnInit, AfterViewInit {
       operationsSorter: 'alpha',
       displayRequestDuration: true,
       requestInterceptor: (request: any) => {
-        if (request.url.endsWith('/*')) {
+        if (request.url.includes('/*')) {
           request.url = request.url.replace('/*', '');
         }
 
