@@ -247,9 +247,10 @@ export class StoreApplicationDetailComponent implements OnInit {
   }
 
   createDocs() {
+    const store = this.apiConfigService.getActiveStore();
     // header
     const appSpec: any = [
-      { h1: this.model.name },
+      { h1: [store.username, this.model.name].join(' ') },
       { p: this.model.description || '' }
     ];
 
