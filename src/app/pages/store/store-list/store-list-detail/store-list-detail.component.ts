@@ -52,6 +52,8 @@ import { Resolver } from '@stoplight/json-ref-resolver';
 import { AuthService } from 'src/app/pages/access/auth-manager/services/auth.service';
 import * as Converter from 'api-spec-converter';
 
+import jsf from 'json-schema-faker';
+
 const jsonRefResolver = new Resolver();
 const appearance: MatFormFieldDefaultOptions = {
   appearance: 'outline'
@@ -373,7 +375,6 @@ export class StoreListDetailComponent implements OnInit, AfterViewInit {
   }
 
   public async createDocs() {
-
     // header
     const apiSpec: any = [
       { h1: this.model.name },
@@ -426,7 +427,11 @@ export class StoreListDetailComponent implements OnInit, AfterViewInit {
             if (payloadSchema) {
               const row = ['payloadRq', 'Request body', 'body', payloadSchema?.type, String(value.requestBody.required || 'false')];
               rows.push(row);
-              httpBody = payloadSchema;
+
+              jsf.option({ fillProperties: false });
+              jsf.option({ useExamplesValue: true });
+              jsf.option({ alwaysFakeOptionals: true });
+              httpBody = jsf.generate(payloadSchema);
             }
           }
 
