@@ -398,16 +398,17 @@ export class StoreListDetailComponent implements OnInit, AfterViewInit {
         apiSpec.push({ code: { language: 'typescript', content: `${method} ${path}` } });
 
         // construct http param and header
-        let httpBody: any = '{{json_body}}';
+        let httpBody: any = null;
         const httpParams: any = {};
         const httpHeaders: any = {
           'Content-type': (!value.consumes) ? 'application/json' : value.consumes.join(', '),
           Authorization: 'bearer {{access_token}}'
         };
 
+        const rows = [];
+
         // add parameter
         if (!!value.parameters) {
-          const rows = [];
           value.parameters.forEach(p => {
             const row = [p.name || '', p.description || '', p.in || '', p.schema?.type || '', String(p.required || 'false')];
 
@@ -421,20 +422,24 @@ export class StoreListDetailComponent implements OnInit, AfterViewInit {
 
             rows.push(row);
           });
+        }
 
-          if (value.requestBody) {
-            const payloadSchema = value.requestBody.content['application/json']?.schema;
-            if (payloadSchema) {
-              const row = ['payloadRq', 'Request body', 'body', payloadSchema?.type, String(value.requestBody.required || 'false')];
-              rows.push(row);
+        // payload Request
+        if (value.requestBody) {
+          const payloadSchema = value.requestBody.content['application/json']?.schema;
+          if (payloadSchema) {
+            const row = ['payloadRq', 'Request body', 'body', payloadSchema?.type, String(value.requestBody.required || 'false')];
+            rows.push(row);
 
-              jsf.option({ fillProperties: false });
-              jsf.option({ useExamplesValue: true });
-              jsf.option({ alwaysFakeOptionals: true });
-              httpBody = jsf.generate(payloadSchema);
-            }
+            jsf.option({ fillProperties: false });
+            jsf.option({ useExamplesValue: true });
+            jsf.option({ alwaysFakeOptionals: true });
+
+            httpBody = jsf.generate(payloadSchema);
           }
+        }
 
+        if (rows.length > 0) {
           apiSpec.push({
             table: {
               headers: ['Parameter Name', 'Description', 'Parameter Type', 'Data Type', 'Required'],
