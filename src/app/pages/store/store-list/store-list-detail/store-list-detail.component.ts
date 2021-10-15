@@ -54,6 +54,11 @@ import * as Converter from 'api-spec-converter';
 
 import jsf from 'json-schema-faker';
 
+jsf.option({ fillProperties: false });
+jsf.option({ useExamplesValue: true });
+jsf.option({ alwaysFakeOptionals: true });
+jsf.option({ maxItems: 1 });
+
 const jsonRefResolver = new Resolver();
 const appearance: MatFormFieldDefaultOptions = {
   appearance: 'outline'
@@ -410,7 +415,7 @@ export class StoreListDetailComponent implements OnInit, AfterViewInit {
         // add parameter
         if (!!value.parameters) {
           value.parameters.forEach(p => {
-            const row = [p.name || '', p.description || '', p.in || '', p.schema?.type || '', String(p.required || 'false')];
+            const row = [p.name || '', p.schema?.type || '', p.in || '', (p.required ? '**Required.** ' : '') + p.description || ''];
 
             if (p.in === 'query') {
               httpParams[p.name] = p.name;
@@ -424,25 +429,21 @@ export class StoreListDetailComponent implements OnInit, AfterViewInit {
           });
         }
 
-        // payload Request
+        // payload request
         if (value.requestBody) {
           const payloadSchema = value.requestBody.content['application/json']?.schema;
           if (payloadSchema) {
-            const row = ['payloadRq', 'Request body', 'body', payloadSchema?.type, String(value.requestBody.required || 'false')];
+            const row = ['payloadRq', payloadSchema?.type, 'body', (value.requestBody.required ? '**Required.** ' : '') + 'Request body'];
             rows.push(row);
 
-            jsf.option({ fillProperties: false });
-            jsf.option({ useExamplesValue: true });
-            jsf.option({ alwaysFakeOptionals: true });
-
-            httpBody = jsf.generate(payloadSchema);
+            httpBody = JSON.stringify(jsf.generate(payloadSchema), null, 2);
           }
         }
 
         if (rows.length > 0) {
           apiSpec.push({
             table: {
-              headers: ['Parameter Name', 'Description', 'Parameter Type', 'Data Type', 'Required'],
+              headers: ['Parameter', 'Type', 'In', 'Description'],
               rows: [...rows]
             }
           });
@@ -456,13 +457,31 @@ export class StoreListDetailComponent implements OnInit, AfterViewInit {
           url: finalHost + finalUrl,
           method: upperCase(method),
           headers: httpHeaders,
-          body: httpBody
+          // body: httpBody
         };
 
-        const content: any = CurlGenerator(params);
+        let content: string = CurlGenerator(params).replace(/"/g, '\'');
+        if (httpBody) {
+          content += ` -d '${httpBody}'`;
+        }
 
         apiSpec.push({ h4: 'Usage/Example' });
+        apiSpec.push({ h3: 'Request' });
         apiSpec.push({ code: { language: 'shell', content } });
+
+        // payload response
+        if (value.responses) {
+          apiSpec.push({ h3: 'Responses' });
+          for (const [code, rs] of Object.entries(value.responses)) {
+            const rsContent = (rs as any).content;
+            if (rsContent) {
+              apiSpec.push({ p: code + ': ' + '**' + (rs as any).description + '**' });
+              for (const [cType, cValue] of Object.entries(rsContent)) {
+                apiSpec.push({ code: { language: 'typescript', content: JSON.stringify(jsf.generate((cValue as any).schema), null, 2) } });
+              }
+            }
+          }
+        }
       }
     }
 
