@@ -33,7 +33,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { ApiConfigService } from 'src/app/services/api-config.service';
 import { untilDestroyed, UntilDestroy } from '@ngneat/until-destroy';
 import { SnackbarNotifComponent } from 'src/app/utilities/snackbar-notif/snackbar-notif.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { statusClass } from 'src/app/utilities/function/api-status';
 import { StoreService } from '../services/store.service';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -104,6 +104,7 @@ export class StoreListComponent implements OnInit {
   isLoadApiDetail = new BehaviorSubject<boolean>(false);
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
     private apiConfigService: ApiConfigService,
@@ -193,5 +194,11 @@ export class StoreListComponent implements OnInit {
       width: '600px',
       disableClose: true
     });
+  }
+
+  batchEdit(apis: Api[]) {
+    const ids: Api['id'][] = [];
+    apis.forEach(a => ids.push(a.id));
+    this.router.navigate(['/publisher/edit'], { relativeTo: this.route, queryParams: { apiIds: ids } });
   }
 }

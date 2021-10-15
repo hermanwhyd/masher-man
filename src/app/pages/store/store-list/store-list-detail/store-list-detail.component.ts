@@ -3,6 +3,7 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angula
 import icArrowBack from '@iconify/icons-ic/twotone-arrow-back';
 import icPencil from '@iconify/icons-ic/edit';
 import icFile from '@iconify/icons-fa-solid/file-code';
+import icTraining from '@iconify/icons-ic/baseline-model-training';
 
 import { ApiDetail, EndPointConfig } from 'src/app/types/api.interface';
 import { ActivatedRoute } from '@angular/router';
@@ -80,6 +81,7 @@ export class StoreListDetailComponent implements OnInit, AfterViewInit {
   icArrowBack = icArrowBack;
   icPencil = icPencil;
   icFile = icFile;
+  icTraining = icTraining;
 
   model: ApiDetail;
 
@@ -379,7 +381,12 @@ export class StoreListDetailComponent implements OnInit, AfterViewInit {
     ];
 
     // contents
-    const resolved = await jsonRefResolver.resolve(JSON.parse(this.model.apiDefinition));
+    let openapi3 = JSON.parse(this.model.apiDefinition);
+    if (openapi3.swagger) {
+      const converted: any = await Converter.convert({ from: 'swagger_2', to: 'openapi_3', source: openapi3 });
+      openapi3 = JSON.parse(JSON.stringify(converted.spec));
+    }
+    const resolved = await jsonRefResolver.resolve(openapi3);
     const apiDefinition = JSON.parse(JSON.stringify(resolved.result));
 
     apiSpec.push({ h2: 'API Reference' });
@@ -390,7 +397,7 @@ export class StoreListDetailComponent implements OnInit, AfterViewInit {
         apiSpec.push({ code: { language: 'typescript', content: `${method} ${path}` } });
 
         // construct http param and header
-        const httpBody: any = '{{json body}}';
+        let httpBody: any = '{{json_body}}';
         const httpParams: any = {};
         const httpHeaders: any = {
           'Content-type': (!value.consumes) ? 'application/json' : value.consumes.join(', '),
@@ -401,7 +408,7 @@ export class StoreListDetailComponent implements OnInit, AfterViewInit {
         if (!!value.parameters) {
           const rows = [];
           value.parameters.forEach(p => {
-            const row = [p.name || '', p.description || '', p.in || '', p.type || '', String(p.required || 'false')];
+            const row = [p.name || '', p.description || '', p.in || '', p.schema?.type || '', String(p.required || 'false')];
 
             if (p.in === 'query') {
               httpParams[p.name] = p.name;
@@ -411,16 +418,16 @@ export class StoreListDetailComponent implements OnInit, AfterViewInit {
               httpHeaders[p.name] = `{{${p.name}}}`;
             }
 
-            if (p.in === 'body' && p.schema) {
-              // httpBody = '@body.json';
-              row[3] = 'object';
-            }
-
             rows.push(row);
           });
 
           if (value.requestBody) {
-
+            const payloadSchema = value.requestBody.content['application/json']?.schema;
+            if (payloadSchema) {
+              const row = ['payloadRq', 'Request body', 'body', payloadSchema?.type, String(value.requestBody.required || 'false')];
+              rows.push(row);
+              httpBody = payloadSchema;
+            }
           }
 
           apiSpec.push({

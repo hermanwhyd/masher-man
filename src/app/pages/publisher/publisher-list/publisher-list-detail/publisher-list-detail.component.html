@@ -1,6 +1,7 @@
 <div class="card overflow-auto -mt-16">
 
-  <div class="bg-app-bar px-6 h-16 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+  <div class="bg-app-bar px-6 h-16 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center"
+    fxLayoutGap="8px">
     <div class="flex items-center">
       <button [routerLink]="['.']" class="mr-2" mat-icon-button [loading]="isLoading">
         <mat-icon [icIcon]="icArrowBack" size="24px"></mat-icon>
@@ -20,7 +21,11 @@
         {{ model?.status}}
       </span>
     </p>
-    <a class="ml-4" color="primary" fxFlex="none" mat-mini-fab matTooltip="Edit" [routerLink]="['/publisher/edit']"
+    <a color="primary" fxFlex="none" mat-mini-fab matTooltip="Store View" [routerLink]="['/store/list']"
+      [queryParams]="{apiId: model?.id}">
+      <mat-icon [icIcon]="icStore" size="20px"></mat-icon>
+    </a>
+    <a color="primary" fxFlex="none" mat-mini-fab matTooltip="Edit" [routerLink]="['/publisher/edit']"
       [queryParams]="{apiIds: model?.id}" type="button">
       <mat-icon [icIcon]="icPencil" size="20px"></mat-icon>
     </a>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import icArrowBack from '@iconify/icons-ic/twotone-arrow-back';
 import icPencil from '@iconify/icons-ic/edit';
+import icStore from '@iconify/icons-ic/outline-shopping-cart';
 
 import { ApiDetail, EndPointConfig } from 'src/app/types/api.interface';
 import { ActivatedRoute } from '@angular/router';
@@ -57,6 +58,7 @@ export class PublisherListDetailComponent implements OnInit {
 
   icArrowBack = icArrowBack;
   icPencil = icPencil;
+  icStore = icStore;
 
   model: ApiDetail;
 

@@ -1,6 +1,6 @@
 ::ng-deep mat-dialog-content {
-
-  ol, ul {
+  ol,
+  ul {
     list-style: disc;
     @apply ml-4;
   }
@@ -15,18 +15,26 @@
     @apply hidden;
   }
 
-  h1, h2 {
+  h1,
+  h2 {
     border-bottom: 1px solid var(--foreground-divider);
-    padding-bottom: .3em;
+    padding-bottom: 0.3em;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-weight: var(--font-weight-medium) !important;
     margin-bottom: var(--padding-16);
     margin-top: 32px;
   }
 
-  p, ul, li {
+  p,
+  ul,
+  li {
     font-size: 16px !important;
     line-height: 1.5 !important;
     @apply my-3;
@@ -39,11 +47,13 @@
   code {
     display: inline-block;
     @apply p-3;
+    background: var(--background-app-bar);
+    color: var(--text-color);
   }
 
   pre {
     white-space: pre-wrap;
-    word-break: keep-all
+    word-break: keep-all;
   }
 
   table {
@@ -62,7 +72,8 @@
       }
     }
 
-    td, th {
+    td,
+    th {
       border-left: 1px solid var(--foreground-divider);
       padding: var(--padding-12) var(--padding-16);
 
@@ -74,6 +85,5 @@
     th {
       font-weight: var(--font-weight-medium);
     }
-
   }
 }

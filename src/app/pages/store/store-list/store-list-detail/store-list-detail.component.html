@@ -21,6 +21,10 @@
         {{ model?.status}}
       </span>
     </p>
+    <a color="primary" fxFlex="none" mat-mini-fab matTooltip="Publisher View" [routerLink]="['/publisher/list']"
+      [queryParams]="{apiId: model?.id}">
+      <mat-icon [icIcon]="icTraining" size="20px"></mat-icon>
+    </a>
     <button color="primary" fxFlex="none" mat-mini-fab matTooltip="Documentation" (click)="createDocs()">
       <mat-icon [icIcon]="icFile" size="20px"></mat-icon>
     </button>

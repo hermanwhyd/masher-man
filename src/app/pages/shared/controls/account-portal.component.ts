@@ -3,6 +3,8 @@ import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import { ControlProps } from '@jsonforms/core';
 
 import icGlobe from '@iconify/icons-fa-solid/globe';
+import icStore from '@iconify/icons-ic/outline-shopping-cart';
+import icTraining from '@iconify/icons-ic/baseline-model-training';
 
 import { JsonEditorComponent, JsonEditorOptions } from 'ang-jsoneditor';
 import { ApiConfigService } from 'src/app/services/api-config.service';
@@ -26,6 +28,14 @@ import { MatDialog } from '@angular/material/dialog';
 
       <span fxFlex></span>
 
+      <a *ngIf="this.isEnabled()" color="primary" mat-mini-fab matTooltip="Publisher View" [routerLink]="['/publisher/list']"
+        [queryParams]="{apiId: api?.id}">
+        <mat-icon [icIcon]="icTraining" size="20px"></mat-icon>
+      </a>
+      <a *ngIf="this.isEnabled()" color="primary" mat-mini-fab matTooltip="Store View" [routerLink]="['/store/list']"
+        [queryParams]="{apiId: api?.id}">
+        <mat-icon [icIcon]="icStore" size="20px"></mat-icon>
+      </a>
       <button *ngIf="this.isEnabled()" mat-raised-button color="primary" (click)="createCopy()">MAKE A COPY</button>
     </div>
   `,
@@ -33,6 +43,8 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class AccountPortalComponent extends JsonFormsControl {
   icGlobe = icGlobe;
+  icTraining = icTraining;
+  icStore = icStore;
 
   api: ApiDetail;
   options = new JsonEditorOptions();
