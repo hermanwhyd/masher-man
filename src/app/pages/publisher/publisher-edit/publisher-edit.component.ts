@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { PublisherService } from '../services/publisher.service';
 
 import jmespath from 'jmespath';
@@ -41,7 +41,7 @@ const appearance: MatFormFieldDefaultOptions = {
     }
   ]
 })
-export class PublisherEditComponent implements OnInit {
+export class PublisherEditComponent implements OnInit, AfterViewInit, OnDestroy {
   jmespath = jmespath;
 
   errorsSubject = new BehaviorSubject<ErrorObject[]>([]);
@@ -87,13 +87,20 @@ export class PublisherEditComponent implements OnInit {
     private dialog: MatDialog,
     private loadingSvc: LoadingService) { }
 
+  ngOnDestroy(): void {
+    this.publisherService.draftAPIs.next([]);
+  }
+
+  ngAfterViewInit(): void {
+    this.routerParseParams();
+  }
+
   ngOnInit(): void {
     this.publisherService.draftAPIs$.pipe(untilDestroyed(this), distinctUntilChanged())
       .subscribe(data => {
         this.model.apis = data;
       });
 
-    this.routerParseParams();
     this.listenToLoading();
   }
 
