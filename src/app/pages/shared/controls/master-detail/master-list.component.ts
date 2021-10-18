@@ -57,10 +57,10 @@ export const removeSchemaKeywords = (path: string) => {
           >
             <a matLine [matTooltip]="item.label" matTooltipPosition="above">{{ item.label || 'No api name set' }}</a>
             <button mat-icon-button class="button hide" (click)="onDeleteClick(i)" [ngClass]="{ show: highlightedIdx == i }"
-              matTooltip="Close Designer" *ngIf="isEnabled()">
+              matTooltip="Close Designer">
               <mat-icon mat-list-icon>remove_circle_outline</mat-icon>
             </button>
-            <button mat-icon-button [loading]="!isEnabled()" *ngIf="!isEnabled()"><mat-icon mat-list-icon>delete</mat-icon></button>
+            <button mat-icon-button [loading]="isPublishing[item.label]" *ngIf="!isEnabled()"></button>
           </mat-list-item>
         </mat-nav-list>
         <button
@@ -74,7 +74,7 @@ export const removeSchemaKeywords = (path: string) => {
         </button>
       </mat-sidenav>
       <mat-sidenav-content class="content">
-        <vex-jsonforms-detail *ngIf="selectedItem" [item]="selectedItem" ></vex-jsonforms-detail>
+        <vex-jsonforms-detail *ngIf="selectedItem" [item]="selectedItem"></vex-jsonforms-detail>
         <vex-jsonform-empty *ngIf="!selectedItem"></vex-jsonform-empty>
       </mat-sidenav-content>
     </mat-sidenav-container>
@@ -127,6 +127,8 @@ export class MasterListComponent extends JsonFormsArrayControl {
   removeItems: (path: string, toDelete: number[]) => () => void;
   propsPath: string;
   highlightedIdx: number;
+
+  isPublishing = {};
 
   constructor(
     private jsonFormsAngularService: JsonFormsAngularService,
@@ -273,6 +275,7 @@ export class MasterListComponent extends JsonFormsArrayControl {
     this.publisherMasterListService.publishEmit$
       .pipe(untilDestroyed(this), filter<string[]>(Boolean))
       .subscribe((idx: string[]) => {
+        this.isPublishing[this.selectedItem.data.name] = true;
         this.jsonFormsService.setReadonly(true);
         const apid: ApiDetail = { ...this.selectedItem.data };
 
@@ -284,7 +287,10 @@ export class MasterListComponent extends JsonFormsArrayControl {
         apid.endpointConfig = JSON.stringify(apid.endpointConfig);
 
         this.publiserService.createOrUpdateApi(apid)
-          .pipe(untilDestroyed(this), finalize(() => this.jsonFormsService.setReadonly(false)))
+          .pipe(untilDestroyed(this), finalize(() => {
+            this.jsonFormsService.setReadonly(false);
+            this.isPublishing[this.selectedItem.data.name] = false;
+          }))
           .subscribe(data => {
             this.selectedItem.data.id = data.id;
             this.jsonFormsAngularService.refresh();

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PublisherService } from '../services/publisher.service';
 
 import jmespath from 'jmespath';
@@ -8,14 +8,13 @@ import { angularMaterialRenderers } from '@jsonforms/angular-material';
 import { and, isControl, rankWith, scopeEndsWith } from '@jsonforms/core';
 import { ErrorObject } from 'ajv';
 
-
 import uischemaAsset from 'src/assets/static-data/publisher/uischema-list.json';
 import schemaAsset from 'src/assets/static-data/publisher/schema-list.json';
 import { BehaviorSubject } from 'rxjs';
 import { MatFormFieldDefaultOptions, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MatDialog } from '@angular/material/dialog';
 import { InformationDialogComponent } from 'src/app/utilities/information-dialog/information-dialog.component';
-import { delay, distinctUntilChanged, filter, finalize, map, switchMap } from 'rxjs/operators';
+import { delay, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { LoadingService } from 'src/app/services/loading.service';
 import { ActivatedRoute } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -40,8 +39,7 @@ const appearance: MatFormFieldDefaultOptions = {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: appearance
     }
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  ]
 })
 export class PublisherEditComponent implements OnInit {
   jmespath = jmespath;
@@ -83,7 +81,6 @@ export class PublisherEditComponent implements OnInit {
   ];
 
   constructor(
-    private cd: ChangeDetectorRef,
     private route: ActivatedRoute,
     private publisherService: PublisherService,
     private publisherMasterListService: PublisherMasterListService,
@@ -126,7 +123,6 @@ export class PublisherEditComponent implements OnInit {
   }
 
   onChange(event) {
-    this.cd.markForCheck();
     this.draftCountSubject.next(event.apis?.length || 0);
   }
 
@@ -154,9 +150,6 @@ export class PublisherEditComponent implements OnInit {
       .pipe(delay(0))
       .subscribe((loading) => {
         this.isLoading = loading;
-        if (this.isLoading) {
-          setTimeout(() => this.isLoading = false, 10000);
-        }
       });
   }
 }
