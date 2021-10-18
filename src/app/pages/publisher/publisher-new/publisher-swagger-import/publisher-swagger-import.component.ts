@@ -9,7 +9,7 @@ import icDelete from '@iconify/icons-ic/twotone-delete';
 import icClear from '@iconify/icons-ic/baseline-clear';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER, SPACE, FF_SEMICOLON } from '@angular/cdk/keycodes';
-import { paramCase, pascalCase } from 'change-case';
+import { paramCase, pascalCase, sentenceCase } from 'change-case';
 import _, { lowerCase, upperCase, upperFirst } from 'lodash';
 
 import { ApiDetailTemplate } from 'src/assets/static-data/template/api-detail';
@@ -154,7 +154,7 @@ export class PublisherSwaggerImportComponent implements OnInit {
           name: apiName,
           context: apiContext,
           version: form.version,
-          description: [form.description, spec.description].join(' ').trim(),
+          description: [form.description, sentenceCase(spec.description || spec.summary)].join(' ').trim(),
           tags: form.tags,
           endpointConfig: {
             production_endpoints: {
