@@ -1,13 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { PopoverService } from '../../../components/popover/popover.service';
-import { ToolbarUserDropdownComponent } from './toolbar-user-dropdown/toolbar-user-dropdown.component';
 import icPerson from '@iconify/icons-ic/twotone-person';
 import { AuthService } from 'src/app/pages/access/auth-manager/services/auth.service';
+import { ApiConfigService } from 'src/app/services/api-config.service';
+import { upperCase } from 'lodash';
 
 @Component({
   selector: 'vex-toolbar-user',
-  templateUrl: './toolbar-user.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: './toolbar-user.component.html'
 })
 export class ToolbarUserComponent implements OnInit {
 
@@ -16,40 +16,16 @@ export class ToolbarUserComponent implements OnInit {
 
   fullname = 'GUEST';
 
-  constructor(private popover: PopoverService,
-    private cd: ChangeDetectorRef,
+  @Output() openPanelProfile = new EventEmitter();
+
+  constructor(
+    private apiConfigService: ApiConfigService,
+    private popover: PopoverService,
     private authService: AuthService) { }
 
   ngOnInit() {
-  }
-
-  showPopover(originRef: HTMLElement) {
-    this.dropdownOpen = true;
-    this.cd.markForCheck();
-
-    const popoverRef = this.popover.open({
-      content: ToolbarUserDropdownComponent,
-      origin: originRef,
-      offsetY: 12,
-      position: [
-        {
-          originX: 'center',
-          originY: 'top',
-          overlayX: 'center',
-          overlayY: 'bottom'
-        },
-        {
-          originX: 'end',
-          originY: 'bottom',
-          overlayX: 'end',
-          overlayY: 'top',
-        },
-      ]
-    });
-
-    popoverRef.afterClosed$.subscribe(() => {
-      this.dropdownOpen = false;
-      this.cd.markForCheck();
+    this.apiConfigService.accounts$.subscribe(() => {
+      this.fullname = upperCase(this.apiConfigService.getActiveStore()?.username || 'GUEST');
     });
   }
 }
