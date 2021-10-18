@@ -96,22 +96,25 @@ export class PublisherNewComponent implements OnInit {
     this.publisherService.getSwaggerJson(this.swaggerCtrl.value)
       .subscribe(async (data: any) => {
         let apiDef = JSON.parse(JSON.stringify(data));
+        const host = (this.swaggerCtrl.value as string).split('/')[2];
+        const scheme = (this.swaggerCtrl.value as string).split('/')[0];
 
         if (apiDef.swagger) {
           const converted: any = await Converter.convert({ from: 'swagger_2', to: 'openapi_3', source: apiDef });
           const convertedSpec = JSON.parse(JSON.stringify(converted.spec));
-          const host = (this.swaggerCtrl.value as string).split('/')[2];
 
           apiDef = {
             ...convertedSpec,
-            ...{ servers: [{ url: 'http://' + host }] },
             ...{ info: { title: host?.split('.')[0] } }
           };
         }
 
         const resolved: any = await jsonRefResolver.resolve(apiDef);
 
-        apiDef = JSON.parse(JSON.stringify(resolved.result));
+        apiDef = {
+          ...JSON.parse(JSON.stringify(resolved.result)),
+          ...{ servers: [{ url: scheme + '//' + host }] },
+        };
 
         delete (apiDef.definitions);
         delete (apiDef.components);
