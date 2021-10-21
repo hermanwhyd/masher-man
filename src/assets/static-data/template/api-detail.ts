@@ -72,11 +72,11 @@ export const ApiDetailTemplate = {
     technicalOwnerEmail: ''
   },
   corsConfiguration: {
-    corsConfigurationEnabled: true,
+    corsConfigurationEnabled: false,
     accessControlAllowOrigins: [
       '*'
     ],
-    accessControlAllowCredentials: true,
+    accessControlAllowCredentials: false,
     accessControlAllowHeaders: [
       'authorization',
       'Access-Control-Allow-Origin',
