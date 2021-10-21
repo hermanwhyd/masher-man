@@ -21,6 +21,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { PublisherEndpointUrlControlComponent } from './publisher-endpointurl-control.component';
 import { MarkdownDialogModule } from 'src/app/utilities/markdown-dialog/markdown-dialog.module';
 import { RouterModule } from '@angular/router';
+import { PublisherApiTiersControlComponent } from './publisher-apitiers-control.component';
 
 const ARRAY_COMPONENTS = [
   PublisherDataDisplayComponent,
@@ -30,7 +31,8 @@ const ARRAY_COMPONENTS = [
   JsonformEmptyComponent,
   ApiDefinitionControlComponent,
   AccountPortalComponent,
-  PublisherEndpointUrlControlComponent
+  PublisherEndpointUrlControlComponent,
+  PublisherApiTiersControlComponent
 ];
 
 @NgModule({

@@ -24,6 +24,7 @@ import { masterDetailTester, MasterListComponent } from '../../shared/controls/m
 import { arrayPrimitiveTester, PublisherArrayPrimitiveControlComponent } from '../../shared/controls/publisher-array-primitive-control.component';
 import { PublisherDataDisplayComponent } from '../../shared/controls/publisher-data-display.component';
 import { AccountPortalComponent } from '../../shared/controls/account-portal.component';
+import { apiTiersTester, PublisherApiTiersControlComponent } from '../../shared/controls/publisher-apitiers-control.component';
 
 const appearance: MatFormFieldDefaultOptions = {
   appearance: 'outline'
@@ -65,6 +66,10 @@ export class PublisherEditComponent implements OnInit, AfterViewInit, OnDestroy 
     {
       renderer: MasterListComponent,
       tester: masterDetailTester
+    },
+    {
+      renderer: PublisherApiTiersControlComponent,
+      tester: rankWith(5, apiTiersTester)
     },
     {
       renderer: PublisherArrayPrimitiveControlComponent,

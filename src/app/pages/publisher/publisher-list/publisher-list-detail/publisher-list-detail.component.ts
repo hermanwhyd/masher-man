@@ -26,6 +26,7 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { and, isControl, rankWith, scopeEndsWith } from '@jsonforms/core';
 import { ApiDefinitionControlComponent, apiDefinitionTester } from 'src/app/pages/shared/controls/api-definition-control.component';
 import { arrayPrimitiveTester, PublisherArrayPrimitiveControlComponent } from 'src/app/pages/shared/controls/publisher-array-primitive-control.component';
+import { apiTiersTester, PublisherApiTiersControlComponent } from 'src/app/pages/shared/controls/publisher-apitiers-control.component';
 import { AccountPortalComponent } from 'src/app/pages/shared/controls/account-portal.component';
 import { Subscription } from 'src/app/types/subscription.interface';
 import { SubscriptionService } from 'src/app/services/subscription.service';
@@ -80,6 +81,10 @@ export class PublisherListDetailComponent implements OnInit {
     {
       renderer: ApiDefinitionControlComponent,
       tester: apiDefinitionTester
+    },
+    {
+      renderer: PublisherApiTiersControlComponent,
+      tester: rankWith(5, apiTiersTester)
     },
     {
       renderer: PublisherArrayPrimitiveControlComponent,

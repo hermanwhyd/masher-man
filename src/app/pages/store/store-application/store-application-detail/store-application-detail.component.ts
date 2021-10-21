@@ -45,6 +45,7 @@ import { StoreApplicationKeyComponent } from '../store-application-key/store-app
 import { ApplicationService } from 'src/app/services/application.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarNotifComponent } from 'src/app/utilities/snackbar-notif/snackbar-notif.component';
+import { apiTiersTester, PublisherApiTiersControlComponent } from 'src/app/pages/shared/controls/publisher-apitiers-control.component';
 
 const appearance: MatFormFieldDefaultOptions = {
   appearance: 'outline'
@@ -105,6 +106,10 @@ export class StoreApplicationDetailComponent implements OnInit {
     {
       renderer: ApiDefinitionControlComponent,
       tester: apiDefinitionTester
+    },
+    {
+      renderer: PublisherApiTiersControlComponent,
+      tester: rankWith(5, apiTiersTester)
     },
     {
       renderer: PublisherArrayPrimitiveControlComponent,
