@@ -22,6 +22,7 @@ import { PublisherEndpointUrlControlComponent } from './publisher-endpointurl-co
 import { MarkdownDialogModule } from 'src/app/utilities/markdown-dialog/markdown-dialog.module';
 import { RouterModule } from '@angular/router';
 import { PublisherApiTiersControlComponent } from './publisher-apitiers-control.component';
+import { KeyMapperComponent } from './keymapper-portal.component';
 
 const ARRAY_COMPONENTS = [
   PublisherDataDisplayComponent,
@@ -32,7 +33,8 @@ const ARRAY_COMPONENTS = [
   ApiDefinitionControlComponent,
   AccountPortalComponent,
   PublisherEndpointUrlControlComponent,
-  PublisherApiTiersControlComponent
+  PublisherApiTiersControlComponent,
+  KeyMapperComponent
 ];
 
 @NgModule({

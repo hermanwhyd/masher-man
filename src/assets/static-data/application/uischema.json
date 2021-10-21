@@ -57,8 +57,17 @@
               "type": "VerticalLayout",
               "elements": [
                 {
-                  "type": "Control",
-                  "scope": "#/properties/keyType"
+                  "type": "HorizontalLayout",
+                  "elements": [
+                    {
+                      "type": "Control",
+                      "scope": "#/properties/keyType"
+                    },
+                    {
+                      "type": "Control",
+                      "scope": "#/___keymapper"
+                    }
+                  ]
                 },
                 {
                   "type": "HorizontalLayout",

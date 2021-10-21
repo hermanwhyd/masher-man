@@ -1,185 +1,127 @@
 export const apiSpecificationExample = {
-  openapi: '3.0.1',
-  info: {
-    title: 'Balance_API',
-    description: 'Gives information on users account balance',
-    version: 'v1'
-  },
-  servers: [
-    {
-      url: 'http://localhost:8080/balance/v1'
-    }
-  ],
+  openapi: '3.0.0',
   paths: {
-    '/{msisdn}': {
-      get: {
-        summary: 'Get users balance',
+    '/*': {
+      post: {
+        tags: [
+          'api-controller-v-2'
+        ],
+        summary: 'sendOTP',
+        operationId: 'sendOTPUsingPOST_1',
         parameters: [
           {
-            name: 'msisdn',
-            in: 'path',
-            description: 'msisdn to fetch',
+            name: 'ax-request-id',
+            in: 'header',
+            description: 'ax-request-id',
+            required: false,
+            schema: {
+              type: 'string'
+            }
+          },
+          {
+            name: 'channel',
+            in: 'header',
+            description: 'channel',
             required: true,
             schema: {
-              type: 'string'
-            },
-            example: 6285920558588
-          },
-          {
-            name: 'ReqID',
-            in: 'query',
-            description: 'System Generated',
-            schema: {
-              type: 'string'
-            },
-            example: 20809
-          },
-          {
-            name: 'type',
-            in: 'query',
-            description: 'default value=ALL',
-            schema: {
-              type: 'string'
-            },
-            example: 'ALL'
+              type: 'string',
+              default: 'NONE'
+            }
           }
         ],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: [
+                  'msisdn',
+                  'transport'
+                ],
+                properties: {
+                  length: {
+                    type: 'integer',
+                    format: 'int32'
+                  },
+                  useLetter: {
+                    type: 'boolean'
+                  },
+                  useNumber: {
+                    type: 'boolean'
+                  },
+                  allCapital: {
+                    type: 'boolean'
+                  },
+                  transport: {
+                    type: 'string',
+                    enum: [
+                      'SMS',
+                      'EMAIL'
+                    ]
+                  },
+                  validityInSecond: {
+                    type: 'integer',
+                    format: 'int32'
+                  },
+                  msisdn: {
+                    type: 'string'
+                  }
+                },
+                title: 'SendOTPRq'
+              }
+            }
+          },
+          description: 'sendOTPRq',
+          required: true
+        },
         responses: {
           200: {
-            description: 'PayloadQueryBalanceResp Response object',
+            description: 'OK',
             content: {
               '*/*': {
                 schema: {
-                  $ref: '#/components/schemas/PayloadQueryBalanceResp'
-                }
-              },
-              'application/json': {
-                example: {
-                  Header: {
-                    ReqID: '20809',
-                    IMEI: '3571250436519XXX'
-                  },
-                  PayloadQueryBalanceResp: {
-                    QueryInformation: {
-                      SubscriberBalances: {
-                        CCMoney: {
-                          UnitValue: {
-                            ValueDigits: '1000',
-                            Exponent: '0'
-                          },
-                          CurrencyCode: '360'
-                        },
-                        ActiveEndDate: '2020-12-31T00:00:00.000Z',
-                        GraceEndDate: '2021-01-30T00:00:00.000Z',
-                        BalanceType: '3'
-                      },
-                      HomePOCInformation: 'JK0',
-                      PostpaidPrepaidInformation: '1',
-                      SubscriberPricePlan: '513711184',
-                      SubscriberID: '1234620113'
+                  type: 'object',
+                  required: [
+                    'esbuuid',
+                    'msisdn',
+                    'reason',
+                    'validity'
+                  ],
+                  properties: {
+                    esbuuid: {
+                      type: 'string'
+                    },
+                    msisdn: {
+                      type: 'string'
+                    },
+                    reason: {
+                      type: 'string'
+                    },
+                    validity: {
+                      type: 'integer',
+                      format: 'int32'
                     }
                   },
-                  CommonResponse: {
-                    ResponseCode: '00',
-                    ErrorCode: '',
-                    ErrorMessage: ''
-                  }
+                  title: 'SendOTPRs'
                 }
               }
             }
+          },
+          201: {
+            description: 'Created'
+          },
+          401: {
+            description: 'Unauthorized'
+          },
+          403: {
+            description: 'Forbidden'
+          },
+          404: {
+            description: 'Not Found'
           }
         },
         'x-auth-type': 'Application & Application User',
         'x-throttling-tier': 'Unlimited'
-      }
-    }
-  },
-  components: {
-    schemas: {
-      PayloadQueryBalanceResp: {
-        type: 'object',
-        properties: {
-          Header: {
-            type: 'object',
-            properties: {
-              ReqID: {
-                type: 'string'
-              },
-              IMEI: {
-                type: 'string'
-              }
-            }
-          },
-          PayloadQueryBalanceResp: {
-            type: 'object',
-            properties: {
-              QueryInformation: {
-                type: 'object',
-                properties: {
-                  SubscriberBalances: {
-                    type: 'object',
-                    properties: {
-                      CCMoney: {
-                        type: 'object',
-                        properties: {
-                          UnitValue: {
-                            type: 'object',
-                            properties: {
-                              ValueDigits: {
-                                type: 'string'
-                              },
-                              Exponent: {
-                                type: 'string'
-                              }
-                            }
-                          },
-                          CurrencyCode: {
-                            type: 'string'
-                          }
-                        }
-                      },
-                      ActiveEndDate: {
-                        type: 'string'
-                      },
-                      GraceEndDate: {
-                        type: 'string'
-                      },
-                      BalanceType: {
-                        type: 'string'
-                      }
-                    }
-                  },
-                  HomePOCInformation: {
-                    type: 'string'
-                  },
-                  PostpaidPrepaidInformation: {
-                    type: 'string'
-                  },
-                  SubscriberPricePlan: {
-                    type: 'string'
-                  },
-                  SubscriberID: {
-                    type: 'string'
-                  }
-                }
-              }
-            }
-          },
-          CommonResponse: {
-            type: 'object',
-            properties: {
-              ResponseCode: {
-                type: 'string'
-              },
-              ErrorCode: {
-                type: 'string'
-              },
-              ErrorMessage: {
-                type: 'string'
-              }
-            }
-          }
-        }
       }
     }
   }

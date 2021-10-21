@@ -46,6 +46,7 @@ import { ApplicationService } from 'src/app/services/application.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarNotifComponent } from 'src/app/utilities/snackbar-notif/snackbar-notif.component';
 import { apiTiersTester, PublisherApiTiersControlComponent } from 'src/app/pages/shared/controls/publisher-apitiers-control.component';
+import { KeyMapperComponent, keyMapperPortalTester } from 'src/app/pages/shared/controls/keymapper-portal.component';
 
 const appearance: MatFormFieldDefaultOptions = {
   appearance: 'outline'
@@ -118,6 +119,10 @@ export class StoreApplicationDetailComponent implements OnInit {
     {
       renderer: PublisherEndpointUrlControlComponent,
       tester: rankWith(5, arrayEndpointUrlTester)
+    },
+    {
+      renderer: KeyMapperComponent,
+      tester: keyMapperPortalTester
     }
   ];
 
