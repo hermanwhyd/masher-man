@@ -18,116 +18,121 @@
     </ng-template>
 
     <mat-step [stepControl]="form">
-      <form (ngSubmit)="submit()" [formGroup]="form" fxLayout="column" autocomplete="off">
-        <ng-template matStepLabel>General Detail</ng-template>
-        <p class="mt-0 mb-4 text-secondary">
-          Base config for all imported operation from swagger. You can custom individually later on API Designer!
-        </p>
-        <mat-form-field appearance="outline">
-          <mat-label>Base Name</mat-label>
-          <input cdkFocusInitial formControlName="name" matInput required placeholder="E.g., ServiceName-v1">
-          <mat-hint>Display name, a pascal case of service name with hardcoded version</mat-hint>
-          <mat-error *ngIf="(formControl.name.touched) && formControl.name.errors?.required">
-            Name is required
-          </mat-error>
-        </mat-form-field>
+      <mat-dialog-content>
+        <form (ngSubmit)="submit()" [formGroup]="form" fxLayout="column" autocomplete="off">
+          <ng-template matStepLabel>General Detail</ng-template>
+          <p class="mt-0 mb-4 text-secondary">
+            Base config for all imported operation from swagger. You can custom individually later on API Designer!
+          </p>
+          <mat-form-field appearance="outline">
+            <mat-label>Base Name</mat-label>
+            <input cdkFocusInitial formControlName="name" matInput required placeholder="E.g., ServiceName-v1">
+            <mat-hint>Display name, a pascal case of service name with hardcoded version</mat-hint>
+            <mat-error *ngIf="(formControl.name.touched) && formControl.name.errors?.required">
+              Name is required
+            </mat-error>
+          </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Base Context</mat-label>
-          <input formControlName="context" matInput required placeholder="E.g., service-name/{version}">
-          <mat-hint>URI context path of the API, a kebab case name of service followed by &#123;version&#125;
-          </mat-hint>
-          <mat-error *ngIf="(formControl.context.touched) && formControl.context.errors?.required">
-            Context is required
-          </mat-error>
-        </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Base Context</mat-label>
+            <input formControlName="context" matInput required placeholder="E.g., service-name/{version}">
+            <mat-hint>URI context path of the API, a kebab case name of service followed by &#123;version&#125;
+            </mat-hint>
+            <mat-error *ngIf="(formControl.context.touched) && formControl.context.errors?.required">
+              Context is required
+            </mat-error>
+          </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Version</mat-label>
-          <input formControlName="version" matInput required placeholder="E.g. v1, v2, etc">
-          <mat-hint>Must is lower case with single number version</mat-hint>
-          <mat-error *ngIf="(formControl.version.touched) && formControl.version.errors?.required">
-            Version is required
-          </mat-error>
-        </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Version</mat-label>
+            <input formControlName="version" matInput required placeholder="E.g. v1, v2, etc">
+            <mat-hint>Must is lower case with single number version</mat-hint>
+            <mat-error *ngIf="(formControl.version.touched) && formControl.version.errors?.required">
+              Version is required
+            </mat-error>
+          </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Base Description</mat-label>
-          <textarea cdkTextareaAutosize formControlName="description" matInput></textarea>
-          <mat-hint>Brief description of API functionality</mat-hint>
-        </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Base Description</mat-label>
+            <textarea cdkTextareaAutosize formControlName="description" matInput></textarea>
+            <mat-hint>Brief description of API functionality</mat-hint>
+          </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Server Host</mat-label>
-          <input formControlName="server" matInput required placeholder="http://">
-          <mat-hint>Server or host must start with http:// or https:// prefix</mat-hint>
-          <mat-error *ngIf="(formControl.server.touched) && formControl.server.errors?.required">
-            Server Host is required
-          </mat-error>
-        </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Server Host</mat-label>
+            <input formControlName="server" matInput required placeholder="http://">
+            <mat-hint>Server or host must start with http:// or https:// prefix</mat-hint>
+            <mat-error *ngIf="(formControl.server.touched) && formControl.server.errors?.required">
+              Server Host is required
+            </mat-error>
+          </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Tags</mat-label>
-          <mat-chip-list #chipList formControlName="tags">
-            <mat-chip *ngFor="let tag of tags.value" (removed)="removeTag(tag)">
-              {{ tag }}
-              <mat-icon matChipRemove [icIcon]="icDelete"></mat-icon>
-            </mat-chip>
-            <input type="text" placeholder="touchpoint name, api-economy, etc" [matChipInputFor]="chipList"
-              matChipInputAddOnBlur="'true'" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-              (matChipInputTokenEnd)="addTag($event)">
-          </mat-chip-list>
-          <mat-hint>Use keywords and common search terms as tags to group APIs</mat-hint>
-        </mat-form-field>
-      </form>
+          <mat-form-field appearance="outline">
+            <mat-label>Tags</mat-label>
+            <mat-chip-list #chipList formControlName="tags">
+              <mat-chip *ngFor="let tag of tags.value" (removed)="removeTag(tag)">
+                {{ tag }}
+                <mat-icon matChipRemove [icIcon]="icDelete"></mat-icon>
+              </mat-chip>
+              <input type="text" placeholder="touchpoint name, api-economy, etc" [matChipInputFor]="chipList"
+                matChipInputAddOnBlur="'true'" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                (matChipInputTokenEnd)="addTag($event)">
+            </mat-chip-list>
+            <mat-hint>Use keywords and common search terms as tags to group APIs</mat-hint>
+          </mat-form-field>
+        </form>
+      </mat-dialog-content>
       <div fxLayout="row" fxLayoutAlign="end center">
         <button mat-button matStepperNext [disabled]="!nextable">NEXT</button>
       </div>
     </mat-step>
     <mat-step [stepControl]="form2nd">
-      <form (ngSubmit)="goForward()" [formGroup]="form2nd" fxLayout="column">
-        <ng-template matStepLabel>Business Information</ng-template>
-        <p class="mt-0 mb-4 text-secondary">
-          This information will be displayed in the store API owner.
-        </p>
-        <mat-form-field appearance="outline">
-          <mat-label>Business Owner</mat-label>
-          <input cdkFocusInitial type="text" formControlName="businessOwner" name="businessOwner" matInput
-            placeholder="E.g., XL Business Solution, Service Delivery Platform, Axis Business, etc">
-          <mat-hint>Fill Business Owner with a name of department or product owner (institution and not personal name)
-          </mat-hint>
-        </mat-form-field>
+      <mat-dialog-content>
+        <form (ngSubmit)="goForward()" [formGroup]="form2nd" fxLayout="column">
+          <ng-template matStepLabel>Business Information</ng-template>
+          <p class="mt-0 mb-4 text-secondary">
+            This information will be displayed in the store API owner.
+          </p>
+          <mat-form-field appearance="outline">
+            <mat-label>Business Owner</mat-label>
+            <input cdkFocusInitial type="text" formControlName="businessOwner" name="businessOwner" matInput
+              placeholder="E.g., XL Business Solution, Service Delivery Platform, Axis Business, etc">
+            <mat-hint>Fill Business Owner with a name of department or product owner (institution and not personal name)
+            </mat-hint>
+          </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Business Owner Email</mat-label>
-          <input formControlName="businessOwnerEmail" name="businessOwnerEmail" type="email" matInput
-            placeholder="E.g., someone@xl.co.id">
-        </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Business Owner Email</mat-label>
+            <input formControlName="businessOwnerEmail" name="businessOwnerEmail" type="email" matInput
+              placeholder="E.g., someone@xl.co.id">
+          </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Technical Owner</mat-label>
-          <input type="text" formControlName="technicalOwner" name="technicalOwner" matInput required
-            placeholder="E.g. John Spacy, Liggard Space">
-          <mat-hint>Name of developer or PIC who may have responsibility for this API</mat-hint>
-          <mat-error *ngIf="(formControl2nd.technicalOwner.touched) && formControl2nd.technicalOwner.errors?.required">
-            Technical Owner is required
-          </mat-error>
-        </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Technical Owner</mat-label>
+            <input type="text" formControlName="technicalOwner" name="technicalOwner" matInput required
+              placeholder="E.g. John Spacy, Liggard Space">
+            <mat-hint>Name of developer or PIC who may have responsibility for this API</mat-hint>
+            <mat-error
+              *ngIf="(formControl2nd.technicalOwner.touched) && formControl2nd.technicalOwner.errors?.required">
+              Technical Owner is required
+            </mat-error>
+          </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Technical Owner Email</mat-label>
-          <input formControlName="technicalOwnerEmail" name="technicalOwnerEmail" type="email" matInput required
-            placeholder="E.g., someyou@xl.co.id" autocomplete="email">
-          <mat-error
-            *ngIf="(formControl2nd.technicalOwnerEmail.touched) && formControl2nd.technicalOwnerEmail.errors?.required">
-            Technical Owner Email is required
-          </mat-error>
-        </mat-form-field>
-        <div fxLayout="row" fxLayoutAlign="end center">
-          <button mat-button matStepperPrevious>PREV</button>
-          <button mat-button type="submit" [disabled]="!nextable2nd">NEXT</button>
-        </div>
-      </form>
+          <mat-form-field appearance="outline">
+            <mat-label>Technical Owner Email</mat-label>
+            <input formControlName="technicalOwnerEmail" name="technicalOwnerEmail" type="email" matInput required
+              placeholder="E.g., someyou@xl.co.id" autocomplete="email">
+            <mat-error
+              *ngIf="(formControl2nd.technicalOwnerEmail.touched) && formControl2nd.technicalOwnerEmail.errors?.required">
+              Technical Owner Email is required
+            </mat-error>
+          </mat-form-field>
+          <div fxLayout="row" fxLayoutAlign="end center">
+            <button mat-button matStepperPrevious>PREV</button>
+            <button mat-button type="submit" [disabled]="!nextable2nd">NEXT</button>
+          </div>
+        </form>
+      </mat-dialog-content>
     </mat-step>
     <mat-step>
       <ng-template matStepLabel>Choose Operations</ng-template>
