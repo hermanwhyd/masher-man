@@ -101,7 +101,7 @@ export class PublisherEditComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   ngOnInit(): void {
-    this.publisherService.draftAPIs$.pipe(untilDestroyed(this), distinctUntilChanged())
+    this.publisherService.draftAPIs$.pipe(untilDestroyed(this))
       .subscribe(data => {
         this.model.apis = data;
       });

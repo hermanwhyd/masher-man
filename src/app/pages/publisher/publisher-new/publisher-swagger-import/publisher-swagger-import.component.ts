@@ -172,11 +172,11 @@ export class PublisherSwaggerImportComponent implements OnInit {
           apiDefinition: apiDefinitionSwagger,
           businessInformation: form2nd,
           corsConfiguration: {
-            corsConfigurationEnabled: true,
+            corsConfigurationEnabled: false,
             accessControlAllowOrigins: [
               '*'
             ],
-            accessControlAllowCredentials: true,
+            accessControlAllowCredentials: false,
             accessControlAllowHeaders: [
               'authorization',
               'Access-Control-Allow-Origin',

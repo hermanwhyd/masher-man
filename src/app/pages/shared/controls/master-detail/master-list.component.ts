@@ -187,6 +187,7 @@ export class MasterListComponent extends JsonFormsArrayControl {
       };
       return masterItem;
     });
+
     this.masterItems = masterItems;
     let newSelectedIdx = -1;
     let newSelectedItem;
@@ -265,8 +266,8 @@ export class MasterListComponent extends JsonFormsArrayControl {
 
   registerRefresh() {
     this.publisherMasterListService.refreshEmit$
-      .pipe(untilDestroyed(this))
-      .subscribe((idx: string) => {
+      .pipe(untilDestroyed(this), filter<string>(Boolean))
+      .subscribe((str: string) => {
         this.jsonFormsService.refresh();
       });
   }
@@ -274,10 +275,10 @@ export class MasterListComponent extends JsonFormsArrayControl {
   registerPublish() {
     this.publisherMasterListService.publishEmit$
       .pipe(untilDestroyed(this), filter<string[]>(Boolean))
-      .subscribe((idx: string[]) => {
+      .subscribe((str: string[]) => {
         this.isPublishing[this.selectedItem.data.name] = true;
         this.jsonFormsService.setReadonly(true);
-        const apid: ApiDetail = { ...this.selectedItem.data };
+        const apid: ApiDetail = this.selectedItem.data;
 
         apid.apiDefinition = (typeof apid.apiDefinition === 'string') ? apid.apiDefinition : JSON.stringify(apid.apiDefinition);
 
@@ -290,9 +291,9 @@ export class MasterListComponent extends JsonFormsArrayControl {
           .pipe(untilDestroyed(this), finalize(() => {
             this.jsonFormsService.setReadonly(false);
             this.isPublishing[this.selectedItem.data.name] = false;
-          }))
+          }), filter<ApiDetail>(Boolean))
           .subscribe(data => {
-            this.selectedItem.data.id = data.id;
+            apid.id = data.id;
             this.jsonFormsAngularService.refresh();
             this.snackBar.openFromComponent(SnackbarNotifComponent, {
               data: { message: 'Save and publish API successfully', type: 'success' },

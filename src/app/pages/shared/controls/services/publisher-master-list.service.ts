@@ -13,7 +13,7 @@ export class PublisherMasterListService {
   public refreshEmit = new Subject<string>();
   public refreshEmit$ = this.refreshEmit.asObservable();
 
-  public createEmit = new BehaviorSubject<ApiDetail>(null);
+  public createEmit = new Subject<ApiDetail>();
   public createEmit$ = this.createEmit.asObservable();
 
   constructor() { }
