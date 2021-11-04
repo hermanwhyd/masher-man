@@ -269,12 +269,12 @@ export class StoreApplicationDetailComponent implements OnInit {
 
     const rows = [];
     this.model.keys.forEach(k => {
-      rows.push([k.keyType, k.consumerKey, k.consumerSecret]);
+      rows.push([k.keyType, k.consumerKey, k.consumerSecret, k.token?.validityTime]);
     });
 
     appSpec.push({
       table: {
-        headers: ['Type', 'Consumer Key', 'Consumer Secret'],
+        headers: ['Type', 'Consumer Key', 'Consumer Secret', 'Validity (seconds)'],
         rows: [...rows]
       }
     });
@@ -297,7 +297,7 @@ export class StoreApplicationDetailComponent implements OnInit {
 
     this.dialog.open(MarkdownDialogComponent, {
       data: appSpec,
-      width: '750px'
+      width: '830px'
     });
   }
 }
