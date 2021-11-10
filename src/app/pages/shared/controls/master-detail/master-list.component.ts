@@ -280,17 +280,19 @@ export class MasterListComponent extends JsonFormsArrayControl {
         this.jsonFormsService.setReadonly(true);
         const apid: ApiDetail = this.selectedItem.data;
 
-        apid.apiDefinition = (typeof apid.apiDefinition === 'string') ? apid.apiDefinition : JSON.stringify(apid.apiDefinition);
+        const draftApiD = { ...apid };
 
-        if (apid.endpointConfig.sandbox_endpoints?.url === '') {
-          delete (apid.endpointConfig.sandbox_endpoints);
+        draftApiD.apiDefinition = (typeof apid.apiDefinition === 'string') ? apid.apiDefinition : JSON.stringify(apid.apiDefinition);
+
+        if (draftApiD.endpointConfig.sandbox_endpoints?.url === '') {
+          delete (draftApiD.endpointConfig.sandbox_endpoints);
         }
-        apid.endpointConfig = JSON.stringify(apid.endpointConfig);
+        draftApiD.endpointConfig = JSON.stringify(draftApiD.endpointConfig);
 
-        this.publiserService.createOrUpdateApi(apid)
+        this.publiserService.createOrUpdateApi(draftApiD)
           .pipe(untilDestroyed(this), finalize(() => {
             this.jsonFormsService.setReadonly(false);
-            this.isPublishing[this.selectedItem.data.name] = false;
+            this.isPublishing[draftApiD.name] = false;
           }), filter<ApiDetail>(Boolean))
           .subscribe(data => {
             apid.id = data.id;
