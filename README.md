@@ -18,10 +18,28 @@ Please goto src/assets/screenshot
 
 # Run this project
 
+This project build with Angular 12 and tailwindcss 2.x and many other awesome dependencies, you can find out on package.json file.
+
 With angular CLI:
 
 ```shell
 ng serve
+```
+
+# Deploy
+
+## Using firebase
+
+Build:
+
+```shell
+ng build --configuration production
+```
+
+deploy:
+
+```shell
+firebase deploy
 ```
 
 # Common Error
@@ -34,6 +52,6 @@ ng serve
 This project build with premium template - [VEX](https://themeforest.net/item/vex-angular-8-material-design-admin-template/24472891)
 If you decide to use this project, may be you need to purchase it first.
 
-## Further help
+# Further help
 
-> If you have any specific questions about the template, you can contact us anytime on our support email ([herman.whyd@gmail.com](mailto:herman.whyd@gmail.com))
+If you have any specific questions about the template, you can contact us anytime on our support email ([herman.whyd@gmail.com](mailto:herman.whyd@gmail.com))
