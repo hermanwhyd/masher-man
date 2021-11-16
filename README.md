@@ -26,17 +26,15 @@ With angular CLI:
 ng serve
 ```
 
-# Deploy
-
-## Using firebase
-
-Build:
+# Build
 
 ```shell
 ng build --configuration production
 ```
 
-deploy:
+# Deploy
+
+## Using firebase
 
 ```shell
 firebase deploy
@@ -47,11 +45,6 @@ firebase deploy
 - Can't resolve 'swagger-schema-official/schema
   you can refer this [github issues](https://github.com/apigee-127/sway/issues/180).
 
-# Disclaimer
-
-This project build with premium template - [VEX](https://themeforest.net/item/vex-angular-8-material-design-admin-template/24472891)
-If you decide to use this project, may be you need to purchase it first.
-
 # Further help
 
-If you have any specific questions about the template, you can contact us anytime on our support email ([herman.whyd@gmail.com](mailto:herman.whyd@gmail.com))
+If you have any specific questions about this project, you can contact us anytime on our support email ([hwayudi@xl.co.id](mailto:hwayudi@xl.co.id))
