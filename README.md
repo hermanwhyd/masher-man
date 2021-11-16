@@ -2,8 +2,8 @@
 
 # Introduction
 
-MasherMan is a APIGATE (WsO2) client for easy managing multi account of publisher and store. With Single Page Application You can manage API such as Publising, Editing, Make a copy and replublish to other environment.
-Also, you can manage Application such as add or update application, subscribe and unsubscriber API, approve subscription (using publisher account). And the last of course you can test Your published API via API Console which also available on this SPA.
+MasherMan is an APIGATE (WsO2) client for easy managing multi-account of publisher and store. With Single Page Application You can manage API such as Publising, Editing, Make a copy and replublish to other environment.
+You can manage Application such as add or update application, subscribe and unsubscriber API. And the last You can test Your published API via API Console which also available on this SPA.
 
 # Live Demo
 
@@ -11,7 +11,7 @@ Also, you can manage Application such as add or update application, subscribe an
 
 # Screenshot
 
-Please goto src/assets/screenshot
+Please goto src/assets/screenshot folder
 
 # Run this project
 
