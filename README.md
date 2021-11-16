@@ -50,4 +50,4 @@ copy all file inside dist/vex to your public_html folder
 
 # Further help
 
-If you have any specific questions about this project, you can contact us anytime on our support email ([hwayudi@xl.co.id](mailto:hwayudi@xl.co.id))
+If you have any specific questions about this project, you can contact us anytime on our support email ([hwahyudi@xl.co.id](mailto:hwahyudi@xl.co.id))
