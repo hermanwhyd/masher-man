@@ -3,9 +3,7 @@
 # Introduction
 
 MasherMan is a WsO2 client for easy managing multi account of publisher and store.
-
 You can manage API such as Publising, Editing, Make a copy and replublish to other publish account.
-
 Also, you can manage Application, add and update, subscribe and unsubscriber API, approve subscription (using publisher account).
 
 # Live Demo
@@ -25,6 +23,7 @@ With angular CLI:
 ```shell
 ng serve
 ```
+then you can access http://localhost:4200 from your browser
 
 # Build
 
@@ -34,11 +33,15 @@ ng build --configuration production
 
 # Deploy
 
-## Using firebase
+## firebase hosting
+for detail please follow this [blog](https://www.positronx.io/deploy-angular-app-to-production-with-firebase-hosting/)
 
 ```shell
 firebase deploy
 ```
+
+## web hosting
+copy all file inside dist/vex to your public_html folder
 
 # Common Error
 
