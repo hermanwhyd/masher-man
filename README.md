@@ -1,10 +1,9 @@
-<h2>MASHER-MAN</h2>
+<h2>MASHER-MAN a SPA APIGATE (WsO2) Manager</h2>
 
 # Introduction
 
-MasherMan is a WsO2 client for easy managing multi account of publisher and store.
-You can manage API such as Publising, Editing, Make a copy and replublish to other publish account.
-Also, you can manage Application, add and update, subscribe and unsubscriber API, approve subscription (using publisher account).
+MasherMan is a APIGATE (WsO2) client for easy managing multi account of publisher and store. With Single Page Application You can manage API such as Publising, Editing, Make a copy and replublish to other environment.
+Also, you can manage Application such as add or update application, subscribe and unsubscriber API, approve subscription (using publisher account). And the last of course you can test Your published API via API Console which also available on this SPA.
 
 # Live Demo
 
@@ -41,7 +40,7 @@ firebase deploy
 ```
 
 ## web hosting
-copy all file inside dist/vex to your public_html folder
+after done build project, copy all file inside dist/vex to your public_html folder
 
 # Common Error
 
