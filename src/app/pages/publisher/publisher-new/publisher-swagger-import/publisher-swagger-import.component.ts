@@ -154,7 +154,7 @@ export class PublisherSwaggerImportComponent implements OnInit {
           name: apiName,
           context: apiContext,
           version: form.version,
-          description: [form.description, sentenceCase(spec.description || spec.summary)].join(' ').trim(),
+          description: [form.description, sentenceCase(spec.description || spec.summary || spec.operationId)].join(' ').trim(),
           tags: form.tags,
           endpointConfig: {
             production_endpoints: {

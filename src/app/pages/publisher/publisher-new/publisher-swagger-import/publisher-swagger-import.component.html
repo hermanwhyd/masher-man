@@ -146,7 +146,7 @@
               class="opblock opblock-{{ method.key | lowercase }} pl-3 w-full">
               <div class="opblock-summary opblock-summary-{{ method.key | lowercase }}">
                 <span class="opblock-summary-method">{{ method.key | uppercase }}</span>
-                <span class="opblock-summary-path truncate">{{ path.key }}</span>
+                <span class="opblock-summary-path truncate" title="{{ path.key }}">{{ path.key }}</span>
                 <div class="opblock-summary-description truncate text-right">
                   {{ method.value.summary || method.value.description || method.value.operationId }}
                 </div>
