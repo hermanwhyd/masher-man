@@ -33,6 +33,11 @@
             <ic-icon [icon]="icEdit" class="-ml-1 mr-2" inline="true" size="16px"></ic-icon>
             <span><span *ngIf="selection.selected.length > 1">Batch </span>Edit</span>
           </button>
+          <button (click)="batchEdit(selection.selected, true)" class="ml-2 rounded-full" color="primary"
+            mat-raised-button type="button" matTooltip="Edit APIs">
+            <ic-icon [icon]="icCopy" class="-ml-1 mr-2" inline="true" size="16px"></ic-icon>
+            <span><span *ngIf="selection.selected.length > 1">Batch </span>Copy</span>
+          </button>
         </div>
 
         <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"

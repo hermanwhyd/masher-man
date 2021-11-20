@@ -1,11 +1,11 @@
 <vex-secondary-toolbar current="API Designer">
   <button *ngIf="(errorsSubject | async).length > 0" mat-stroked-button color="warn" (click)="validate()"
     [matBadge]="(errorsSubject | async).length" matBadgeColor="accent">
-    Validate
+    VALIDATE
   </button>
   <button *ngIf="(errorsSubject | async).length == 0" mat-raised-button (click)="publish()"
     [disabled]="(draftCountSubject | async) == 0" [loading]="isLoading" color="primary">
-    Save and Publish
+    SAVE PUBLISH
   </button>
 </vex-secondary-toolbar>
 <div class="bg-card" vexContainer>

@@ -13,6 +13,7 @@ import icRestore from '@iconify/icons-ic/baseline-restore-from-trash';
 import icInfo from '@iconify/icons-ic/outline-info';
 import icGlobe from '@iconify/icons-fa-solid/globe';
 import icRemove from '@iconify/icons-ic/outline-remove-circle-outline';
+import icCopy from '@iconify/icons-ic/round-file-copy';
 
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { fadeInRight400ms } from 'src/@vex/animations/fade-in-right.animation';
@@ -71,6 +72,7 @@ export class StoreListComponent implements OnInit {
   icGlobe = icGlobe;
   icFolderPlush = icFolderPlush;
   icRemove = icRemove;
+  icCopy = icCopy;
 
   @Input()
   columns: TableColumn<Api>[] = [
@@ -196,9 +198,10 @@ export class StoreListComponent implements OnInit {
     });
   }
 
-  batchEdit(apis: Api[]) {
+  batchEdit(apis: Api[], copyOnly = false) {
     const ids: Api['id'][] = [];
     apis.forEach(a => ids.push(a.id));
-    this.router.navigate(['/publisher/edit'], { relativeTo: this.route, queryParams: { apiIds: ids } });
+    const queryParams = (copyOnly) ? { copyOnly: true, apiIds: ids } : { apiIds: ids };
+    this.router.navigate(['/publisher/edit'], { relativeTo: this.route, queryParams });
   }
 }

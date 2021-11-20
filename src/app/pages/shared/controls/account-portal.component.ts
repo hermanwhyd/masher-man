@@ -11,7 +11,10 @@ import { ApiConfigService } from 'src/app/services/api-config.service';
 import { Profile } from 'src/app/types/api-config.interface';
 import { ApiDetail } from 'src/app/types/api.interface';
 import { PublisherMasterListService } from './services/publisher-master-list.service';
-import { MatDialog } from '@angular/material/dialog';
+import { PublisherService } from '../../publisher/services/publisher.service';
+import { finalize } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackbarNotifComponent } from 'src/app/utilities/snackbar-notif/snackbar-notif.component';
 
 @Component({
   selector: 'vex-publisher-data-display',
@@ -28,6 +31,7 @@ import { MatDialog } from '@angular/material/dialog';
 
       <span fxFlex></span>
 
+      <button *ngIf="api.status === 'CREATED'" [loading]="isLoading" mat-raised-button color="accent" (click)="changeLifeCycle()">PUBLISH</button>
       <a *ngIf="this.isEnabled()" color="primary" mat-mini-fab matTooltip="Publisher View" [routerLink]="['/publisher/list']"
         [queryParams]="{apiId: api?.id}">
         <mat-icon [icIcon]="icTraining" size="20px"></mat-icon>
@@ -49,13 +53,15 @@ export class AccountPortalComponent extends JsonFormsControl {
   api: ApiDetail;
   options = new JsonEditorOptions();
   activeProfile: Profile;
+  isLoading = false;
 
   @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
   constructor(
     jsonFormsAngularService: JsonFormsAngularService,
     private publisherMasterListService: PublisherMasterListService,
     private apiConfigService: ApiConfigService,
-    private dialog: MatDialog) {
+    private publisherService: PublisherService,
+    public snackBar: MatSnackBar) {
     super(jsonFormsAngularService);
   }
 
@@ -72,6 +78,20 @@ export class AccountPortalComponent extends JsonFormsControl {
 
   public createCopy() {
     this.publisherMasterListService.createEmit.next({ ...this.api, id: null });
+  }
+
+  public changeLifeCycle() {
+    this.isLoading = true;
+    this.publisherService.changeLifeCycle(this.api.id, 'Publish')
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe(() => {
+        this.api.status = 'PUBLISHED';
+        this.publisherMasterListService.refreshEmit.next('R');
+        this.snackBar.openFromComponent(
+          SnackbarNotifComponent,
+          { data: { message: 'Successfully updated the API status', type: 'success' } }
+        );
+      });
   }
 
 }

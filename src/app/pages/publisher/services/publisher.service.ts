@@ -114,4 +114,25 @@ export class PublisherService {
           , { headers }) as Observable<Application>;
       })) as Observable<Application>;
   }
+
+  public changeLifeCycle(apiId: string, action: string) {
+    const scope = 'apim:api_publish';
+    const params = new HttpParams().append('apiId', apiId).append('action', action);
+
+    const publisher = this.apiConfigService.getActivePublisher();
+    if (!publisher) {
+      return throwError('Invalid Publisher Profile, please setup its first!');
+    }
+
+    const loginRq: LoginRq = { username: publisher.username, password: decode(publisher.password), grant_type: 'password', scope };
+
+    return this.authService.token(loginRq, publisher.clientDigest)
+      .pipe(switchMap(token => {
+        const headers = new HttpHeaders({ Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' });
+        return this.httpClient.post(
+          [this.apiConfigService.getApiUrl(), this.URL, 'change-lifecycle'].join('/')
+          , null
+          , { params, headers }) as Observable<any>;
+      })) as Observable<any>;
+  }
 }

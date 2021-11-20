@@ -42,7 +42,17 @@
                         {
                           "type": "Control",
                           "label": "Version",
-                          "scope": "#/properties/version"
+                          "scope": "#/properties/version",
+                          "rule": {
+                            "effect": "DISABLE",
+                            "condition": {
+                              "scope": "#/properties/id",
+                              "schema": {
+                                "type": "string",
+                                "format": "uuid"
+                              }
+                            }
+                          }
                         }
                       ]
                     },

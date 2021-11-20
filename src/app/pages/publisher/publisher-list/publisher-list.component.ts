@@ -14,6 +14,7 @@ import icInfo from '@iconify/icons-ic/outline-info';
 import icGlobe from '@iconify/icons-fa-solid/globe';
 import icRemove from '@iconify/icons-ic/outline-remove-circle-outline';
 import icStore from '@iconify/icons-ic/outline-shopping-cart';
+import icCopy from '@iconify/icons-ic/round-file-copy';
 
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { fadeInRight400ms } from 'src/@vex/animations/fade-in-right.animation';
@@ -69,6 +70,7 @@ export class PublisherListComponent implements OnInit {
   icGlobe = icGlobe;
   icRemove = icRemove;
   icStore = icStore;
+  icCopy = icCopy;
 
   @Input()
   columns: TableColumn<Api>[] = [
@@ -185,7 +187,9 @@ export class PublisherListComponent implements OnInit {
     return `${this.apiConfigService.getActiveProfile()?.portalUrl}/publisher/info?name=${api.name}&version=${api.version}&provider=${api.provider}`;
   }
 
-  batchEdit(apis: Api['id'][]) {
-    this.router.navigate(['../', 'edit'], { relativeTo: this.route, queryParams: { apiIds: apis } });
+  batchEdit(apis: Api['id'][], copyOnly = false) {
+    const queryParams = (copyOnly) ? { copyOnly: true, apiIds: apis } : { apiIds: apis };
+    this.router.navigate(['../', 'edit'], { relativeTo: this.route, queryParams });
   }
+
 }

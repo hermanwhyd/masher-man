@@ -10,7 +10,7 @@ import { ErrorObject } from 'ajv';
 
 import uischemaAsset from 'src/assets/static-data/publisher/uischema-list.json';
 import schemaAsset from 'src/assets/static-data/publisher/schema-list.json';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { MatFormFieldDefaultOptions, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MatDialog } from '@angular/material/dialog';
 import { InformationDialogComponent } from 'src/app/utilities/information-dialog/information-dialog.component';
@@ -51,6 +51,7 @@ export class PublisherEditComponent implements OnInit, AfterViewInit, OnDestroy 
   model = { apis: [] as ApiDetail[] };
 
   isLoading = false;
+  hasParamCopyOnly = false;
 
   uischema = uischemaAsset;
   schema = schemaAsset;
@@ -110,6 +111,8 @@ export class PublisherEditComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   routerParseParams() {
+    this.hasParamCopyOnly = this.route.snapshot.queryParamMap.has('copyOnly');
+
     this.route.queryParamMap.pipe(
       untilDestroyed(this),
       map((params: any) => params.getAll('apiIds')),
@@ -118,6 +121,15 @@ export class PublisherEditComponent implements OnInit, AfterViewInit, OnDestroy 
     ).subscribe((apiIds: string[]) => {
       apiIds.forEach((apiId) => {
         this.publisherService.getApiDetail(apiId)
+          .pipe(
+            map((data: any) => {
+              if (this.hasParamCopyOnly) {
+                delete data.id;
+              }
+
+              return data;
+            })
+          )
           .subscribe(data => {
             const endpointConfig = {} as EndPointConfig;
             try {
