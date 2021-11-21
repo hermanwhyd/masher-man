@@ -136,10 +136,10 @@
     </mat-step>
     <mat-step>
       <ng-template matStepLabel>Choose Operations</ng-template>
+      <p class="mt-0 mb-4 text-secondary">
+        Please select the operation:
+      </p>
       <mat-dialog-content class="mb-4">
-        <p class="mt-0 mb-4 text-secondary">
-          Please select the operation:
-        </p>
         <div *ngFor="let path of swagger.paths | keyvalue" class="swagger-ui">
           <div class="operation-tag-content" *ngFor="let method of path.value | keyvalue">
             <mat-checkbox [(ngModel)]="method.value.selected"
@@ -148,7 +148,7 @@
                 <span class="opblock-summary-method">{{ method.key | uppercase }}</span>
                 <span class="opblock-summary-path truncate" title="{{ path.key }}">{{ path.key }}</span>
                 <div class="opblock-summary-description truncate text-right">
-                  {{ method.value.summary || method.value.description || method.value.operationId }}
+                  {{ pascalCase(method.value.summary || method.value.operationId) }}
                 </div>
               </div>
             </mat-checkbox>

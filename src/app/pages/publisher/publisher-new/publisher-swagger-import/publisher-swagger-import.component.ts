@@ -27,6 +27,8 @@ export class PublisherSwaggerImportComponent implements OnInit {
   icDelete = icDelete;
   icClear = icClear;
 
+  pascalCase = pascalCase;
+
   swagger: any;
   isOpenApi: boolean;
 
@@ -130,12 +132,15 @@ export class PublisherSwaggerImportComponent implements OnInit {
 
         delete (spec.selected);
 
-        const apiSuffix = path.split('/').pop();
+        // const apiSuffix = path.split('/').pop();
+        let apiSuffix = pascalCase(spec.summary || spec.operationId);
+        apiSuffix = apiSuffix.toLowerCase().startsWith(method.toLowerCase()) ? apiSuffix.substring(method.length) : apiSuffix;
+
         const apiResource = (path.includes('/{')) ? '/{' + path.split('{').splice(1).join('{') : '/*';
         const apiPath = (path.includes('/{')) ? path.split('/{')[0] : path;
 
-        const apiName = `${form.name}-${upperFirst(method)}${pascalCase(apiSuffix)}`;
-        const apiContext = `${form.context}/${lowerCase(method)}-${paramCase(apiSuffix)}`;
+        const apiName = `${form.name}-${upperFirst(method)}${apiSuffix}`;
+        const apiContext = `${form.context}/${lowerCase(method)}-${apiSuffix.toLocaleLowerCase()}`;
 
         const apiDefinitionSwagger = {
           openapi: this.swagger.openapi,
