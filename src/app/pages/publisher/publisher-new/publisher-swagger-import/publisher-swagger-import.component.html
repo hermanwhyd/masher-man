@@ -148,7 +148,7 @@
                 <span class="opblock-summary-method">{{ method.key | uppercase }}</span>
                 <span class="opblock-summary-path truncate" title="{{ path.key }}">{{ path.key }}</span>
                 <div class="opblock-summary-description truncate text-right">
-                  {{ pascalCase(method.value.summary || method.value.operationId) }}
+                  {{ pascalCase(method.value.summary || method.value.operationId || '') }}
                 </div>
               </div>
             </mat-checkbox>

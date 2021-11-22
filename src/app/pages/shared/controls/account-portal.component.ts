@@ -33,11 +33,11 @@ import { SnackbarNotifComponent } from 'src/app/utilities/snackbar-notif/snackba
 
       <button *ngIf="api.status === 'CREATED'" [loading]="isLoading" mat-raised-button color="accent" (click)="changeLifeCycle()">PUBLISH</button>
       <a *ngIf="this.isEnabled()" color="primary" mat-mini-fab matTooltip="Publisher View" [routerLink]="['/publisher/list']"
-        [queryParams]="{apiId: api?.id}">
+        [queryParams]="{apiId: api?.id}" target="_blank">
         <mat-icon [icIcon]="icTraining" size="20px"></mat-icon>
       </a>
       <a *ngIf="this.isEnabled()" color="primary" mat-mini-fab matTooltip="Store View" [routerLink]="['/store/list']"
-        [queryParams]="{apiId: api?.id}">
+        [queryParams]="{apiId: api?.id}" target="_blank">
         <mat-icon [icIcon]="icStore" size="20px"></mat-icon>
       </a>
       <button *ngIf="this.isEnabled()" mat-raised-button color="primary" (click)="createCopy()">MAKE A COPY</button>
@@ -57,7 +57,7 @@ export class AccountPortalComponent extends JsonFormsControl {
 
   @ViewChild(JsonEditorComponent) editor: JsonEditorComponent;
   constructor(
-    jsonFormsAngularService: JsonFormsAngularService,
+    private jsonFormsAngularService: JsonFormsAngularService,
     private publisherMasterListService: PublisherMasterListService,
     private apiConfigService: ApiConfigService,
     private publisherService: PublisherService,
@@ -77,7 +77,7 @@ export class AccountPortalComponent extends JsonFormsControl {
   }
 
   public createCopy() {
-    this.publisherMasterListService.createEmit.next({ ...this.api, id: null });
+    this.publisherMasterListService.createEmit.next({ ...this.api, id: null, status: 'CREATED' });
   }
 
   public changeLifeCycle() {
@@ -86,6 +86,7 @@ export class AccountPortalComponent extends JsonFormsControl {
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(() => {
         this.api.status = 'PUBLISHED';
+        this.jsonFormsAngularService.refresh();
         this.publisherMasterListService.refreshEmit.next('R');
         this.snackBar.openFromComponent(
           SnackbarNotifComponent,

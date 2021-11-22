@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { publishReplay, refCount, switchMap } from 'rxjs/operators';
 import { AuthService } from '../pages/access/auth-manager/services/auth.service';
 import { LoginRq } from '../pages/access/auth-manager/services/oauth.interface';
 import { Paginate } from '../types/paginate.interface';
@@ -16,6 +16,8 @@ export class TierService {
   private readonly URL_STORE = 'store/tiers';
   private readonly URL_PUBLISHER = 'publisher/tiers';
 
+  private apiTierCache: Observable<Paginate<Tier>>;
+
   constructor(
     private httpClient: HttpClient,
     private authService: AuthService,
@@ -27,19 +29,27 @@ export class TierService {
   }
 
   public apiTiers(offset: number = 0, limit: number = 1000) {
-    const scope = 'apim:tier_view';
+    // Cache it once if apiTier value is false
+    if (!this.apiTierCache) {
+      const scope = 'apim:tier_view';
 
-    const publisher = this.apiConfigService.getActivePublisher();
-    if (!publisher) {
-      return throwError('Invalid Publisher Profile, please setup its first!');
+      const publisher = this.apiConfigService.getActivePublisher();
+      if (!publisher) {
+        return throwError('Invalid Publisher Profile, please setup its first!');
+      }
+
+      const loginRq: LoginRq = { username: publisher.username, password: decode(publisher.password), grant_type: 'password', scope };
+
+      this.apiTierCache = this.authService.token(loginRq, publisher.clientDigest)
+        .pipe(switchMap(token => {
+          const headers = new HttpHeaders({ Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' });
+          return this.httpClient.get([this.apiConfigService.getApiUrl(), this.URL_PUBLISHER, 'api'].join('/'), { headers });
+        }),
+          publishReplay(1), // this tells Rx to cache the latest emitted
+          refCount() // and this tells Rx to keep the Observable alive as long as there are any Subscribers
+        );
     }
 
-    const loginRq: LoginRq = { username: publisher.username, password: decode(publisher.password), grant_type: 'password', scope };
-
-    return this.authService.token(loginRq, publisher.clientDigest)
-      .pipe(switchMap(token => {
-        const headers = new HttpHeaders({ Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' });
-        return this.httpClient.get([this.apiConfigService.getApiUrl(), this.URL_PUBLISHER, 'api'].join('/'), { headers });
-      })) as Observable<Paginate<Tier>>;
+    return this.apiTierCache;
   }
 }

@@ -133,7 +133,7 @@ export class PublisherSwaggerImportComponent implements OnInit {
         delete (spec.selected);
 
         // const apiSuffix = path.split('/').pop();
-        let apiSuffix = pascalCase(spec.summary || spec.operationId);
+        let apiSuffix = pascalCase(spec.summary || spec.operationId || '');
         apiSuffix = apiSuffix.toLowerCase().startsWith(method.toLowerCase()) ? apiSuffix.substring(method.length) : apiSuffix;
 
         const apiResource = (path.includes('/{')) ? '/{' + path.split('{').splice(1).join('{') : '/*';

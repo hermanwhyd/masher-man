@@ -51,7 +51,7 @@ export const ApiDetailTemplate = {
       }
     }
   ),
-  status: 'PUBLISHED',
+  status: 'CREATED',
   responseCaching: 'Disabled',
   cacheTimeout: 300,
   destinationStatsEnabled: 'ENDPOINT',

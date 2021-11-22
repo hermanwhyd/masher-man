@@ -415,14 +415,14 @@ export class StoreListDetailComponent implements OnInit, AfterViewInit {
         // add parameter
         if (!!value.parameters) {
           value.parameters.forEach(p => {
-            const row = [p.name || '', p.schema?.type || '', p.in || '', (p.required ? '**Required.** ' : '') + p.description || ''];
+            const row = [p.name || '', p.schema?.type || '', p.in || '', (p.required ? '**Required.** ' : '') + (p.description || '')];
 
             if (p.in === 'query') {
-              httpParams[p.name] = p.name;
+              httpParams[p.name] = `{${p.name}}`;
             }
 
             if (p.in === 'header') {
-              httpHeaders[p.name] = `{{${p.name}}}`;
+              httpHeaders[p.name] = `{${p.name}}`;
             }
 
             rows.push(row);
@@ -451,7 +451,7 @@ export class StoreListDetailComponent implements OnInit, AfterViewInit {
 
         // add usage example
         const finalHost = this.model.endpointURLs[0]?.environmentURLs.https || this.model.endpointURLs[0]?.environmentURLs.http;
-        const finalUrl = queryString.stringifyUrl({ url: path === '/*' ? '' : path, query: httpParams });
+        const finalUrl = queryString.stringifyUrl({ url: path === '/*' ? '' : path, query: httpParams }, { encode: false });
 
         const params: any = {
           url: finalHost + finalUrl,
