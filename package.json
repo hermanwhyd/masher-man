@@ -78,6 +78,7 @@
     "os-browserify": "^0.3.0",
     "pdfmake": "^0.2.2",
     "query-string": "^7.0.1",
+    "rollbar": "^2.24.0",
     "rxjs": "^6.6.7",
     "showdown": "~1.9.1",
     "simplebar": "^5.3.4",

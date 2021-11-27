@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, InjectionToken } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -12,6 +12,20 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { InformationDialogModule } from './utilities/information-dialog/information-dialog.module';
 import { SnackBarNotifModule } from './utilities/snackbar-notif/snackbar-notif.module';
 import { ConfirmationDialogModule } from './utilities/confirmation-dialog/confirmation-dialog.module';
+import Rollbar from 'rollbar';
+
+const rollbarConfig = {
+  accessToken: 'b996ba1861aa4525bb80c6d6280937b4',
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+};
+
+export function rollbarFactory() {
+  return new Rollbar(rollbarConfig);
+}
+
+export const RollbarService = new InjectionToken<Rollbar>('rollbar');
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -36,6 +50,10 @@ import { ConfirmationDialogModule } from './utilities/confirmation-dialog/confir
     SnackBarNotifModule,
   ],
   providers: [
+    {
+      provide: RollbarService,
+      useFactory: rollbarFactory
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,
