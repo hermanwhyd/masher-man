@@ -35,7 +35,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
         {{ tag }}
         <mat-icon matChipRemove *ngIf="this.isEnabled()" [icIcon]="icDelete"></mat-icon>
       </mat-chip>
-      <input type="text" #tierInput [formControl]="tierCtrl" [matChipInputFor]="chipList" [matAutocomplete]="auto" matChipInputAddOnBlur="'true'" placeholder="type to search">
+      <input type="text" #tierInput [formControl]="tierCtrl" [matChipInputFor]="chipList" [matAutocomplete]="auto" matChipInputAddOnBlur="'true'" placeholder="type to search" *ngIf="this.isEnabled()">
     </mat-chip-list>
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedTag($event)">
       <mat-option *ngFor="let item of filteredTiers | async" [value]="item.name">

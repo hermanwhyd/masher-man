@@ -88,12 +88,13 @@
 
           <div @fadeInUp fxLayout="column">
             <div @stagger class="p-2 border-b" *ngFor="let item of subscriptionsFiltered" fxLayout="row"
-              fxLayoutAlign="start center" fxLayoutGap="8px">
+              fxLayoutAlign="start center" fxLayoutGap="8px" class="callout p-2"
+              [ngClass]="item.status == 'UNBLOCKED' ? 'callout-info' : item.status == null ? 'callout-default' : 'callout-warning'">
               <div @fadeInRight fxFlex="auto">
                 <h4 class="body-2 m-0 leading-snug">
                   <a [routerLink]="['/store/list']" [queryParams]="{apiIdentifier: item?.apiIdentifier}"
                     class="text-cyan underline">
-                    {{ codec.decodeValue(item.apiIdentifier) }}
+                    {{ getApiName(codec.decodeValue(item.apiIdentifier)) }}
                   </a>
                 </h4>
                 <h5 class="text-secondary m-0 caption leading-none" *ngIf="item.subscriptionId">
@@ -109,6 +110,8 @@
 
               <button class="rounded-full" color="warn" type="button" fxFlex="none" mat-raised-button
                 (click)="unsubscribe(item)" *ngIf="item.subscriptionId" type="button">UNSUBSCRIBE</button>
+              <button class="rounded-full" color="primary" type="button" fxFlex="none" mat-raised-button
+                (click)="resubscribe(item)" *ngIf="item.subscriptionId" type="button">RESUBSCRIBE</button>
             </div>
           </div>
         </div>

@@ -315,7 +315,7 @@ export class StoreListDetailComponent implements OnInit, AfterViewInit {
             callApps.list?.forEach(app => {
               let sub = callSubs.list?.find(s => s.applicationId === app.applicationId);
               if (!sub) {
-                sub = { apiIdentifier: this.model.id, tier: app.throttlingTier, applicationId: app.applicationId };
+                sub = { apiIdentifier: this.model.id, tier: 'Unlimited', applicationId: app.applicationId };
               }
               subs.push(sub);
             });
@@ -371,6 +371,34 @@ export class StoreListDetailComponent implements OnInit, AfterViewInit {
           delete models[idx].status;
           delete models[idx].subscriptionId;
         });
+      }
+    });
+  }
+
+  resubscribe(item: Subscription) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: {
+        message: `Are you sure you want to re-subscribe selected application subscription?`,
+        buttonText: {
+          ok: 'Yes',
+          cancel: 'No'
+        }
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        this.subscriptionService.unsubscribe(item.subscriptionId)
+          .pipe(switchMap(() => {
+            return this.subscriptionService.subscribe([item]);
+          })).subscribe((rs) => {
+            const models = this.subscribers;
+            models[models.indexOf(item)] = rs[0];
+            this.snackBar.openFromComponent(
+              SnackbarNotifComponent,
+              { data: { message: 'APIs subscription success, pending for approval via manage-service portal!', type: 'success' } }
+            );
+          });
       }
     });
   }

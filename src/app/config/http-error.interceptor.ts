@@ -23,8 +23,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           this.snackBar.openFromComponent(SnackbarNotifComponent, { data: { message: reason, type: 'danger' } });
 
           rollbar.error(new Error(reason).stack);
-
-          return throwError(error?.error);
+          return throwError(error);
         })
       );
   }

@@ -76,7 +76,8 @@
 
           <div @fadeInUp fxLayout="column">
             <div @stagger class="p-2 border-b" *ngFor="let item of subscribers" fxLayout="row"
-              fxLayoutAlign="start center" fxLayoutGap="8px">
+              fxLayoutAlign="start center" fxLayoutGap="8px" class="callout p-2"
+              [ngClass]="item.status == 'UNBLOCKED' ? 'callout-info' : item.status == null ? 'callout-default' : 'callout-warning'">
               <div @fadeInRight fxFlex="auto">
                 <h4 class="body-2 m-0 leading-snug">
                   <a [routerLink]="['/store/application']" [queryParams]="{appId: item?.applicationId}"
@@ -89,8 +90,8 @@
                 </h5>
               </div>
 
-              <button class="rounded-full" color="primary" type="button" fxFlex="none" mat-raised-button
-                (click)="approve(item)" *ngIf="item.status === 'ON_HOLD'">APPROVE</button>
+              <!-- <button class="rounded-full" color="primary" type="button" fxFlex="none" mat-raised-button
+                (click)="approve(item)" *ngIf="item.status === 'ON_HOLD'">APPROVE</button> -->
             </div>
           </div>
         </div>

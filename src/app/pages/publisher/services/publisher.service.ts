@@ -88,13 +88,11 @@ export class PublisherService {
       .pipe(switchMap(token => {
         const headers = new HttpHeaders({ Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' });
         if (api.id) {
-          return this.httpClient.put(
-            [this.apiConfigService.getApiUrl(), this.URL, api.id].join('/'), api, { headers }
-          ) as Observable<ApiDetail>;
+          return this.httpClient.put<ApiDetail>([this.apiConfigService.getApiUrl(), this.URL, api.id].join('/'), api, { headers });
         } else {
-          return this.httpClient.post([this.apiConfigService.getApiUrl(), this.URL].join('/'), api, { headers }) as Observable<ApiDetail>;
+          return this.httpClient.post<ApiDetail>([this.apiConfigService.getApiUrl(), this.URL].join('/'), api, { headers });
         }
-      })) as Observable<ApiDetail>;
+      }));
   }
 
   getApplicationDetail(appId: string) {

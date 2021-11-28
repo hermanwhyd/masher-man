@@ -125,6 +125,9 @@ export class PublisherEditComponent implements OnInit, AfterViewInit, OnDestroy 
             map((data: any) => {
               if (this.hasParamCopyOnly) {
                 delete data.id;
+                data.status = 'CREATED';
+                data.sequences = [];
+                data.endpointSecurity = null;
               }
 
               return data;

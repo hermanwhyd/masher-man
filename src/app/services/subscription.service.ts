@@ -16,6 +16,7 @@ export class SubscriptionService {
 
   private readonly URL = 'store/subscriptions';
   private readonly URL_PUBLISHER = 'publisher/subscriptions';
+  private readonly URL_WORKFLOW = 'publisher/workflows';
 
   constructor(
     private httpClient: HttpClient,
@@ -104,6 +105,39 @@ export class SubscriptionService {
         return this.httpClient.post([this.apiConfigService.getApiUrl(), this.URL_PUBLISHER, 'unblock-subscription'].join('/'),
           {}, { params, headers }) as Observable<Subscription>;
       })) as Observable<Subscription>;
+  }
+
+  /** still not working */
+  public approveWorkflow(subscriptionId: string) {
+    const scope = 'apim:api_workflow';
+
+    const params = new HttpParams().append('workflowReferenceId', subscriptionId);
+
+    const account = this.apiConfigService.getActivePublisher();
+    if (!account) {
+      return throwError('Invalid Publisher Profile, please setup its first!');
+    }
+
+    const loginRq: LoginRq = { username: account.username, password: decode(account.password), grant_type: 'password', scope };
+
+    const bodyRq = {
+      status: 'APPROVED',
+      attributes: {
+        apiCurrentState: 'Created',
+        apiLCAction: 'Publish',
+        apiName: 'APIname',
+        piVersion: '1.0.0',
+        apiProvider: 'admin',
+        invoker: 'admin'
+      }
+    };
+
+    return this.authService.token(loginRq, account.clientDigest)
+      .pipe(switchMap(token => {
+        const headers = new HttpHeaders({ Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' });
+        return this.httpClient.post([this.apiConfigService.getApiUrl(), this.URL_WORKFLOW, 'update-workflow-status'].join('/'),
+          bodyRq, { params, headers }) as Observable<object>;
+      })) as Observable<object>;
   }
 
   public getApiPublisherSubscriber(apiId: string, offset: number = 0, limit: number = 1000) {

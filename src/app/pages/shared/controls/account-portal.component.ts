@@ -77,7 +77,7 @@ export class AccountPortalComponent extends JsonFormsControl {
   }
 
   public createCopy() {
-    this.publisherMasterListService.createEmit.next({ ...this.api, id: null, status: 'CREATED' });
+    this.publisherMasterListService.createEmit.next({ ...this.api, id: null, status: 'CREATED', sequences: [], endpointSecurity: null });
   }
 
   public changeLifeCycle() {

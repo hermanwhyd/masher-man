@@ -47,6 +47,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarNotifComponent } from 'src/app/utilities/snackbar-notif/snackbar-notif.component';
 import { apiTiersTester, PublisherApiTiersControlComponent } from 'src/app/pages/shared/controls/publisher-apitiers-control.component';
 import { KeyMapperComponent, keyMapperPortalTester } from 'src/app/pages/shared/controls/keymapper-portal.component';
+import { replaceLastOccurrenceInString } from 'src/app/utilities/function/strings-util';
 
 const appearance: MatFormFieldDefaultOptions = {
   appearance: 'outline'
@@ -195,6 +196,8 @@ export class StoreApplicationDetailComponent implements OnInit {
       models[idx] = rs;
       this.subscriptionsSubject.next(models);
     });
+
+    // this.subscriptionService.approveWorkflow(item.subscriptionId).subscribe(() => console.log('APPROVED WORKFLOW'));
   }
 
   unsubscribe(item: Subscription) {
@@ -219,6 +222,36 @@ export class StoreApplicationDetailComponent implements OnInit {
     });
   }
 
+  resubscribe(item: Subscription) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: {
+        message: `Are you sure you want to re-subscribe API <b>${this.codec.decodeValue(item.apiIdentifier)}</b>?`,
+        buttonText: {
+          ok: 'Yes',
+          cancel: 'No'
+        }
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        this.subscriptionService.unsubscribe(item.subscriptionId)
+          .pipe(switchMap(() => {
+            return this.subscriptionService.subscribe([item]);
+          })).subscribe((rs) => {
+            const models = this.subscriptionsSubject.value;
+            models[models.indexOf(item)] = rs[0];
+
+            this.subscriptionsSubject.next(models);
+            this.snackBar.openFromComponent(
+              SnackbarNotifComponent,
+              { data: { message: 'APIs subscription success, pending for approval via manage-service portal!', type: 'success' } }
+            );
+          });
+      }
+    });
+  }
+
   refreshSubscriptionsFiltered() {
     const value = this.searchCtrl.value || '';
     this.subscriptionsFiltered = this.subscriptionsSubject.value.filter(
@@ -231,7 +264,7 @@ export class StoreApplicationDetailComponent implements OnInit {
         rs.list.forEach((item) => {
           const apiIdentifier = [item.provider, item.name.split('-').join('%2D'), item.version].join('-');
           if (count < 5 && !this.subscriptionsSubject.value.some(s => s.apiIdentifier === apiIdentifier)) {
-            this.subscriptionsFiltered.push({ apiIdentifier, tier: this.model.throttlingTier, applicationId: this.model.applicationId });
+            this.subscriptionsFiltered.push({ apiIdentifier, tier: 'Unlimited', applicationId: this.model.applicationId });
             count++;
           }
         });
@@ -299,5 +332,9 @@ export class StoreApplicationDetailComponent implements OnInit {
       data: appSpec,
       width: '830px'
     });
+  }
+
+  getApiName(apiIdentifier: string) {
+    return replaceLastOccurrenceInString(this.codec.decodeValue(apiIdentifier.substring(apiIdentifier.indexOf('-') + 1)), '-', ' ');
   }
 }
