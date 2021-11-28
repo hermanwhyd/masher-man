@@ -13,6 +13,7 @@ import { InformationDialogModule } from './utilities/information-dialog/informat
 import { SnackBarNotifModule } from './utilities/snackbar-notif/snackbar-notif.module';
 import { ConfirmationDialogModule } from './utilities/confirmation-dialog/confirmation-dialog.module';
 import Rollbar from 'rollbar';
+import { LoadingInterceptor } from './config/loading.interceptor';
 
 const rollbarConfig = {
   accessToken: 'b996ba1861aa4525bb80c6d6280937b4',
@@ -50,6 +51,11 @@ export const RollbarService = new InjectionToken<Rollbar>('rollbar');
     SnackBarNotifModule,
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoadingInterceptor,
+      multi: true
+    },
     {
       provide: RollbarService,
       useFactory: rollbarFactory

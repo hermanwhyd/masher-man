@@ -4,6 +4,7 @@ import icArrowBack from '@iconify/icons-ic/twotone-arrow-back';
 import icPencil from '@iconify/icons-ic/edit';
 import icFile from '@iconify/icons-fa-solid/file-code';
 import icTraining from '@iconify/icons-ic/baseline-model-training';
+import icCopy from '@iconify/icons-ic/round-file-copy';
 
 import { ApiDetail, EndPointConfig } from 'src/app/types/api.interface';
 import { ActivatedRoute } from '@angular/router';
@@ -89,6 +90,7 @@ export class StoreListDetailComponent implements OnInit, AfterViewInit {
   icPencil = icPencil;
   icFile = icFile;
   icTraining = icTraining;
+  icCopy = icCopy;
 
   model: ApiDetail;
 

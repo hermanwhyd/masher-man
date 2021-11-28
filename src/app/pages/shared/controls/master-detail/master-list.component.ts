@@ -21,7 +21,7 @@ import {
 import { ApiDetailTemplate } from 'src/assets/static-data/template/api-detail';
 import { ConfirmationDialogComponent } from 'src/app/utilities/confirmation-dialog/confirmation-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { filter, finalize } from 'rxjs/operators';
+import { catchError, filter, finalize } from 'rxjs/operators';
 import { ApiDetail } from 'src/app/types/api.interface';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -29,6 +29,7 @@ import { SnackbarNotifComponent } from 'src/app/utilities/snackbar-notif/snackba
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PublisherMasterListService } from '../services/publisher-master-list.service';
 import { PublisherService } from 'src/app/pages/publisher/services/publisher.service';
+import { throwError } from 'rxjs';
 
 const keywords = ['#', 'properties', 'items'];
 
@@ -293,14 +294,17 @@ export class MasterListComponent extends JsonFormsArrayControl {
           .pipe(untilDestroyed(this), finalize(() => {
             this.jsonFormsService.setReadonly(false);
             this.isPublishing[draftApiD.name] = false;
-          }), filter<ApiDetail>(Boolean))
-          .subscribe(data => {
-            apid.id = data.id;
-            this.jsonFormsAngularService.refresh();
-            this.snackBar.openFromComponent(SnackbarNotifComponent, {
-              data: { message: 'Save and publish API successfully', type: 'success' },
-              duration: 5000
-            });
+          }), catchError(error => throwError(error)))
+          .subscribe({
+            next: data => {
+              apid.id = data.id;
+              this.jsonFormsAngularService.refresh();
+              this.snackBar.openFromComponent(SnackbarNotifComponent, {
+                data: { message: 'Save and publish API successfully', type: 'success' },
+                duration: 5000
+              });
+            },
+            error: err => console.log('subsErr', err)
           });
       });
   }

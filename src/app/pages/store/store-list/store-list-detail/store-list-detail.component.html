@@ -32,6 +32,10 @@
       [queryParams]="{apiIds: model?.id}" type="button">
       <mat-icon [icIcon]="icPencil" size="20px"></mat-icon>
     </a>
+    <a color="primary" fxFlex="none" mat-mini-fab matTooltip="Copy" [routerLink]="['/publisher/edit']"
+      [queryParams]="{copyOnly: true, apiIds: model?.id}" type="button">
+      <mat-icon [icIcon]="icCopy" size="20px"></mat-icon>
+    </a>
   </div>
 
   <div @stagger>
