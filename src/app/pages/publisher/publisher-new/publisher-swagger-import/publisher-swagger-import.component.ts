@@ -61,7 +61,7 @@ export class PublisherSwaggerImportComponent implements OnInit {
     this.isOpenApi = this.data.swagger === undefined;
 
     const host = this.isOpenApi ? this.swagger.servers[0].url : 'http://' + this.swagger.host;
-    const title = this.isOpenApi ? this.swagger.info?.title : this.swagger.host?.split('.')[0];
+    const title = this.swagger.host?.split('.')[0];
 
     this.formControl.name.setValue(pascalCase(title) + '-v1');
     this.formControl.context.setValue(paramCase(title) + '/{version}');

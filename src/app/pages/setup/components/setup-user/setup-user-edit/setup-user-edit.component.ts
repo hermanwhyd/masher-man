@@ -63,7 +63,7 @@ export class SetupUserEditComponent implements OnInit {
     this.authService.register(
       {
         callbackUrl: '',
-        clientName: 'rest_api_publisher',
+        clientName: 'rest_api_masherman',
         grantType: 'password refresh_token',
         saasApp: true,
         owner: model.username
