@@ -14,6 +14,8 @@ import { SnackBarNotifModule } from './utilities/snackbar-notif/snackbar-notif.m
 import { ConfirmationDialogModule } from './utilities/confirmation-dialog/confirmation-dialog.module';
 import Rollbar from 'rollbar';
 import { LoadingInterceptor } from './config/loading.interceptor';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 const rollbarConfig = {
   accessToken: 'b996ba1861aa4525bb80c6d6280937b4',
@@ -44,7 +46,13 @@ export const RollbarService = new InjectionToken<Rollbar>('rollbar');
     // App
     InformationDialogModule,
     SnackBarNotifModule,
-    ConfirmationDialogModule
+    ConfirmationDialogModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the app is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    })
   ],
   exports: [
     InformationDialogModule,

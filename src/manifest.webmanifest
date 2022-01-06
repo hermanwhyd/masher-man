@@ -1,0 +1,23 @@
+{
+  "name": "masher-man",
+  "short_name": "MasherMan",
+  "theme_color": "#1976d2",
+  "background_color": "#fafafa",
+  "display": "standalone",
+  "scope": "./",
+  "start_url": "./",
+  "icons": [
+    {
+      "src": "assets/icons/favicon-196x196.png",
+      "sizes": "196x196",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "assets/icons/apple-touch-icon-76x76.png",
+      "sizes": "76x76",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ]
+}
