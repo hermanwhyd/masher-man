@@ -114,7 +114,7 @@ export class PublisherApiTiersControlComponent extends JsonFormsArrayControl imp
       this.formControl.disable();
     } else {
       this.tierService.apiTiers().subscribe(data => {
-        this.apiTiers = data.list;
+        this.apiTiers = data;
         this.tierCtrl.setValue('');
       });
     }

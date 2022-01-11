@@ -1,9 +1,12 @@
+import { Tier } from './tier.interface';
+
 export interface Account {
   active: boolean;
   profile: string;
   userPublishers?: User[];
   userStores?: User[];
   userApiManagers?: User[];
+  tiers: Tier[];
 }
 
 export interface User {

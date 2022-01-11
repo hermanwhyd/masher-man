@@ -7,4 +7,6 @@ export interface Tier {
   description: string;
   name: string;
   attributes: any;
+  selected?: boolean;
+  default?: boolean;
 }

@@ -1,0 +1,47 @@
+<span class="card" fxLayout="column" fxLayout.gt-sm="row">
+
+  <div class="p-6" fxFlex="60%">
+    <div class="mt-0 mb-4" fxLayout="row" fxLayoutAlign="start center">
+      <h2 class="title" fxFlex="auto">Subscription Tiers</h2>
+      <button matTooltipPosition="above" (click)="refresh()" class="cursor-pointer text-primary" mat-stroked-button
+        type="button" [loading]="isLoading">
+        REFRESH
+      </button>
+    </div>
+    <table class="text-left w-full table-collapse">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Desciption</th>
+          <th>T</th>
+          <th>D</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr [ngClass]="{'border-t': !first, 'border-b': !last}"
+          *ngFor="let item of subscriptionTiers$ | async | sort:'name'; let first = first; let last = last">
+          <td class="py-1 text-sm font-semibold m-0 leading-snug">{{item.name}}</td>
+          <td class="py-1 text-secondary m-0 caption leading-none">{{item.description}}</td>
+          <td>
+            <mat-checkbox (change)="$event ? selection.toggle(item.name) : null"
+              [checked]="selection.isSelected(item.name)" color="primary"></mat-checkbox>
+          </td>
+          <td>
+            <mat-checkbox (change)="$event ? radio.toggle(item.name) : null" [checked]="radio.isSelected(item.name)"
+              color="primary"></mat-checkbox>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="border-l" fxFlex="40%">
+    <div class="p-6">
+      <h2 class="title mt-0 mb-4">DESCRIPTION</h2>
+      <p class="text-secondary">
+        <b>T for tiers</b>, choose subscription-tiers when API creation or update the existing.<br /><br />
+        <b>D for default</b>, this default tier when you subscribe to API.
+      </p>
+    </div>
+  </div>
+</span>

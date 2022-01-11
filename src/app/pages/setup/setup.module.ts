@@ -22,9 +22,12 @@ import { SetupUserEditComponent } from './components/setup-user/setup-user-edit/
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { SetupTierComponent } from './components/setup-tier/setup-tier.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ArraySortPipe } from 'src/app/pipes/array-sort.pipe';
 
 @NgModule({
-  declarations: [SetupComponent, SetupApiComponent, SetupUserComponent, SetupUserEditComponent],
+  declarations: [SetupComponent, SetupApiComponent, SetupUserComponent, SetupUserEditComponent, SetupTierComponent, ArraySortPipe],
   imports: [
     CommonModule,
     SetupRoutingModule,
@@ -43,7 +46,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatButtonLoadingModule,
     MatSnackBarModule,
     MatDialogModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatCheckboxModule,
   ]
 })
 export class SetupModule { }

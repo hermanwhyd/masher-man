@@ -88,9 +88,9 @@ export class PublisherService {
       .pipe(switchMap(token => {
         const headers = new HttpHeaders({ Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' });
         if (api.id) {
-          return this.httpClient.put<ApiDetail>([this.apiConfigService.getApiUrl(), this.URL, api.id].join('/'), api, { headers });
+          return this.httpClient.put<ApiDetail>([this.apiConfigService.getApiUrl(), this.URL, api.id].join('/'), { ...api, provider: publisher.username }, { headers });
         } else {
-          return this.httpClient.post<ApiDetail>([this.apiConfigService.getApiUrl(), this.URL].join('/'), api, { headers });
+          return this.httpClient.post<ApiDetail>([this.apiConfigService.getApiUrl(), this.URL].join('/'), { ...api, provider: publisher.username }, { headers });
         }
       }));
   }

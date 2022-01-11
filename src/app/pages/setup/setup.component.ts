@@ -8,6 +8,7 @@ import { stagger80ms } from '../../../@vex/animations/stagger.animation';
 import { SidebarMenu } from './interfaces/sidebar-menu.interface';
 import { SetupApiComponent } from './components/setup-api/setup-api.component';
 import { SetupUserComponent } from './components/setup-user/setup-user.component';
+import { SetupTierComponent } from './components/setup-tier/setup-tier.component';
 
 @Component({
   selector: 'vex-setup',
@@ -25,12 +26,14 @@ export class SetupComponent implements OnInit {
   sidebarMenu: SidebarMenu[] = [
     { type: 'subheader', title: 'BASE CONFIG', element: '', active: false },
     { type: 'link', element: 'setupApi', title: 'API Config', active: true },
+    { type: 'link', element: 'setupTier', title: 'Subscription Tiers', active: true },
     { type: 'subheader', title: 'ACCOUNT CONFIG', element: '', active: false },
     { type: 'link', element: 'setupUser', title: 'Publisher', active: false },
     { type: 'link', element: 'setupUser', title: 'Store', active: false },
   ];
 
   @ViewChild(SetupUserComponent, { read: ElementRef, static: true }) private setupUser: ElementRef;
+  @ViewChild(SetupTierComponent, { read: ElementRef, static: true }) private setupTier: ElementRef;
   @ViewChild(SetupApiComponent, { read: ElementRef, static: true }) private setupApi: ElementRef;
   constructor(
     private layoutService: LayoutService,
