@@ -45,28 +45,29 @@ export class SetupUserComponent implements OnInit {
     private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
-    this.apiConfigService.accounts$.subscribe((accounts: Account[]) => {
+    this.apiConfigService
+      .accounts$
+      .subscribe((accounts: Account[]) => {
+        this.accounts = accounts;
+        this.config = this.accounts.find(c => c.active === true);
+        if (!this.config) {
+          this.config = {
+            profile: this.apiConfigService.getActiveProfile()?.name, active: true
+            , userPublishers: [], userStores: [], userApiManagers: [], tiers: []
+          } as Account;
+          this.accounts.push(this.config);
+        }
 
-      this.accounts = accounts;
-      this.config = this.accounts.find(c => c.active === true);
-      if (!this.config) {
-        this.config = {
-          profile: this.apiConfigService.getActiveProfile()?.name, active: true
-          , userPublishers: [], userStores: [], userApiManagers: []
-        } as Account;
-        this.accounts.push(this.config);
-      }
-
-      if (this.TYPE === 'publisher') {
-        this.users = this.config.userPublishers;
-      } else if (this.TYPE === 'store') {
-        this.users = this.config.userStores;
-      } else if (this.TYPE === 'apimanager') {
-        this.users = this.config.userApiManagers;
-      } else {
-        this.users = [];
-      }
-    });
+        if (this.TYPE === 'publisher') {
+          this.users = this.config.userPublishers;
+        } else if (this.TYPE === 'store') {
+          this.users = this.config.userStores;
+        } else if (this.TYPE === 'apimanager') {
+          this.users = this.config.userApiManagers;
+        } else {
+          this.users = [];
+        }
+      });
   }
 
   createOrUpdateModel() {

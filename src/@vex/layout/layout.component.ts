@@ -48,12 +48,14 @@ export class LayoutComponent implements OnInit, AfterViewInit {
   @ViewChild('sidenav', { static: true }) sidenav: MatSidenav;
   @ViewChild(MatSidenavContainer, { static: true }) sidenavContainer: MatSidenavContainer;
 
-  constructor(private cd: ChangeDetectorRef,
+  constructor(
+    private cd: ChangeDetectorRef,
     private breakpointObserver: BreakpointObserver,
     private layoutService: LayoutService,
     private configService: ThemeConfigService,
     private router: Router,
-    @Inject(DOCUMENT) private document: Document) { }
+    @Inject(DOCUMENT) private document: Document
+  ) { }
 
   ngOnInit() {
     /**

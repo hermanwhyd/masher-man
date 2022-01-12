@@ -34,12 +34,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Paginate } from 'src/app/types/paginate.interface';
 import { PageEvent } from '@angular/material/paginator';
 import { ApiConfigService } from 'src/app/services/api-config.service';
-import { untilDestroyed, UntilDestroy } from '@ngneat/until-destroy';
+import { UntilDestroy } from '@ngneat/until-destroy';
 import { SnackbarNotifComponent } from 'src/app/utilities/snackbar-notif/snackbar-notif.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { statusClass } from 'src/app/utilities/function/api-status';
 import { SelectionModel } from '@angular/cdk/collections';
-import { Profile } from 'src/app/types/api-config.interface';
 
 @UntilDestroy()
 @Component({
@@ -98,9 +97,6 @@ export class PublisherListComponent implements OnInit {
   isLoading = false;
   apisSubject: BehaviorSubject<Api[]> = new BehaviorSubject([]);
   data$: Observable<Api[]> = this.apisSubject.asObservable();
-  profiles$ = this.apiConfigService.profiles$;
-  activeProfile: Profile;
-
   isLoadApiDetail = new BehaviorSubject<boolean>(false);
 
   constructor(
@@ -114,6 +110,7 @@ export class PublisherListComponent implements OnInit {
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource();
     this.registerSub();
+    this.fetchData();
   }
 
   registerSub() {
@@ -134,16 +131,14 @@ export class PublisherListComponent implements OnInit {
           });
       });
 
-    this.profiles$.pipe(untilDestroyed(this)).subscribe(() => {
-      this.fetchData();
-      this.activeProfile = this.apiConfigService.getActiveProfile();
-    });
-
     this.route.queryParamMap.pipe(
       map((params: any) => params.has('apiId')),
     ).subscribe((has) => this.isLoadApiDetail.next(has));
   }
 
+  get activeProfile() {
+    return this.apiConfigService.getActiveProfile();
+  }
   get visibleColumns() {
     return this.columns.filter(column => column.visible).map(column => column.property);
   }

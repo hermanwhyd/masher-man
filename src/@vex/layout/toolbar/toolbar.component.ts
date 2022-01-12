@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostBinding, Input, OnInit } from '@angular/core';
+import { Component, HostBinding, Input, OnInit } from '@angular/core';
 import { LayoutService } from '../../services/layout.service';
 import icMenu from '@iconify/icons-ic/twotone-menu';
 import icRefresh from '@iconify/icons-ic/baseline-refresh';
@@ -6,13 +6,11 @@ import { ThemeConfigService } from '../../services/theme-config.service';
 import { map } from 'rxjs/operators';
 import { NavigationService } from '../../services/navigation.service';
 import icArrowDropDown from '@iconify/icons-ic/twotone-arrow-drop-down';
-import { PopoverService } from '../../components/popover/popover.service';
 import { Router } from '@angular/router';
 
 import icApiGW from '@iconify/icons-logos/aws-api-gateway';
 
 import { ApiConfigService } from 'src/app/services/api-config.service';
-import { Profile } from 'src/app/types/api-config.interface';
 
 @Component({
   selector: 'vex-toolbar',
@@ -42,11 +40,12 @@ export class ToolbarComponent implements OnInit {
   icArrowDropDown = icArrowDropDown;
   icRefresh = icRefresh;
 
+  accounts$ = this.apiConfigService.accounts$;
+
   constructor(
     private layoutService: LayoutService,
     private configService: ThemeConfigService,
     private navigationService: NavigationService,
-    private popoverService: PopoverService,
     private router: Router,
     private apiConfigService: ApiConfigService) { }
 

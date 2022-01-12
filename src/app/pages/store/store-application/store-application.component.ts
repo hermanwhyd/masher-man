@@ -23,7 +23,7 @@ import { filter, finalize, map } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormControl } from '@angular/forms';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import _ from 'lodash';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApiConfigService } from 'src/app/services/api-config.service';
@@ -89,8 +89,7 @@ export class StoreApplicationComponent implements OnInit {
   isLoading = false;
   appsSubject: BehaviorSubject<Application[]> = new BehaviorSubject([]);
   data$: Observable<Application[]> = this.appsSubject.asObservable();
-  profiles$ = this.apiConfigService.profiles$;
-  accounts$ = this.apiConfigService.accounts$;
+
   activeProfile: Profile;
 
   isLoadApiDetail = new BehaviorSubject<boolean>(false);
@@ -113,6 +112,7 @@ export class StoreApplicationComponent implements OnInit {
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource();
     this.registerSub();
+    this.fetchData();
   }
 
   registerSub() {
@@ -120,11 +120,6 @@ export class StoreApplicationComponent implements OnInit {
       filter<Application[]>(Boolean)
     ).subscribe(models => {
       this.dataSource.data = models;
-    });
-
-    combineLatest([this.profiles$, this.accounts$]).pipe(untilDestroyed(this)).subscribe(() => {
-      this.activeProfile = this.apiConfigService.getActiveProfile();
-      this.fetchData();
     });
 
     this.route.queryParamMap.pipe(

@@ -100,8 +100,6 @@ export class StoreListComponent implements OnInit {
   isLoading = false;
   apisSubject: BehaviorSubject<Api[]> = new BehaviorSubject([]);
   data$: Observable<Api[]> = this.apisSubject.asObservable();
-  profiles$ = this.apiConfigService.profiles$;
-  activeProfile: Profile;
 
   isLoadApiDetail = new BehaviorSubject<boolean>(false);
 
@@ -117,6 +115,7 @@ export class StoreListComponent implements OnInit {
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource();
     this.registerSub();
+    this.fetchData();
   }
 
   registerSub() {
@@ -137,14 +136,13 @@ export class StoreListComponent implements OnInit {
           });
       });
 
-    this.profiles$.pipe(untilDestroyed(this)).subscribe(() => {
-      this.fetchData();
-      this.activeProfile = this.apiConfigService.getActiveProfile();
-    });
-
     this.route.queryParamMap.pipe(
       map((params: any) => params.has('apiId') || params.has('apiIdentifier')),
     ).subscribe((has) => this.isLoadApiDetail.next(has));
+  }
+
+  get activeProfile() {
+    return this.apiConfigService.getActiveProfile();
   }
 
   get visibleColumns() {

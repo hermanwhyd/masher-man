@@ -1,4 +1,4 @@
-import { Component, Inject, LOCALE_ID, Renderer2 } from '@angular/core';
+import { Component, Inject, LOCALE_ID, OnInit, Renderer2 } from '@angular/core';
 import { ThemeConfigService } from '../@vex/services/theme-config.service';
 import { Settings } from 'luxon';
 import { DOCUMENT } from '@angular/common';
@@ -13,20 +13,25 @@ import icStore from '@iconify/icons-ic/outline-shopping-cart';
 import icFolder from '@iconify/icons-ic/baseline-snippet-folder';
 
 import { LayoutService } from '../@vex/services/layout.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SplashScreenService } from '../@vex/services/splash-screen.service';
 import { StyleService } from '../@vex/services/style.service';
 import { AuthService } from './pages/access/auth-manager/services/auth.service';
+import { ApiConfigService } from './services/api-config.service';
 
 @Component({
   selector: 'vex-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'MasherMan';
 
+  accounts$ = this.apiConfigService.accounts$;
+
   constructor(
+    private router: Router,
+    private apiConfigService: ApiConfigService,
     private configService: ThemeConfigService,
     private styleService: StyleService,
     private renderer: Renderer2,
@@ -112,5 +117,27 @@ export class AppComponent {
         ]
       }
     ];
+  }
+
+  ngOnInit(): void {
+    // Reload page after any profile or account change
+    this.accounts$.subscribe(() => {
+      this.reloadPage();
+    });
+  }
+
+  reloadPage() {
+    const currentUrl = this.router.url;
+    console.log(currentUrl);
+    const temp = [
+      '/setup',
+      '/publisher/edit'
+    ].filter(f => currentUrl.startsWith(f));
+
+    if (temp.length === 0) {
+      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        this.router.navigateByUrl(currentUrl);
+      });
+    }
   }
 }

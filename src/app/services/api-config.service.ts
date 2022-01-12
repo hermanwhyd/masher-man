@@ -63,7 +63,7 @@ export class ApiConfigService {
   }
 
   public getActivePublisher() {
-    return this.getActiveAccount().userPublishers.find(p => p.active === true);
+    return this.getActiveAccount()?.userPublishers.find(p => p.active === true);
   }
 
   public getActiveStore() {
@@ -76,17 +76,17 @@ export class ApiConfigService {
   }
 
   public setActiveAccountPublisher(user: User) {
-    this.getActiveAccount().userPublishers.forEach(p => p.active = p === user ? true : false);
+    this.getActiveAccount()?.userPublishers.forEach(p => p.active = p === user ? true : false);
     this.accounts.next(this.accounts.value);
   }
 
   public setActiveAccountStore(user: User) {
-    this.getActiveAccount().userStores.forEach(p => p.active = p === user ? true : false);
+    this.getActiveAccount()?.userStores.forEach(p => p.active = p === user ? true : false);
     this.accounts.next(this.accounts.value);
   }
 
   public setActiveAccountApiManager(user: User) {
-    this.getActiveAccount().userApiManagers.forEach(p => p.active = p === user ? true : false);
+    this.getActiveAccount()?.userApiManagers.forEach(p => p.active = p === user ? true : false);
     this.accounts.next(this.accounts.value);
   }
 
