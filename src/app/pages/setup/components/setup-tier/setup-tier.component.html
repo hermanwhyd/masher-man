@@ -27,8 +27,8 @@
               color="primary"></mat-checkbox>
           </td>
           <td>
-            <mat-checkbox (change)="$event ? radio.toggle(item.name) : null" [checked]="radio.isSelected(item.name)"
-              color="primary"></mat-checkbox>
+            <mat-checkbox (change)="$event ? onDefaultChange(item.name) : null" [checked]="radio.isSelected(item.name)"
+              color="accent"></mat-checkbox>
           </td>
         </tr>
       </tbody>

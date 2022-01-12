@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import _ from 'lodash';
 import { finalize } from 'rxjs/operators';
 import { ApiConfigService } from 'src/app/services/api-config.service';
@@ -9,8 +9,7 @@ import { Tier } from 'src/app/types/tier.interface';
 @Component({
   selector: 'vex-setup-tier',
   templateUrl: './setup-tier.component.html',
-  styleUrls: ['./setup-tier.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./setup-tier.component.scss']
 })
 export class SetupTierComponent implements OnInit {
 
@@ -26,26 +25,11 @@ export class SetupTierComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.selection.changed
-      .subscribe(() => {
-        // if (_.difference(this.selection.selected, this.selectedTierName) ||
-        //   _.difference(this.selectedTierName, this.selection.selected)) {
-
-        // }
-
-        // this.apiConfigService.updateSelectedSubsTier(this.selection.selected);
-      });
-
-    this.radio.changed
-      .subscribe(() => {
-        if (this.defaultTierName !== this.radio.selected[0]) {
-          this.apiConfigService.updateDefaultSubsTier(this.radio.selected[0]);
-        }
-      });
-
-    this.radio.select(this.defaultTierName);
-    this.selection.select(...this.selectedTierName);
-    this.tiers = this.apiConfigService.getActiveAccount()?.tiers || [];
+    this.apiConfigService.accounts$.subscribe(() => {
+      this.radio.select(this.defaultTierName);
+      this.selection.select(...this.selectedTierName);
+      this.tiers = this.currentTiers;
+    });
   }
 
   refresh() {
@@ -54,13 +38,18 @@ export class SetupTierComponent implements OnInit {
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(data => {
         this.apiConfigService.updateSubsTiers(data);
-        this.tiers = this.apiConfigService.getActiveAccount()?.tiers || [];
+        this.tiers = this.currentTiers;
       });
   }
 
   onTierChange(tierName: string) {
     this.selection.toggle(tierName);
-    console.log('hallo');
+    this.apiConfigService.updateSelectedSubsTier(this.selection.selected);
+  }
+
+  onDefaultChange(tierName: string) {
+    this.radio.toggle(tierName);
+    this.apiConfigService.updateDefaultSubsTier(tierName);
   }
 
   get defaultTierName() {
@@ -69,5 +58,9 @@ export class SetupTierComponent implements OnInit {
 
   get selectedTierName() {
     return this.apiConfigService.getSelectedSubsTier().map(t => t.name) || [];
+  }
+
+  get currentTiers() {
+    return this.apiConfigService.getActiveAccount()?.tiers || [];
   }
 }
