@@ -132,10 +132,10 @@ export class ApiConfigService {
   }
 
   public getSelectedSubsTier() {
-    return this.subscriptionTiers?.value.filter(f => f.selected).map(t => t.name);
+    return this.subscriptionTiers?.value.filter(f => f.selected);
   }
 
   public getDefaultSubsTier() {
-    return this.subscriptionTiers?.value.find(f => f.default)?.name;
+    return this.subscriptionTiers?.value.find(f => f.default);
   }
 }

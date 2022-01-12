@@ -1,6 +1,4 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { ENTER, COMMA, SPACE, FF_SEMICOLON } from '@angular/cdk/keycodes';
 
 import icDelete from '@iconify/icons-ic/twotone-delete';
 
@@ -22,9 +20,11 @@ import jmespath from 'jmespath';
 import { Observable } from 'rxjs';
 import { Tier } from 'src/app/types/tier.interface';
 import { map, startWith } from 'rxjs/operators';
-import { TierService } from 'src/app/services/tier.service';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { ApiConfigService } from 'src/app/services/api-config.service';
 
+@UntilDestroy()
 @Component({
   selector: 'vex-publisher-apitiers-control',
   template: `
@@ -56,6 +56,8 @@ export class PublisherApiTiersControlComponent extends JsonFormsArrayControl imp
   apiTiers: Tier[] = [];
   filteredTiers: Observable<Tier[]>;
 
+  account$ = this.apiConfigService.accounts$;
+
   currentTags: string[] = [];
 
   jfState: JsonFormsState;
@@ -67,7 +69,7 @@ export class PublisherApiTiersControlComponent extends JsonFormsArrayControl imp
   @ViewChild('tierInput') tierInput: ElementRef<HTMLInputElement>;
   constructor(
     jsonFormsService: JsonFormsAngularService,
-    private tierService: TierService
+    private apiConfigService: ApiConfigService
   ) {
     super(jsonFormsService);
 
@@ -113,10 +115,20 @@ export class PublisherApiTiersControlComponent extends JsonFormsArrayControl imp
     if (!this.isEnabled()) {
       this.formControl.disable();
     } else {
-      this.tierService.apiTiers().subscribe(data => {
-        this.apiTiers = data;
-        this.tierCtrl.setValue('');
-      });
+      this.account$
+        .pipe(untilDestroyed(this))
+        .subscribe(() => {
+          this.apiTiers = this.apiConfigService.getActiveAccount()?.tiers || [];
+          this.tierCtrl.setValue('');
+
+          (this.apiConfigService.getSelectedSubsTier() || []).map(t => t.name).forEach(t => {
+            if (!this.currentTags.includes(t)) {
+              this.currentTags.push(t);
+            }
+          });
+
+          this.formControl.patchValue(this.currentTags);
+        });
     }
   }
 

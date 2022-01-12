@@ -130,9 +130,10 @@ export class AppComponent implements OnInit {
     const currentUrl = this.router.url;
     console.log(currentUrl);
     const temp = [
+      '/',
       '/setup',
-      '/publisher/edit'
-    ].filter(f => currentUrl.startsWith(f));
+      '/publisher/edit*'
+    ].filter(f => f.endsWith('*') ? currentUrl.startsWith(f) : currentUrl.includes(f));
 
     if (temp.length === 0) {
       this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {

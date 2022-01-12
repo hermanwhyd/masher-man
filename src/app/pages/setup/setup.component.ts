@@ -26,10 +26,10 @@ export class SetupComponent implements OnInit {
   sidebarMenu: SidebarMenu[] = [
     { type: 'subheader', title: 'BASE CONFIG', element: '', active: false },
     { type: 'link', element: 'setupApi', title: 'API Config', active: true },
-    { type: 'link', element: 'setupTier', title: 'Subscription Tiers', active: true },
     { type: 'subheader', title: 'ACCOUNT CONFIG', element: '', active: false },
     { type: 'link', element: 'setupUser', title: 'Publisher', active: false },
     { type: 'link', element: 'setupUser', title: 'Store', active: false },
+    { type: 'link', element: 'setupTier', title: 'Subscription Tiers', active: false },
   ];
 
   @ViewChild(SetupUserComponent, { read: ElementRef, static: true }) private setupUser: ElementRef;

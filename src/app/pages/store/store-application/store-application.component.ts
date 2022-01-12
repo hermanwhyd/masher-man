@@ -113,6 +113,7 @@ export class StoreApplicationComponent implements OnInit {
     this.dataSource = new MatTableDataSource();
     this.registerSub();
     this.fetchData();
+    this.activeProfile = this.apiConfigService.getActiveProfile() || {} as Profile;
   }
 
   registerSub() {

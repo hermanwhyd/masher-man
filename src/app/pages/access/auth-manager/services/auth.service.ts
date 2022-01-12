@@ -41,11 +41,12 @@ export class AuthService {
       );
   }
 
-  tokenClientCredential(consumerKey: string, consumerSecret: string) {
+  tokenClientCredential(consumerKey: string, consumerSecret: string, validity = 3600) {
     const body = new HttpParams()
       .set('grant_type', 'client_credentials')
       .set('client_id', consumerKey)
       .set('client_secret', consumerSecret)
+      .set('validity_period', validity)
       ;
 
     const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });

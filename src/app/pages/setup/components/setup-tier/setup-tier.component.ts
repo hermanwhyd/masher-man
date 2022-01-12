@@ -28,8 +28,8 @@ export class SetupTierComponent implements OnInit {
   ngOnInit(): void {
     this.selection.changed
       .subscribe(() => {
-        // if (_.difference(this.selection.selected, this.apiConfigService.getSelectedSubsTier()) ||
-        //   _.difference(this.apiConfigService.getSelectedSubsTier(), this.selection.selected)) {
+        // if (_.difference(this.selection.selected, this.selectedTierName) ||
+        //   _.difference(this.selectedTierName, this.selection.selected)) {
 
         // }
 
@@ -38,13 +38,13 @@ export class SetupTierComponent implements OnInit {
 
     this.radio.changed
       .subscribe(() => {
-        if (this.apiConfigService.getDefaultSubsTier() !== this.radio.selected[0]) {
+        if (this.defaultTierName !== this.radio.selected[0]) {
           this.apiConfigService.updateDefaultSubsTier(this.radio.selected[0]);
         }
       });
 
-    this.radio.select(this.apiConfigService.getDefaultSubsTier());
-    this.selection.select(...this.apiConfigService.getSelectedSubsTier());
+    this.radio.select(this.defaultTierName);
+    this.selection.select(...this.selectedTierName);
     this.tiers = this.apiConfigService.getActiveAccount()?.tiers || [];
   }
 
@@ -61,5 +61,13 @@ export class SetupTierComponent implements OnInit {
   onTierChange(tierName: string) {
     this.selection.toggle(tierName);
     console.log('hallo');
+  }
+
+  get defaultTierName() {
+    return this.apiConfigService.getDefaultSubsTier()?.name || null;
+  }
+
+  get selectedTierName() {
+    return this.apiConfigService.getSelectedSubsTier().map(t => t.name) || [];
   }
 }

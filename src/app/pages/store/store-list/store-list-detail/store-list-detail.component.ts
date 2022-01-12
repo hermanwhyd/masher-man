@@ -533,7 +533,7 @@ export class StoreListDetailComponent implements OnInit, AfterViewInit {
         switchMap((key: Key) => {
           return this.isAuthUsingApiKey
             ? of(key.consumerKey)
-            : this.authService.tokenClientCredential(key.consumerKey, key.consumerSecret);
+            : this.authService.tokenClientCredential(key.consumerKey, key.consumerSecret, 600);
         }))
       .subscribe(authKey => {
         this.isLoadingToken = false;
