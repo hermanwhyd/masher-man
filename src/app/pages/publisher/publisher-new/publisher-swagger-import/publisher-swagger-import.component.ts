@@ -132,7 +132,7 @@ export class PublisherSwaggerImportComponent implements OnInit {
     Object.entries(this.swagger.paths).forEach(([path, pvalue]) => {
       Object.entries(pvalue).filter(([fkey, fvalue]) => fvalue.selected === true).forEach(([method, spec]) => {
         spec['x-auth-type'] = 'Application & Application User';
-        spec['x-throttling-tier'] = 'Unlimited';
+        spec['x-throttling-tier'] = 'Default';
 
         delete (spec.selected);
 

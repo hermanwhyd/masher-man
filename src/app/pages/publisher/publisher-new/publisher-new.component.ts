@@ -60,12 +60,12 @@ export class PublisherNewComponent implements OnInit {
   }
 
   async importFromClipboard() {
-    const resolved = await jsonRefResolver.resolve(this.editor.get());
-    let apiDef = JSON.parse(JSON.stringify(resolved.result));
+    let apiDef = JSON.parse(JSON.stringify(this.editor.get()));
 
     if (apiDef.swagger) {
       const converted: any = await Converter.convert({ from: 'swagger_2', to: 'openapi_3', source: apiDef });
       const convertedSpec = JSON.parse(JSON.stringify(converted.spec));
+
       apiDef = {
         ...convertedSpec,
         ...{ servers: [{ url: 'http://' + apiDef.host }] },
@@ -73,10 +73,16 @@ export class PublisherNewComponent implements OnInit {
       };
     }
 
+    const resolved = await jsonRefResolver.resolve(apiDef);
+
+    apiDef = {
+      ...JSON.parse(JSON.stringify(resolved.result)),
+      // ...{ servers: [{ url: 'http://' + apiDef }] },
+    };
+
     delete (apiDef.definitions);
     delete (apiDef.components);
     delete (apiDef.tags);
-
 
     this.dialog.open(PublisherSwaggerImportComponent, {
       data: apiDef,

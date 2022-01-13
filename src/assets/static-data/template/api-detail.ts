@@ -41,7 +41,7 @@ export const ApiDetailTemplate = {
               }
             },
             'x-auth-type': 'Application & Application User',
-            'x-throttling-tier': 'Unlimited'
+            'x-throttling-tier': 'Default'
           }
         }
       },
