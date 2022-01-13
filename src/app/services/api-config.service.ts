@@ -96,7 +96,8 @@ export class ApiConfigService {
       t.selected = t.selected || curr.find(f => f.name === t.name)?.selected || false;
     });
 
-    this.subscriptionTiers.next(list);
+    this.getActiveAccount().tiers = list;
+    this.accounts.next(this.accounts.value);
   }
 
   updateSelectedSubsTier(selected: string[]) {

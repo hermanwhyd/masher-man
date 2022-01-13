@@ -317,7 +317,7 @@ export class StoreListDetailComponent implements OnInit, AfterViewInit {
             callApps.list?.forEach(app => {
               let sub = callSubs.list?.find(s => s.applicationId === app.applicationId);
               if (!sub) {
-                sub = { apiIdentifier: this.model.id, tier: 'Unlimited', applicationId: app.applicationId };
+                sub = { apiIdentifier: this.model.id, tier: this.defaultSubsTier, applicationId: app.applicationId };
               }
               subs.push(sub);
             });
@@ -392,6 +392,7 @@ export class StoreListDetailComponent implements OnInit, AfterViewInit {
       if (confirmed) {
         this.subscriptionService.unsubscribe(item.subscriptionId)
           .pipe(switchMap(() => {
+            item.tier = this.defaultSubsTier;
             return this.subscriptionService.subscribe([item]);
           })).subscribe((rs) => {
             const models = this.subscribers;
@@ -544,5 +545,9 @@ export class StoreListDetailComponent implements OnInit, AfterViewInit {
 
   get canGenerateToken() {
     return this.formConsole.dirty && this.formConsole.valid;
+  }
+
+  get defaultSubsTier() {
+    return this.apiConfigService.getDefaultSubsTier()?.name || 'Default';
   }
 }

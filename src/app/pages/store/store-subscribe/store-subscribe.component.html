@@ -8,13 +8,15 @@
 
 <mat-divider class="-mx-6 text-border"></mat-divider>
 
-<p class="subheading-2 text-hint py-2">Subscriber APIs for selected applications of active store account.</p>
+<p class="font-semibold py-2 flex justify-center items-center">
+  Subscriber APIs for selected applications of <strong class="ml-1">{{ activeStoreUsername }}</strong>.
+</p>
 
 <mat-slide-toggle (change)="isShowId = !isShowId" [checked]="isShowId">Show ID</mat-slide-toggle>
 
 <mat-dialog-content fxLayout="column">
   <div class="mt-3">
-    <p class="text-secondary ">Select Applications</p>
+    <p class="font-semibold ">Select Applications</p>
     <div *ngIf="isLoading">
       <ngx-shimmer-loading [height]="'30px'" [width]="'100%'" class="block"></ngx-shimmer-loading>
       <ngx-shimmer-loading [height]="'30px'" [width]="'100%'" class="block"></ngx-shimmer-loading>
@@ -23,7 +25,7 @@
     <mat-selection-list #sapps (selectionChange)="onSelectionChange()" [style.overflow]="'auto'"
       [style.max-height.px]="'250'">
       <mat-list-option *ngFor="let item of applicationList" [value]="item">
-        <span class="block">
+        <span class="block text-secondary">
           {{ item.name + ' &#8212; ' + item.throttlingTier }}
         </span>
         <span class="text-secondary" [style.font-size]="'0.625rem'" *ngIf="isShowId">
@@ -34,11 +36,11 @@
   </div>
 
   <div class="mt-6">
-    <p class="text-secondary">Selected APIs</p>
+    <p class="font-semibold">Selected APIs</p>
     <mat-selection-list #sapis (selectionChange)="onSelectionChange()" [style.overflow]="'auto'"
       [style.max-height.px]="'250'">
       <mat-list-option *ngFor="let item of apis" [value]="item" [selected]="'true'">
-        <span class="block">
+        <span class="block text-secondary">
           {{ item.name + ' &#8212; ' + item.version }}
         </span>
         <span class="text-secondary" [style.font-size]="'0.625rem'" *ngIf="isShowId">
@@ -46,6 +48,11 @@
         </span>
       </mat-list-option>
     </mat-selection-list>
+  </div>
+
+  <div class="text-secondary mt-2">
+    The default new subscription tier is <a href class="ml-1 text-cyan" matTooltip="You can change in setup page"
+      [routerLink]="['/setup']">{{ defaultSubsTier }}</a>
   </div>
 
   <div fxLayout="row" fxLayoutAlign="space-between center" *ngIf="isShowError"

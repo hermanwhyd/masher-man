@@ -97,6 +97,8 @@ export class StoreApplicationDetailComponent implements OnInit {
   options = new JsonEditorOptions();
   isShowJsonRaw = false;
 
+  showApproveBtn = false;
+
   icSearch = icSearch;
   searchCtrl = new FormControl();
   isAdvancedSrc = false;
@@ -146,6 +148,12 @@ export class StoreApplicationDetailComponent implements OnInit {
     ).subscribe(() => this.refreshSubscriptionsFiltered());
 
     this.subscriptionsSubject.asObservable().subscribe(() => this.refreshSubscriptionsFiltered());
+
+    this.route.queryParamMap.pipe(
+      untilDestroyed(this),
+    ).subscribe(params => {
+      this.showApproveBtn = params.has('allow_approve');
+    });
 
     this.route.queryParamMap.pipe(
       untilDestroyed(this),
@@ -237,6 +245,7 @@ export class StoreApplicationDetailComponent implements OnInit {
       if (confirmed) {
         this.subscriptionService.unsubscribe(item.subscriptionId)
           .pipe(switchMap(() => {
+            item.tier = this.defaultSubsTier;
             return this.subscriptionService.subscribe([item]);
           })).subscribe((rs) => {
             const models = this.subscriptionsSubject.value;
@@ -264,7 +273,11 @@ export class StoreApplicationDetailComponent implements OnInit {
         rs.list.forEach((item) => {
           const apiIdentifier = [item.provider, item.name.split('-').join('%2D'), item.version].join('-');
           if (count < 5 && !this.subscriptionsSubject.value.some(s => s.apiIdentifier === apiIdentifier)) {
-            this.subscriptionsFiltered.push({ apiIdentifier, tier: 'Unlimited', applicationId: this.model.applicationId });
+            this.subscriptionsFiltered.push({
+              apiIdentifier,
+              tier: this.defaultSubsTier,
+              applicationId: this.model.applicationId
+            });
             count++;
           }
         });
@@ -336,5 +349,9 @@ export class StoreApplicationDetailComponent implements OnInit {
 
   getApiName(apiIdentifier: string) {
     return replaceLastOccurrenceInString(this.codec.decodeValue(apiIdentifier.substring(apiIdentifier.indexOf('-') + 1)), '-', ' ');
+  }
+
+  get defaultSubsTier() {
+    return this.apiConfigService.getDefaultSubsTier()?.name || 'Default';
   }
 }

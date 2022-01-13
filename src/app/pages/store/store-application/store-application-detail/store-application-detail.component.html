@@ -71,14 +71,20 @@
           </div>
         </div>
 
-        <div *ngIf="isLoading" class="p-6">
-          <ngx-shimmer-loading [height]="'40px'" [width]="'100%'" class="block"></ngx-shimmer-loading>
+        <div *ngIf="isLoading" class="p-6 mb-6">
           <ngx-shimmer-loading [height]="'40px'" [width]="'100%'" class="block"></ngx-shimmer-loading>
           <ngx-shimmer-loading [height]="'40px'" [width]="'100%'" class="block"></ngx-shimmer-loading>
           <ngx-shimmer-loading [height]="'40px'" [width]="'100%'" class="block"></ngx-shimmer-loading>
         </div>
 
         <div *ngIf="!isLoading" class="p-6 bg-card">
+          <div *ngIf="subscriptionsFiltered?.length > 0" @scaleFadeIn
+            class="flex-auto flex justify-center items-center text-secondary mb-2">
+            This application has <strong class="ml-1"> {{ subscriptionsFiltered?.length }} subscriptions</strong>.
+            The Default new subscription tier is <a href class="ml-1 text-cyan"
+              matTooltip="You can change in setup page" [routerLink]="['/setup']">{{defaultSubsTier}}</a>
+          </div>
+
           <div *ngIf="subscriptionsFiltered?.length === 0" @scaleFadeIn
             class="flex-auto flex flex-col justify-center items-center">
             <h2 class="headline m-0 text-center">
@@ -105,13 +111,12 @@
               <button class="rounded-full" color="primary" type="button" fxFlex="none" mat-raised-button type="button"
                 (click)="subscribe(item)" *ngIf="!item.subscriptionId">SUBSCRIBE</button>
 
-              <!-- <button class="rounded-full" color="primary" type="button" fxFlex="none" mat-raised-button
-                (click)="approve(item)" *ngIf="item.status === 'ON_HOLD'">APPROVE</button> -->
-
-              <button class="rounded-full" color="warn" type="button" fxFlex="none" mat-raised-button
-                (click)="unsubscribe(item)" *ngIf="item.subscriptionId" type="button">UNSUBSCRIBE</button>
+              <button class="rounded-full bg-cyan text-contrast-white" type="button" fxFlex="none" mat-raised-button
+                (click)="approve(item)" *ngIf="showApproveBtn && item.status === 'ON_HOLD'">APPROVE</button>
               <button class="rounded-full" color="primary" type="button" fxFlex="none" mat-raised-button
                 (click)="resubscribe(item)" *ngIf="item.subscriptionId" type="button">RESUBSCRIBE</button>
+              <button class="rounded-full" color="warn" type="button" fxFlex="none" mat-raised-button
+                (click)="unsubscribe(item)" *ngIf="item.subscriptionId" type="button">UNSUBSCRIBE</button>
             </div>
           </div>
         </div>

@@ -133,7 +133,7 @@ export class AppComponent implements OnInit {
       '/',
       '/setup',
       '/publisher/edit*'
-    ].filter(f => f.endsWith('*') ? currentUrl.startsWith(f) : currentUrl.includes(f));
+    ].filter(f => f.endsWith('*') ? currentUrl.startsWith(f.split('*')[0]) : currentUrl === f);
 
     if (temp.length === 0) {
       this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {

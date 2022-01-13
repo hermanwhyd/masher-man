@@ -31,7 +31,6 @@ import { apiTiersTester, PublisherApiTiersControlComponent } from 'src/app/pages
 import { AccountPortalComponent } from 'src/app/pages/shared/controls/account-portal.component';
 import { Subscription } from 'src/app/types/subscription.interface';
 import { SubscriptionService } from 'src/app/services/subscription.service';
-import { MatDialog } from '@angular/material/dialog';
 
 const appearance: MatFormFieldDefaultOptions = {
   appearance: 'outline'
@@ -76,6 +75,8 @@ export class PublisherListDetailComponent implements OnInit {
   options = new JsonEditorOptions();
   isShowJsonRaw = false;
 
+  showApproveBtn = false;
+
   uischema = uischemaAsset;
   schema = schemaAsset;
   renderers = [
@@ -100,7 +101,6 @@ export class PublisherListDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private dialog: MatDialog,
     private publisherService: PublisherService,
     private subscriptionService: SubscriptionService) {
     this.options.mode = 'code';
@@ -108,6 +108,12 @@ export class PublisherListDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.route.queryParamMap.pipe(
+      untilDestroyed(this),
+    ).subscribe(params => {
+      this.showApproveBtn = params.has('allow_approve');
+    });
+
     this.route.queryParamMap.pipe(
       untilDestroyed(this),
       map((params: any) => params.get('apiId')),

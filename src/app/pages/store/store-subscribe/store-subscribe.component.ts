@@ -13,6 +13,7 @@ import { SnackbarNotifComponent } from 'src/app/utilities/snackbar-notif/snackba
 import { SubscriptionService } from '../../../services/subscription.service';
 import { StoreListComponent } from '../store-list/store-list.component';
 import { ApplicationService } from 'src/app/services/application.service';
+import { ApiConfigService } from 'src/app/services/api-config.service';
 
 @Component({
   selector: 'vex-store-subscribe',
@@ -37,6 +38,7 @@ export class StoreSubscribeComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: Api[],
+    private apiConfigService: ApiConfigService,
     private applicationService: ApplicationService,
     private subscriptionService: SubscriptionService,
     private snackBar: MatSnackBar,
@@ -69,7 +71,7 @@ export class StoreSubscribeComponent implements OnInit {
     appSelections.forEach(s => {
       apiSelections.forEach(a => {
         subscriptions.push({
-          tier: 'Unlimited',
+          tier: this.defaultSubsTier,
           apiIdentifier: a.value.id,
           applicationId: s.value.applicationId
         });
@@ -81,7 +83,7 @@ export class StoreSubscribeComponent implements OnInit {
     this.subscriptionService.subscribe(subscriptions).pipe(finalize(() => {
       this.isSubmitting = false;
       this.cd.markForCheck();
-    })).subscribe(rs => {
+    })).subscribe(() => {
       this.snackBar.openFromComponent(
         SnackbarNotifComponent,
         { data: { message: 'APIs subscription success, pending for approval via manage-service portal!', type: 'success' } }
@@ -94,5 +96,13 @@ export class StoreSubscribeComponent implements OnInit {
 
   onSelectionChange() {
     this.cd.markForCheck();
+  }
+
+  get defaultSubsTier() {
+    return this.apiConfigService.getDefaultSubsTier()?.name || 'Default';
+  }
+
+  get activeStoreUsername() {
+    return this.apiConfigService.getActiveStore().username;
   }
 }

@@ -129,6 +129,12 @@
             <h2 class="headline m-0 text-center">This account has no applications</h2>
           </div>
 
+          <div *ngIf="subscribers?.length > 0" @scaleFadeIn
+            class="flex-auto flex justify-center items-center text-secondary mb-2">
+            The default new subscription tier is <a href class="ml-1 text-cyan"
+              matTooltip="You can change in setup page" [routerLink]="['/setup']">{{ defaultSubsTier }}</a>
+          </div>
+
           <div @fadeInUp fxLayout="column">
             <div @stagger class="p-2 border-b" *ngFor="let item of subscribers" fxLayout="row"
               fxLayoutAlign="start center" fxLayoutGap="8px" class="callout p-2"

@@ -49,7 +49,7 @@ export class TierService {
               const list = data.list;
               list.forEach(t => {
                 t.selected = ['Default', 'Unlimited'].includes(t.name) || t.name.startsWith('TPS-');
-                t.default = ['Unlimited'].includes(t.name);
+                t.default = ['Default'].includes(t.name);
               });
 
               this.apiConfigService.updateSubsTiers(list);
