@@ -6,10 +6,10 @@
           <h5 *ngIf="item.type === 'subheader'" [class.pt-10]="idx > 0" @fadeInRight matSubheader>
             {{ item.title }}
           </h5>
-          <mat-list-item *ngIf="item.type === 'link'" (click)="scrollTo(item)" @fadeInRight
-            [class.bg-hover]="item.active" class="cursor-pointer" matRipple>
+          <div *ngIf="item.type === 'link'" (click)="scrollTo(item)" @fadeInRight [class.bg-hover]="item.active"
+            class="cursor-pointer px-4 py-2 rounded" matRipple>
             <h4 matLine [class.text-primary]="item.active">{{ item.title }}</h4>
-          </mat-list-item>
+          </div>
         </div>
       </mat-list>
     </div>

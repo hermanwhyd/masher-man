@@ -157,10 +157,10 @@
               <!-- <button class="rounded-full" color="primary" type="button" fxFlex="none" mat-raised-button
                 (click)="approve(item)" *ngIf="item.status === 'ON_HOLD'">APPROVE</button> -->
 
-              <button class="rounded-full" color="warn" type="button" fxFlex="none" mat-raised-button
-                (click)="unsubscribe(item)" *ngIf="item.subscriptionId" type="button">UNSUBSCRIBE</button>
               <button class="rounded-full" color="primary" type="button" fxFlex="none" mat-raised-button
                 (click)="resubscribe(item)" *ngIf="item.subscriptionId" type="button">RESUBSCRIBE</button>
+              <button class="rounded-full" color="warn" type="button" fxFlex="none" mat-raised-button
+                (click)="unsubscribe(item)" *ngIf="item.subscriptionId" type="button">UNSUBSCRIBE</button>
             </div>
           </div>
         </div>

@@ -6,7 +6,7 @@ export const ApiResourceTemplate = {
       }
     },
     'x-auth-type': 'Application & Application User',
-    'x-throttling-tier': 'Default'
+    'x-throttling-tier': 'Unlimited'
   },
   post: {
     requestBody: {
@@ -31,7 +31,7 @@ export const ApiResourceTemplate = {
       }
     },
     'x-auth-type': 'Application & Application User',
-    'x-throttling-tier': 'Default'
+    'x-throttling-tier': 'Unlimited'
   },
   put: {
     requestBody: {
@@ -56,7 +56,7 @@ export const ApiResourceTemplate = {
       }
     },
     'x-auth-type': 'Application & Application User',
-    'x-throttling-tier': 'Default'
+    'x-throttling-tier': 'Unlimited'
   },
   delete: {
     responses: {
@@ -65,7 +65,7 @@ export const ApiResourceTemplate = {
       }
     },
     'x-auth-type': 'Application & Application User',
-    'x-throttling-tier': 'Default'
+    'x-throttling-tier': 'Unlimited'
   },
   patch: {
     requestBody: {
@@ -90,7 +90,7 @@ export const ApiResourceTemplate = {
       }
     },
     'x-auth-type': 'Application & Application User',
-    'x-throttling-tier': 'Default'
+    'x-throttling-tier': 'Unlimited'
   },
   options: {
     responses: {
@@ -99,6 +99,6 @@ export const ApiResourceTemplate = {
       }
     },
     'x-auth-type': 'Application & Application User',
-    'x-throttling-tier': 'Default'
+    'x-throttling-tier': 'Unlimited'
   }
 };

@@ -30,6 +30,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { PublisherMasterListService } from '../services/publisher-master-list.service';
 import { PublisherService } from 'src/app/pages/publisher/services/publisher.service';
 import { throwError } from 'rxjs';
+import { ApiConfigService } from 'src/app/services/api-config.service';
 
 const keywords = ['#', 'properties', 'items'];
 
@@ -136,6 +137,7 @@ export class MasterListComponent extends JsonFormsArrayControl {
     private publisherMasterListService: PublisherMasterListService,
     private publiserService: PublisherService,
     private changeDetectorRef: ChangeDetectorRef,
+    private apiConfigService: ApiConfigService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar) {
     super(jsonFormsAngularService);
@@ -231,7 +233,7 @@ export class MasterListComponent extends JsonFormsArrayControl {
   }
 
   onAddClick() {
-    this.addItem(this.propsPath, ApiDetailTemplate)();
+    this.addItem(this.propsPath, { ...ApiDetailTemplate, ...{ tiers: this.defaultTiers } })();
   }
 
   onDeleteClick(item: number) {
@@ -307,6 +309,10 @@ export class MasterListComponent extends JsonFormsArrayControl {
             error: err => console.log('subsErr', err)
           });
       });
+  }
+
+  get defaultTiers() {
+    return this.apiConfigService.getSelectedSubsTier()?.map(t => t.name) || ['Default', 'Unlimited'];
   }
 }
 

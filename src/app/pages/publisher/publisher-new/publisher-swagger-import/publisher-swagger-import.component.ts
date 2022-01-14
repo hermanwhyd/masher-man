@@ -14,6 +14,7 @@ import _, { lowerCase, upperCase, upperFirst } from 'lodash';
 
 import { ApiDetailTemplate } from 'src/assets/static-data/template/api-detail';
 import { MatStepper } from '@angular/material/stepper';
+import { ApiConfigService } from 'src/app/services/api-config.service';
 
 @Component({
   selector: 'vex-publisher-swagger-import',
@@ -54,6 +55,7 @@ export class PublisherSwaggerImportComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: any,
     public dialogRef: MatDialogRef<PublisherSwaggerImportComponent>,
+    private apiConfigService: ApiConfigService,
     private fb: FormBuilder) { }
 
   ngOnInit(): void {
@@ -132,7 +134,7 @@ export class PublisherSwaggerImportComponent implements OnInit {
     Object.entries(this.swagger.paths).forEach(([path, pvalue]) => {
       Object.entries(pvalue).filter(([fkey, fvalue]) => fvalue.selected === true).forEach(([method, spec]) => {
         spec['x-auth-type'] = 'Application & Application User';
-        spec['x-throttling-tier'] = 'Default';
+        spec['x-throttling-tier'] = 'Unlimited';
 
         delete (spec.selected);
 
@@ -165,6 +167,7 @@ export class PublisherSwaggerImportComponent implements OnInit {
           version: form.version,
           description: [form.description, sentenceCase(spec.description || spec.summary || spec.operationId)].join(' ').trim(),
           tags: form.tags,
+          tiers: this.defaultTiers,
           endpointConfig: {
             production_endpoints: {
               url: [server, apiPath].join(''),
@@ -201,5 +204,9 @@ export class PublisherSwaggerImportComponent implements OnInit {
     });
 
     this.dialogRef.close(draftAPIs);
+  }
+
+  get defaultTiers() {
+    return this.apiConfigService.getSelectedSubsTier()?.map(t => t.name) || ['Default', 'Unlimited'];
   }
 }

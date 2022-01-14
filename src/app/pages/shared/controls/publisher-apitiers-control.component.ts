@@ -122,16 +122,19 @@ export class PublisherApiTiersControlComponent extends JsonFormsArrayControl imp
           this.tierCtrl.setValue('');
 
           // Clear unrelated tier
-          const tempTiers = this.currentTags.filter(f => !this.subsTiers.includes(f));
-
-          // Add default tier
-          (this.apiConfigService.getSelectedSubsTier() || []).map(t => t.name).forEach(t => {
-            if (!tempTiers.includes(t)) {
-              tempTiers.push(t);
+          this.currentTags.forEach((t, i) => {
+            if (!this.subsTiers.includes(t)) {
+              this.remove(i);
             }
           });
 
-          this.formControl.patchValue(tempTiers);
+          // Add default tier
+          (this.apiConfigService.getSelectedSubsTier() || []).map(t => t.name).forEach(t => {
+            if (!this.currentTags.includes(t)) {
+              this.add(t);
+            }
+          });
+
         });
     }
   }
