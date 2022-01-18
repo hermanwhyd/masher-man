@@ -31,6 +31,7 @@ import { PublisherMasterListService } from '../services/publisher-master-list.se
 import { PublisherService } from 'src/app/pages/publisher/services/publisher.service';
 import { throwError } from 'rxjs';
 import { ApiConfigService } from 'src/app/services/api-config.service';
+import { EndpointSecurityDialogComponent } from '../endpoint-security-dialog.component';
 
 const keywords = ['#', 'properties', 'items'];
 
@@ -279,35 +280,57 @@ export class MasterListComponent extends JsonFormsArrayControl {
     this.publisherMasterListService.publishEmit$
       .pipe(untilDestroyed(this), filter<string[]>(Boolean))
       .subscribe((str: string[]) => {
-        this.isPublishing[this.selectedItem.data.name] = true;
-        this.jsonFormsService.setReadonly(true);
         const apid: ApiDetail = this.selectedItem.data;
 
-        const draftApiD = { ...apid };
-
-        draftApiD.apiDefinition = (typeof apid.apiDefinition === 'string') ? apid.apiDefinition : JSON.stringify(apid.apiDefinition);
-
-        if (draftApiD.endpointConfig.sandbox_endpoints?.url === '') {
-          delete (draftApiD.endpointConfig.sandbox_endpoints);
-        }
-        draftApiD.endpointConfig = JSON.stringify(draftApiD.endpointConfig);
-
-        this.publiserService.createOrUpdateApi(draftApiD)
-          .pipe(untilDestroyed(this), finalize(() => {
-            this.jsonFormsService.setReadonly(false);
-            this.isPublishing[draftApiD.name] = false;
-          }), catchError(error => throwError(error)))
-          .subscribe({
-            next: data => {
-              apid.id = data.id;
-              this.jsonFormsAngularService.refresh();
-              this.snackBar.openFromComponent(SnackbarNotifComponent, {
-                data: { message: 'Save and publish API successfully', type: 'success' },
-                duration: 5000
-              });
-            },
-            error: err => console.log('subsErr', err)
+        // check if endpoint secured
+        if (apid.endpointSecurity === null) {
+          this.publishApi(apid);
+        } else {
+          const dialogRef = this.dialog.open(EndpointSecurityDialogComponent, {
+            data: apid
           });
+
+          dialogRef.afterClosed().subscribe(data => {
+            console.log(data);
+            if (data) {
+              apid.endpointSecurity.username = data.username;
+              apid.endpointSecurity.password = data.password;
+
+              this.publishApi(apid);
+            }
+          });
+        }
+      });
+  }
+
+  publishApi(apid: ApiDetail) {
+    this.isPublishing[this.selectedItem.data.name] = true;
+    this.jsonFormsService.setReadonly(true);
+
+    const draftApiD = { ...apid };
+
+    draftApiD.apiDefinition = (typeof apid.apiDefinition === 'string') ? apid.apiDefinition : JSON.stringify(apid.apiDefinition);
+
+    if (draftApiD.endpointConfig.sandbox_endpoints?.url === '') {
+      delete (draftApiD.endpointConfig.sandbox_endpoints);
+    }
+    draftApiD.endpointConfig = JSON.stringify(draftApiD.endpointConfig);
+
+    this.publiserService.createOrUpdateApi(draftApiD)
+      .pipe(untilDestroyed(this), finalize(() => {
+        this.jsonFormsService.setReadonly(false);
+        this.isPublishing[draftApiD.name] = false;
+      }), catchError(error => throwError(error)))
+      .subscribe({
+        next: data => {
+          apid.id = data.id;
+          this.jsonFormsAngularService.refresh();
+          this.snackBar.openFromComponent(SnackbarNotifComponent, {
+            data: { message: 'Save and publish API successfully', type: 'success' },
+            duration: 5000
+          });
+        },
+        error: err => console.log('subsErr', err)
       });
   }
 

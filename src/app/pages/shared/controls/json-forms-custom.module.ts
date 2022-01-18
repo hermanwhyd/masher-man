@@ -23,6 +23,10 @@ import { MarkdownDialogModule } from 'src/app/utilities/markdown-dialog/markdown
 import { RouterModule } from '@angular/router';
 import { PublisherApiTiersControlComponent } from './publisher-apitiers-control.component';
 import { KeyMapperComponent } from './keymapper-portal.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDividerModule } from '@angular/material/divider';
+import { EndpointSecurityDialogComponent } from './endpoint-security-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 const ARRAY_COMPONENTS = [
   PublisherDataDisplayComponent,
@@ -34,7 +38,8 @@ const ARRAY_COMPONENTS = [
   AccountPortalComponent,
   PublisherEndpointUrlControlComponent,
   PublisherApiTiersControlComponent,
-  KeyMapperComponent
+  KeyMapperComponent,
+  EndpointSecurityDialogComponent
 ];
 
 @NgModule({
@@ -55,7 +60,10 @@ const ARRAY_COMPONENTS = [
     NgxJsonViewerModule,
     MatButtonToggleModule,
     MarkdownDialogModule,
-    RouterModule
+    RouterModule,
+    MatFormFieldModule,
+    MatDividerModule,
+    MatDialogModule
   ],
   exports: [
     ...ARRAY_COMPONENTS
